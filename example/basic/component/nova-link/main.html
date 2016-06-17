@@ -1,0 +1,24 @@
+<template is="dom-module" id="nova-link">
+    <style type="text/css">
+    </style>
+    <template>
+        <a href="#!{{link}}">{{text}}</a>
+    </template>
+    <script>
+        Nova({
+            is: 'nova-link',
+            props: {
+                link: {
+                    type: String,
+                    value: ''
+                },
+                text: {
+                    type: String,
+                    value: 'text'
+                }
+            },
+            createdHandler: function() {
+            }
+        });
+    </script>
+</template>

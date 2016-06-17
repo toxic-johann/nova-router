@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Nova Router Example</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Hello App!</h1>
+      <p>
+        <!-- use nova-link for nabigation -->
+        <nova-link link="/foo?test=foo" text="Go to Foo"></nova-link> 
+        <nova-link link="/foo/bar?test=bar" text="Go to Foobar"></nova-link> 
+        <nova-link link="/foo/baz?test=baz" text="Go to Foobaz"></nova-link> 
+        <br>
+        <nova-link link="/bar?test=foo" text="Go to Bar"></nova-link> 
+        <nova-link link="/bar/foo?test=bar" text="Go to Barfoo"></nova-link> 
+        <nova-link link="/bar/bay?test=baz" text="Go to Barbay"></nova-link> 
+        <br>
+        <nova-link link="/notfound" text="Go to notfound"></nova-link> 
+        <nova-link link="/" text="Go to home"></nova-link> 
+        <!-- use v-link directive for navigation. -->
+        <!-- <a v-link="{ path: '/foo' }">Go to Foo</a> -->
+        <!-- <a v-link="{ path: '/bar' }">Go to Bar</a> -->
+      </p>
+      <!-- use router-view element as route outlet -->
+      <router-view></router-view>
+    </div>
+  </body>
+  <script type="text/javascript" src="/example/basic/example.js"></script>
+</html>
+
+    
+</html>
