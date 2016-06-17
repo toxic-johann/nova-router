@@ -73,6 +73,9 @@
 	window.bayView = document.createElement("nova-view");
 	bayView.content = "bay";
 	
+	window.userView = document.createElement("nova-view");
+	userView.content = "user";
+	
 	router.map({
 	    '/foo': {
 	        component: fooView,
@@ -99,6 +102,10 @@
 	                component: bayView
 	            }
 	        }
+	    },
+	    '/user/:username': {
+	        name: "user",
+	        component: userView
 	    }
 	});
 	
@@ -1042,7 +1049,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__16';
+	      var globalAlias = '__15';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1796,7 +1803,7 @@
 						} else if (true) {
 							!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 						} else {
-							var globalAlias = '__11';
+							var globalAlias = '__0';
 							var namespace = globalAlias.split('.');
 							var parent = root;
 							for (var i = 0; i < namespace.length - 1; i++) {
@@ -3006,6 +3013,12 @@
 				function activate(parent, child, transition, cb) {
 					parent = parent || { handler: { component: transition.router.routerView } };
 					var component = child.handler.component;
+					// component.$route = {
+					//     path:transition.router._currentRoute.path,
+					//     params:transition.router._currentRoute.params,
+					//     query:transition.router._currentRoute.query,
+					// }
+					// console.log(component.$route)
 					if (!isChildNode(parent.handler.component, child.handler.component)) {
 						var fn = component.route && component.route.activate || function () {
 							return true;
@@ -3123,7 +3136,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__17';
+	            var globalAlias = '__16';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -3137,7 +3150,7 @@
 	            return {}[name];
 	        }
 	
-	        var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n        <div>{{content}} attached</div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{loadingRouteData != true}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    " };
+	        var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n        <div>{{content}} attached</div>\n        <div>\n            {{JSON.stringify($route.params)}}\n            {{$route.path}}\n            {{JSON.stringify($route.query)}}\n        </div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{loadingRouteData != true}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    " };
 	        NovaExports({
 	            is: 'nova-view',
 	            props: {
@@ -3148,6 +3161,16 @@
 	                loadingRouteData: {
 	                    type: Boolean,
 	                    value: false
+	                },
+	                $route: {
+	                    type: Object,
+	                    value: function value() {
+	                        return {
+	                            params: "",
+	                            path: "",
+	                            query: ""
+	                        };
+	                    }
 	                }
 	            },
 	            route: {

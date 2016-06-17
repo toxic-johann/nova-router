@@ -16,6 +16,9 @@ bazView.content = "baz";
 window.bayView = document.createElement("nova-view");
 bayView.content = "bay";
 
+window.userView = document.createElement("nova-view");
+userView.content = "user"
+
 router.map({
     '/foo': {
         component: fooView,
@@ -42,6 +45,10 @@ router.map({
                 component:bayView
             }
         }
+    },
+    '/user/:username':{
+        name:"user",
+        component:userView
     }
 })
 

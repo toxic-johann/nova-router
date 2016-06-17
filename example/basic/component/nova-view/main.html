@@ -3,6 +3,11 @@
     </style>
     <template>
         <div>{{content}} attached</div>
+        <div>
+            {{JSON.stringify($route.params)}}
+            {{$route.path}}
+            {{JSON.stringify($route.query)}}
+        </div>
         <template-if if="{{loadingRouteData}}">
             <div> {{content}} loading....</div>
         </template-if>
@@ -21,6 +26,16 @@
                 loadingRouteData:{
                     type:Boolean,
                     value:false
+                },
+                $route:{
+                    type:Object,
+                    value:function(){
+                        return {
+                            params:"",
+                            path:"",
+                            query:"",
+                        }
+                    }
                 }
             },
             route:{

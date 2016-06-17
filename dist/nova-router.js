@@ -674,7 +674,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__11';
+	      var globalAlias = '__0';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1802,6 +1802,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function activate(parent, child, transition, cb) {
 	    parent = parent || { handler: { component: transition.router.routerView } };
 	    var component = child.handler.component;
+	    // component.$route = {
+	    //     path:transition.router._currentRoute.path,
+	    //     params:transition.router._currentRoute.params,
+	    //     query:transition.router._currentRoute.query,
+	    // }
+	    // console.log(component.$route)
 	    if (!isChildNode(parent.handler.component, child.handler.component)) {
 	        var fn = component.route && component.route.activate || function () {
 	            return true;

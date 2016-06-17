@@ -38,6 +38,12 @@ export function deactivate (parent, child, transition, cb){
 export function activate (parent, child, transition, cb){
     parent = parent || {handler:{component:transition.router.routerView}}
     let component = child.handler.component
+    // component.$route = {
+    //     path:transition.router._currentRoute.path,
+    //     params:transition.router._currentRoute.params,
+    //     query:transition.router._currentRoute.query,
+    // }
+    // console.log(component.$route)
     if(!isChildNode(parent.handler.component,child.handler.component)){
         let fn = (component.route && component.route.activate) || (()=>true)
         transition.callHook(fn,component,()=>{
