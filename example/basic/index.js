@@ -49,6 +49,10 @@ router.map({
     '/user/:username':{
         name:"user",
         component:userView
+    },
+    '/melon/:id/:code':{
+        name:"melon",
+        component:userView
     }
 })
 

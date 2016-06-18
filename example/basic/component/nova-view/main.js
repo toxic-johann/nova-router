@@ -6,7 +6,7 @@
     define([], factory);
   }
   else {
-    var globalAlias = '__16';
+    var globalAlias = '__2';
     var namespace = globalAlias.split('.');
     var parent = root;
     for ( var i = 0; i < namespace.length-1; i++ ) {

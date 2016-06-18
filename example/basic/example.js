@@ -106,6 +106,10 @@
 	    '/user/:username': {
 	        name: "user",
 	        component: userView
+	    },
+	    '/melon/:id/:code': {
+	        name: "melon",
+	        component: userView
 	    }
 	});
 	
@@ -1049,7 +1053,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__15';
+	      var globalAlias = '__1';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1397,7 +1401,8 @@
 							var generatePath = '';
 							if (path && (typeof path === 'undefined' ? 'undefined' : _typeof(path)) === 'object') {
 								if (path.name) {
-									console.warn("i got a name");
+									// 具名路径
+									generatePath = encodeURI(this._recognizer.generate(path.name, path.params));
 								} else if (path.path) {
 									generatePath = encodeURI(path.path);
 								}

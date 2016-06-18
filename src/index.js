@@ -166,8 +166,9 @@ export default class Router {
     stringifyPath (path) {
       let generatePath = ''
       if(path && typeof path === 'object'){
-        if(path.name) {
-            console.warn("i got a name")
+        if(path.name) { 
+            // 具名路径
+            generatePath = encodeURI(this._recognizer.generate(path.name, path.params))
         } else if(path.path){
             generatePath = encodeURI(path.path)
         }
