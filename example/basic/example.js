@@ -1057,7 +1057,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__1';
+	      var globalAlias = '__3';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1675,7 +1675,7 @@
 				/***/
 			},
 			/* 2 */
-			/***/function (module, exports) {
+			/***/function (module, exports, __webpack_require__) {
 	
 				'use strict';
 	
@@ -1694,6 +1694,16 @@
 				exports.isObject = isObject;
 				exports.warn = warn;
 				exports.mapParams = mapParams;
+	
+				var _routeRecognizer = __webpack_require__(4);
+	
+				var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
+	
+				function _interopRequireDefault(obj) {
+					return obj && obj.__esModule ? obj : { default: obj };
+				}
+	
+				var genQuery = _routeRecognizer2.default.prototype.generateQueryString;
 				/**
 	    * Resolve a relative path.
 	    * 根据相对路径拼接出绝对路径
@@ -1703,7 +1713,6 @@
 	    * @param {Boolean} append ?是否要拼接
 	    * @return {String}
 	    */
-	
 				function resolvePath(base, relative, append) {
 					var query = base.match(/(\?.*)$/);
 					if (query) {
@@ -3150,7 +3159,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__16';
+	            var globalAlias = '__4';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -3189,6 +3198,7 @@
 	            },
 	            route: {
 	                waitForData: false,
+	                canReuse: false,
 	                data: function data() {
 	                    return new Promise(function (resolve, reject) {
 	                        setTimeout(function () {

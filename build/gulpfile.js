@@ -13,6 +13,7 @@ var webpack = require('webpack');
 // var webpackConfig = require('./webpack.config.js');
 var webpackDevConfig = require("./webpack.dev.config.js")
 var webpackBasicExampleConfig = require("./webpack.basic.example.config.js")
+var webpackTestUnitConfig = require("./webpack.test.unit.config.js")
 // var plugins = gulpLoadPlugins();
 var gulpNova = require('gulp-nova');
 var gulpRename = require('gulp-rename');
@@ -96,6 +97,23 @@ gulp.task('build-router-view',function(){
     }))
     .pipe(browserSync.stream());
 })
+
+gulp.task('build-unit-test',function(){
+    webpack(assign({},webpackTestUnitConfig,{
+        watch:true
+    }),webpackHandler);
+})
+
+gulp.task('run-unit-test',function(){
+    browserSync({
+    server: {
+      baseDir: '../',
+      index:"./test/unit/index.html"
+    },
+  })
+})
+
+gulp.task('unit-test',['build-unit-test','run-unit-test'])
 
 gulp.task('watch', function(){
   gulp.watch('../example/basic/component/*/main.html', ['build-component']);

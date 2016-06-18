@@ -547,7 +547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -562,6 +562,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.isObject = isObject;
 	exports.warn = warn;
 	exports.mapParams = mapParams;
+	
+	var _routeRecognizer = __webpack_require__(4);
+	
+	var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var genQuery = _routeRecognizer2.default.prototype.generateQueryString;
 	/**
 	 * Resolve a relative path.
 	 * 根据相对路径拼接出绝对路径
@@ -571,7 +579,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Boolean} append ?是否要拼接
 	 * @return {String}
 	 */
-	
 	function resolvePath(base, relative, append) {
 	  var query = base.match(/(\?.*)$/);
 	  if (query) {

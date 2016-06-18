@@ -6,7 +6,7 @@
     define([], factory);
   }
   else {
-    var globalAlias = '__2';
+    var globalAlias = '__4';
     var namespace = globalAlias.split('.');
     var parent = root;
     for ( var i = 0; i < namespace.length-1; i++ ) {
@@ -45,6 +45,7 @@
             },
             route:{
                 waitForData:false,
+                canReuse:false,
                 data:function(){
                     return new Promise(function(resolve,reject){
                         setTimeout(function(){

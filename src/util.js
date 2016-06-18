@@ -1,3 +1,5 @@
+import RouteRecognizer from 'route-recognizer'
+const genQuery = RouteRecognizer.prototype.generateQueryString
 /**
  * Resolve a relative path.
  * 根据相对路径拼接出绝对路径
@@ -7,7 +9,6 @@
  * @param {Boolean} append ?是否要拼接
  * @return {String}
  */
-
 export function resolvePath (base, relative, append) {
   let query = base.match(/(\?.*)$/)
   if (query) {
