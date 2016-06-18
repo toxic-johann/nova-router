@@ -39,7 +39,8 @@ router.map({
         component:barView,
         subRoutes :{
             '/foo':{
-                component:fooView
+                component:fooView,
+                auth: true,
             },
             '/bay':{
                 component:bayView
@@ -53,6 +54,9 @@ router.map({
     '/melon/:id/:code':{
         name:"melon",
         component:userView
+    },
+    '/test/*any/bar':{
+        component:barView,
     }
 })
 

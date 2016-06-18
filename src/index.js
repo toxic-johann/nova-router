@@ -46,6 +46,7 @@ export default class Router {
         });
 
         this._suppress = suppressTransitionError
+        this._components = []
     }
 
     // API ===================================================
@@ -147,6 +148,7 @@ export default class Router {
         }
         this.routerView = routerView
         this.history.start()
+        this._components.unshift(routerView)
     }
 
     /**
@@ -215,6 +217,10 @@ export default class Router {
         this._recognizer.add(segments,{
             as:handler.name
         })
+        if(!this._components.includes(handler.component)){
+            this._components.push(handler.component)
+            handler.component.$route = this._currentRoute
+        }
         // handle sub router
         if(handler.subRoutes){
             for (let subPath in handler.subRoutes){
@@ -268,12 +274,7 @@ export default class Router {
         })
         if(beforeHooks.length) {
             transition.callHooks(beforeHooks,null,startTransition,{expectBoolean:true})
-            // transition.runQueue(beforeHooks,(hook,_,next)=>{
-            //     console.log("called")
-            //     if(Object.is(transition, this._currentTransition)) {
-            //         transition.callHook(hook,null,next,{exceptBoolean:true})
-            //     }
-            // },{},startTransition)
+
         } else {
             startTransition()
         }
@@ -286,6 +287,11 @@ export default class Router {
      */
     _onTransitionValidated (transition) {
         this._currentRoute = transition.to
+        // copy one in case of the user change our route
+        const route = Object.assign({},this._currentRoute)
+        this._components.forEach(each=>{
+            each.$route = route;
+        })
     }
 
     /**
