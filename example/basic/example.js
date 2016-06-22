@@ -1285,6 +1285,7 @@
 							}
 						});
 	
+						this._saveScrollPosition = saveScrollPosition;
 						this._suppress = suppressTransitionError;
 						this._components = [];
 					}
@@ -1549,11 +1550,11 @@
 							var beforeHooks = this._beforeEachHooks;
 							var startTransition = function startTransition() {
 								transition.start(function () {
-									_this2._postTransition(transition);
+									_this2._postTransition(transition, state, anchor);
 								});
 							};
 							if (beforeHooks.length) {
-								transition.callHooks(beforeHooks, null, startTransition, { expectBoolean: true });
+								transition.callHooks(beforeHooks, null, startTransition);
 							} else {
 								startTransition();
 							}
@@ -1583,13 +1584,26 @@
 	
 					}, {
 						key: '_postTransition',
-						value: function _postTransition(transition) {
+						value: function _postTransition(transition, state, anchor) {
 							// the first time catch change we call the started callback
 							if (!this._rendered && this._startCb) {
 								this._rendered = true;
 								this._startCb.call(null);
 							}
 							this._currentTransition.done = true;
+							var pos = state && state.pos;
+							if (pos && this._saveScrollPosition) {
+								setTimeout(function () {
+									window.scrollTo(pos.x, pos.y);
+								}, 0);
+							} else if (anchor) {
+								setTimeout(function () {
+									var el = document.getElementById(anchor.slice(1));
+									if (el) {
+										window.scrollTo(window.scrollX, el.offsetTop);
+									}
+								}, 0);
+							}
 							if (this._afterEachHooks.length) {
 								this._afterEachHooks.forEach(function (hook) {
 									return hook.call(null, {

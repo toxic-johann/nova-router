@@ -15,6 +15,7 @@ describe('Core',function () {
         if(el && document.body.contains(el)){
             document.body.removeChild(el)
         }
+        router = null
     })
 
     it('try to create a nova-view',function(){
@@ -336,6 +337,117 @@ describe('Core',function () {
         router.start(el)
     })
 
+    it('global before', function(done){
+        router = new Router({abstract:true})
+        let noView = createNovaView({content:'no'})
+        let redirectView = createNovaView({content:'redirect'})
+        let toView = createNovaView({content:'to'})
+        let notFoundView = createNovaView({content:'notfound'})
+        router.map({
+            '/no':{
+                component:noView
+            },
+            '/redirect/:id':{
+                component:redirectView
+            },
+            '/to/:id':{
+                component:toView
+            },
+            '*': {
+                component:notFoundView
+            }
+        })
+
+        let spy1 = jasmine.createSpy('before hook 1')
+        router.beforeEach(function(transition) {
+            spy1()
+            setTimeout(function(){
+                transition.next()
+            },wait)
+        })
+
+        let spy2 = jasmine.createSpy('before hook 2')
+        router.beforeEach(function (transition) {
+            spy2()
+            if (transition.to.path === '/no'){
+                setTimeout(function(){
+                    transition.abort()
+                    next()
+                },wait)
+            } else if(transition.to.path.indexOf('/redirect') > -1) {
+                setTimeout(function(){
+                    transition.redirect('/to/:id')
+                    next2()
+                },wait)
+            } else {
+                transition.next()
+            }
+        })
+
+        let spy3 = jasmine.createSpy('before hook 3')
+        router.beforeEach(function(){
+            spy3()
+        })
+
+        router.start(el)
+        expect(spy1).toHaveBeenCalled()
+        expect(spy2).not.toHaveBeenCalled()
+        expect(spy3).not.toHaveBeenCalled()
+        expect(router.routerView.children.length).toBe(0)
+
+        setTimeout(function(){
+            expect(spy2).toHaveBeenCalled()
+            expect(spy3).toHaveBeenCalled()
+            expect(router.routerView.children[0].content).toBe('notfound')
+            router.go('/no')
+        },wait * 2)
+
+        function next () {
+            expect(spy1.calls.count()).toBe(2)
+            expect(spy2.calls.count()).toBe(2)
+            expect(spy3.calls.count()).toBe(1) // aborted at 2
+            expect(router.routerView.children[0].content).toBe('notfound')
+            router.go('/redirect/12345')
+        }
+
+        function next2 (){
+            expect(spy1.calls.count()).toBe(4) // go + redirect
+            expect(spy2.calls.count()).toBe(3) // only go at this moment
+            expect(spy3.calls.count()).toBe(1) // still 1
+            setTimeout(function () {
+                expect(spy1.calls.count()).toBe(4)
+                expect(spy2.calls.count()).toBe(4)
+                expect(spy3.calls.count()).toBe(2) // after redirect
+                expect(router.routerView.children[0].content).toBe('to')
+                done()
+            },wait * 2)
+        }
+    })
+
+    it('global after',function(done) {
+        router = new Router({abstract: true})
+        let aView = createNovaView({content:"a"})
+        router.map({
+            '/a':{
+                component:aView
+            }
+        })
+        var callCount = 0
+        router.afterEach(function(transition){
+            if(callCount === 0){
+                expect(transition.from.path).toBeUndefined()
+                expect(transition.to.path).toBe('/')
+            } else {
+                expect(transition.from.path).toBe('/')
+                expect(transition.to.path).toBe('/a')
+                done()
+            }
+            callCount++
+        })
+        router.start(el)
+        router.go('/a')
+    })
+
     if(!window.isIE9) {
         it('saveScrollPosition',function(done) {
             router = new Router({
@@ -343,23 +455,27 @@ describe('Core',function () {
                 saveScrollPosition: true
             })
             let aView = createNovaView({content:"a"})
-            aView.template = `<div style="width:600px;height:1000px;">atest</div>`
             router.map({
                 '/a':{
                     component:aView
+                },
+                '*':{
+                    component:aView
                 }
             })
+
             router.start(el)
-            window.scrollTo(100,100)
             let x = window.pageXOffset
             let y = window.pageYOffset
             router.go('/a')
             window.addEventListener('popstate',function onPop(){
-                expect(window.scrollTo).toHaveBeenCalledWith(x, y)
-                expect(window.scrollTo.calls.count()).toBe(2)
-                window.removeEventListener('popstate', onPop)
-                router.stop()
-                done()
+                setTimeout(()=>{
+                    expect(window.scrollTo.calls.count()).toBe(1)
+                    expect(window.scrollTo).toHaveBeenCalledWith(x, y)
+                    window.removeEventListener('popstate', onPop)
+                    router.stop()
+                    done()
+                },0)
             })
             history.back()
         })

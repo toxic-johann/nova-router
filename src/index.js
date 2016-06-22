@@ -63,6 +63,7 @@ export default class Router {
             }
         });
 
+        this._saveScrollPosition = saveScrollPosition
         this._suppress = suppressTransitionError
         this._components = []
     }
@@ -290,11 +291,11 @@ export default class Router {
         const beforeHooks = this._beforeEachHooks
         const startTransition = (()=>{
             transition.start(()=>{
-                this._postTransition(transition)
+                this._postTransition(transition, state, anchor)
             })
         })
         if(beforeHooks.length) {
-            transition.callHooks(beforeHooks,null,startTransition,{expectBoolean:true})
+            transition.callHooks(beforeHooks,null,startTransition)
         } else {
             startTransition()
         }
@@ -318,13 +319,26 @@ export default class Router {
      * called when we finished transition
      * @return {[type]} [description]
      */
-    _postTransition(transition){
+    _postTransition(transition, state, anchor){
         // the first time catch change we call the started callback
         if (!this._rendered && this._startCb) {
             this._rendered = true
             this._startCb.call(null)
         }
         this._currentTransition.done = true
+        const pos = state && state.pos
+        if(pos && this._saveScrollPosition) {
+            setTimeout(()=>{
+                window.scrollTo(pos.x,pos.y)
+            },0)
+        } else if (anchor) {
+            setTimeout(()=>{
+                const el = document.getElementById(anchor.slice(1))
+                if(el) {
+                    window.scrollTo(window.scrollX, el.offsetTop)
+                }
+            },0)
+        }
         if(this._afterEachHooks.length) {
             this._afterEachHooks.forEach(hook =>hook.call(null,{
                 to:transition.to,

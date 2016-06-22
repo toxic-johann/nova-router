@@ -1930,6 +1930,7 @@
 	        if (el && document.body.contains(el)) {
 	            document.body.removeChild(el);
 	        }
+	        router = null;
 	    });
 
 	    it('try to create a nova-view', function () {
@@ -2224,6 +2225,117 @@
 	        router.start(el);
 	    });
 
+	    it('global before', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var noView = createNovaView({ content: 'no' });
+	        var redirectView = createNovaView({ content: 'redirect' });
+	        var toView = createNovaView({ content: 'to' });
+	        var notFoundView = createNovaView({ content: 'notfound' });
+	        router.map({
+	            '/no': {
+	                component: noView
+	            },
+	            '/redirect/:id': {
+	                component: redirectView
+	            },
+	            '/to/:id': {
+	                component: toView
+	            },
+	            '*': {
+	                component: notFoundView
+	            }
+	        });
+
+	        var spy1 = jasmine.createSpy('before hook 1');
+	        router.beforeEach(function (transition) {
+	            spy1();
+	            setTimeout(function () {
+	                transition.next();
+	            }, wait);
+	        });
+
+	        var spy2 = jasmine.createSpy('before hook 2');
+	        router.beforeEach(function (transition) {
+	            spy2();
+	            if (transition.to.path === '/no') {
+	                setTimeout(function () {
+	                    transition.abort();
+	                    next();
+	                }, wait);
+	            } else if (transition.to.path.indexOf('/redirect') > -1) {
+	                setTimeout(function () {
+	                    transition.redirect('/to/:id');
+	                    next2();
+	                }, wait);
+	            } else {
+	                transition.next();
+	            }
+	        });
+
+	        var spy3 = jasmine.createSpy('before hook 3');
+	        router.beforeEach(function () {
+	            spy3();
+	        });
+
+	        router.start(el);
+	        expect(spy1).toHaveBeenCalled();
+	        expect(spy2).not.toHaveBeenCalled();
+	        expect(spy3).not.toHaveBeenCalled();
+	        expect(router.routerView.children.length).toBe(0);
+
+	        setTimeout(function () {
+	            expect(spy2).toHaveBeenCalled();
+	            expect(spy3).toHaveBeenCalled();
+	            expect(router.routerView.children[0].content).toBe('notfound');
+	            router.go('/no');
+	        }, wait * 2);
+
+	        function next() {
+	            expect(spy1.calls.count()).toBe(2);
+	            expect(spy2.calls.count()).toBe(2);
+	            expect(spy3.calls.count()).toBe(1); // aborted at 2
+	            expect(router.routerView.children[0].content).toBe('notfound');
+	            router.go('/redirect/12345');
+	        }
+
+	        function next2() {
+	            expect(spy1.calls.count()).toBe(4); // go + redirect
+	            expect(spy2.calls.count()).toBe(3); // only go at this moment
+	            expect(spy3.calls.count()).toBe(1); // still 1
+	            setTimeout(function () {
+	                expect(spy1.calls.count()).toBe(4);
+	                expect(spy2.calls.count()).toBe(4);
+	                expect(spy3.calls.count()).toBe(2); // after redirect
+	                expect(router.routerView.children[0].content).toBe('to');
+	                done();
+	            }, wait * 2);
+	        }
+	    });
+
+	    it('global after', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: "a" });
+	        router.map({
+	            '/a': {
+	                component: aView
+	            }
+	        });
+	        var callCount = 0;
+	        router.afterEach(function (transition) {
+	            if (callCount === 0) {
+	                expect(transition.from.path).toBeUndefined();
+	                expect(transition.to.path).toBe('/');
+	            } else {
+	                expect(transition.from.path).toBe('/');
+	                expect(transition.to.path).toBe('/a');
+	                done();
+	            }
+	            callCount++;
+	        });
+	        router.start(el);
+	        router.go('/a');
+	    });
+
 	    if (!window.isIE9) {
 	        it('saveScrollPosition', function (done) {
 	            router = new _index2.default({
@@ -2231,23 +2343,27 @@
 	                saveScrollPosition: true
 	            });
 	            var aView = createNovaView({ content: "a" });
-	            aView.template = '<div style="width:600px;height:1000px;">atest</div>';
 	            router.map({
 	                '/a': {
 	                    component: aView
+	                },
+	                '*': {
+	                    component: aView
 	                }
 	            });
+
 	            router.start(el);
-	            window.scrollTo(100, 100);
 	            var x = window.pageXOffset;
 	            var y = window.pageYOffset;
 	            router.go('/a');
 	            window.addEventListener('popstate', function onPop() {
-	                expect(window.scrollTo).toHaveBeenCalledWith(x, y);
-	                expect(window.scrollTo.calls.count()).toBe(2);
-	                window.removeEventListener('popstate', onPop);
-	                router.stop();
-	                done();
+	                setTimeout(function () {
+	                    expect(window.scrollTo.calls.count()).toBe(1);
+	                    expect(window.scrollTo).toHaveBeenCalledWith(x, y);
+	                    window.removeEventListener('popstate', onPop);
+	                    router.stop();
+	                    done();
+	                }, 0);
 	            });
 	            history.back();
 	        });
@@ -2460,6 +2576,7 @@
 	            }
 	        });
 
+	        this._saveScrollPosition = saveScrollPosition;
 	        this._suppress = suppressTransitionError;
 	        this._components = [];
 	    }
@@ -2725,11 +2842,11 @@
 	            var beforeHooks = this._beforeEachHooks;
 	            var startTransition = function startTransition() {
 	                transition.start(function () {
-	                    _this2._postTransition(transition);
+	                    _this2._postTransition(transition, state, anchor);
 	                });
 	            };
 	            if (beforeHooks.length) {
-	                transition.callHooks(beforeHooks, null, startTransition, { expectBoolean: true });
+	                transition.callHooks(beforeHooks, null, startTransition);
 	            } else {
 	                startTransition();
 	            }
@@ -2759,13 +2876,26 @@
 
 	    }, {
 	        key: '_postTransition',
-	        value: function _postTransition(transition) {
+	        value: function _postTransition(transition, state, anchor) {
 	            // the first time catch change we call the started callback
 	            if (!this._rendered && this._startCb) {
 	                this._rendered = true;
 	                this._startCb.call(null);
 	            }
 	            this._currentTransition.done = true;
+	            var pos = state && state.pos;
+	            if (pos && this._saveScrollPosition) {
+	                setTimeout(function () {
+	                    window.scrollTo(pos.x, pos.y);
+	                }, 0);
+	            } else if (anchor) {
+	                setTimeout(function () {
+	                    var el = document.getElementById(anchor.slice(1));
+	                    if (el) {
+	                        window.scrollTo(window.scrollX, el.offsetTop);
+	                    }
+	                }, 0);
+	            }
 	            if (this._afterEachHooks.length) {
 	                this._afterEachHooks.forEach(function (hook) {
 	                    return hook.call(null, {

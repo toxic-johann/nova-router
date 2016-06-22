@@ -97,11 +97,11 @@ router.beforeEach(function (transition) {
 | /user/:username               | /user/evan          | `{ username: 'evan' }`               |
 | /user/:username/post/:post_id | /user/evan/post/123 | `{ username: 'evan', post_id: 123 }` |
 
-#### ~~全匹配片段~~
+#### 全匹配片段
 
-~~动态片段只能匹配路径中的一个部分，而全匹配片段则基本类似于它的贪心版。例如 `/foo/*bar` 会匹配任何以 `/foo/` 开头的路径。匹配的部分也会被解析为 `$route.params` 中的一个键值对。~~
+动态片段只能匹配路径中的一个部分，而全匹配片段则基本类似于它的贪心版。例如 `/foo/*bar` 会匹配任何以 `/foo/` 开头的路径。匹配的部分也会被解析为 `$route.params` 中的一个键值对。
 
-~~例如:~~
+例如:
 
 | 模式            | 匹配的路径        | $route.params      |
 | ------------- | ------------ | ------------------ |
