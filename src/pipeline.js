@@ -2,7 +2,7 @@ import {
   isPromise,
 } from './util'
 
-export function getReuseQueue (deactivateQueue,activateQueue) {
+export function getReuseQueue (deactivateQueue,activateQueue,transition) {
     let depth = Math.min(deactivateQueue.length,activateQueue.length)
     let reuseQueue = [];
     for(let i=0;i<depth;i++){
@@ -11,7 +11,7 @@ export function getReuseQueue (deactivateQueue,activateQueue) {
         if(Object.is(deactivateComponent,activateComponent)){
             let canComponentReuse = deactivateComponent.route 
             ? typeof deactivateComponent.route.canReuse === 'function' 
-                ? deactivateComponent.route.canReuse()
+                ? deactivateComponent.route.canReuse({to:transition.to,from:transition.from})
                 : deactivateComponent.route.canReuse
             : true
             if(canComponentReuse === false){

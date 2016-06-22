@@ -77,7 +77,7 @@ export default class Transition {
         let reverseDeactivateQueue = deactivateQueue.slice().reverse()
 
         // 获取重用队列
-        transition.reuseQueue = getReuseQueue(deactivateQueue,activateQueue)
+        transition.reuseQueue = getReuseQueue(deactivateQueue,activateQueue,this)
         
 
         // 此处有一个检测是否可以重用的部分
@@ -193,10 +193,6 @@ export default class Transition {
                 },onPromiseError)
             } else if(!hook.length) { // 如果没有参数
                 onError("must return Boolean or Promise in "+ hook)
-            } else if (hook.length && !nextCalled && !aborted){
-                // 通过transition提交会二次调用此处
-                // 如果使用了transition但是没有进行操作则会出现这种状况
-                warn("advice use transition with sycn and add Boolean "+ hook)
             }
             
         }
@@ -221,7 +217,7 @@ export default class Transition {
             to: transition.to,
             from: transition.from,
             abort:postActivate?(()=>true):abort,
-            next:processData ? nextWithData : expectBoolean ? nextWithBoolean :next,
+            next:processData ? nextWithData : next,
             redirect: function(){
                 transition.redirect.apply(transition,arguments)
             }

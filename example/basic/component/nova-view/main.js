@@ -6,7 +6,7 @@
     define([], factory);
   }
   else {
-    var globalAlias = '__3';
+    var globalAlias = '__12';
     var namespace = globalAlias.split('.');
     var parent = root;
     for ( var i = 0; i < namespace.length-1; i++ ) {
@@ -20,7 +20,7 @@
     return {}[name];
   }
 
-  var _bundleExports = undefined;NovaExports.__fixedUglify="script>";NovaExports.exports={"template":"\n        <div>{{content}} attached</div>\n        <div>\n            {{JSON.stringify($route.params)}}\n            {{$route.path}}\n            {{JSON.stringify($route.query)}}\n        </div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{loadingRouteData != true}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    "};
+  var _bundleExports = undefined;NovaExports.__fixedUglify="script>";NovaExports.exports={"template":"\n        <div>{{content}} attached</div>\n        <div>\n            {{JSON.stringify($route.params)}}\n            {{$route.path}}\n            {{JSON.stringify($route.query)}}\n        </div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{!loadingRouteData}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    "};
         NovaExports({
             is: 'nova-view',
             props: {
@@ -46,14 +46,14 @@
             route:{
                 waitForData:false,
                 // canReuse:false,
-                // data:function(){
-                //     return new Promise(function(resolve,reject){
-                //         setTimeout(function(){
-                //             resolve()
-                //         },1000)
-                //     })
-                // },
-                data:function(){return {test:true}},
+                data:function(){
+                    return new Promise(function(resolve,reject){
+                        setTimeout(function(){
+                            resolve()
+                        },1000)
+                    })
+                },
+                // data:function(){return {test:true}},
                 activate:function(){
                     console.log("activate",this.content)
                     return new Promise(function(resolve,reject){

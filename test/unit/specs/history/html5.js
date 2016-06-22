@@ -15,9 +15,6 @@ if(!window.isIE9) {
             history = new History({
                 onChange: step1
             })
-            console.log(history)
-            console.log(History)
-            console.log(history.onChange)
             history.start()
             // init
             function step1 (path) {

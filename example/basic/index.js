@@ -37,6 +37,7 @@ router.map({
     },
     '/bar': {
         component:barView,
+        auth:false,
         subRoutes :{
             '/foo':{
                 component:fooView,
@@ -96,7 +97,8 @@ let routerView = document.querySelector('router-view');
 
 
 Nova.ready([routerView], function() {
-    router.start(routerView)
+    router.start('router-view')
+    // router.start(routerView)
     // router.go('/bar/bay')
 
 //     console.log("createing")

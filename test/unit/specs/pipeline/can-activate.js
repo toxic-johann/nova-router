@@ -26,29 +26,13 @@ describe('canActivate',function () {
         test({
             a: {
                 canActivate:function(transition){
-                    transition.next(true)
+                    transition.next()
                 }
             }
         },function(router, calls){
             router.go('/a')
             expect(routerUtil.warn).not.toHaveBeenCalled()
             expect(router.routerView.children[0].content).toBe('a')
-            assertCalls(calls,['a.canActivate'])
-            done()
-        })
-    })
-
-    it('sync deny with transition.next',function (done) {
-        test({
-            a: {
-                canActivate:function(transition){
-                    transition.next(false)
-                }
-            }
-        },function(router, calls){
-            router.go('/a')
-            expect(routerUtil.warn).not.toHaveBeenCalled()
-            expect(router.routerView.children.length).toBe(0)
             assertCalls(calls,['a.canActivate'])
             done()
         })
@@ -70,36 +54,10 @@ describe('canActivate',function () {
             router.go('/a')
             expect(router.routerView.children.length).toBe(0)
             setTimeout(function() {
-                expect(routerUtil.warn).toHaveBeenCalled()
+                expect(routerUtil.warn).not.toHaveBeenCalled()
                 expect(router.routerView.children[0].content).toBe('a')
                 assertCalls(calls,['a.canActivate'])
                 expect(router._currentRoute.path).toBe('/a')
-                done()
-            },wait)
-                
-        })
-    })
-
-    it('async deny with transition.next',function (done) {
-        test({
-            a: {
-                canActivate:function(transition){
-                    setTimeout(function () {
-                        transition.next(false)
-                    }, wait)
-                }
-            }
-        },function(router, calls){
-            // i would like that use promise
-            // in case i don't know whether the user forget to return boolean
-            // so that i will take a warn here
-            router.go('/a')
-            expect(router.routerView.children.length).toBe(0)
-            setTimeout(function() {
-                expect(routerUtil.warn).toHaveBeenCalled()
-                expect(router.routerView.children.length).toBe(0)
-                assertCalls(calls,['a.canActivate'])
-                expect(router._currentRoute.path).toBe('/')
                 done()
             },wait)
                 
@@ -156,7 +114,7 @@ describe('canActivate',function () {
             router.go('/a')
             expect(router.routerView.children.length).toBe(0)
             setTimeout(function() {
-                expect(routerUtil.warn).toHaveBeenCalled()
+                expect(routerUtil.warn).not.toHaveBeenCalled()
                 expect(router.routerView.children.length).toBe(0)
                 assertCalls(calls,['a.canActivate'])
                 expect(router._currentRoute.path).toBe('/')
@@ -261,7 +219,7 @@ describe('canActivate',function () {
             }
         },function(router, calls){
             router.go('/a')
-            expect(routerUtil.warn).toHaveBeenCalled()
+            expect(routerUtil.warn).not.toHaveBeenCalled()
             expect(router.routerView.children.length).toBe(0)
             assertCalls(calls,['a.canActivate'])
             done()

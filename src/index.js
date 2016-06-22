@@ -160,7 +160,11 @@ export default class Router {
         if(!this.routerView){
             if(!routerView){
                 throw new Error("Must start router with router view")
+                return
             }
+        }
+        if(typeof routerView === 'string') {
+            routerView = document.querySelector(routerView)
         }
         this.routerView = routerView
         this._components.unshift(routerView)

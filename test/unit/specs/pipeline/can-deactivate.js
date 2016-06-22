@@ -28,7 +28,7 @@ describe('canDeactivate',function () {
         test({
             a: {
                 canDeactivate:function(transition){
-                    transition.next(true)
+                    transition.next()
                 }
             }
         },function(router, calls){
@@ -42,54 +42,8 @@ describe('canDeactivate',function () {
         })
     })
 
-    it('sync deny with transition.next',function (done) {
-        test({
-            a: {
-                canDeactivate:function(transition){
-                    transition.next(false)
-                }
-            }
-        },function(router, calls){
-            router.go('/a')
-            expect(router.routerView.children[0].content).toBe('a')
-            expect(router._currentRoute.path).toBe('/a')
-            router.go('/c')
-            assertCalls(calls,['a.canDeactivate'])
-            expect(router._currentRoute.path).toBe('/a')
-            expect(router.routerView.children[0].content).toBe('a')
-            expect(routerUtil.warn).not.toHaveBeenCalled()
-            done()
-        })
-    })
 
     it('async allow with transition',function (done) {
-        test({
-            a: {
-                canDeactivate:function(transition){
-                    setTimeout(function () {
-                        transition.next(true)
-                    }, wait)
-                }
-            }
-        },function(router, calls){
-            // i would like that use promise
-            // in case i don't know whether the user forget to return boolean
-            // so that i will take a warn here
-            router.go('/a')
-            expect(router.routerView.children[0].content).toBe('a')
-            expect(router._currentRoute.path).toBe('/a')
-            router.go('/c')
-            setTimeout(function() {
-                assertCalls(calls,['a.canDeactivate'])
-                expect(router.routerView.children[0].content).toBe('c')
-                expect(routerUtil.warn).toHaveBeenCalled()
-                done()
-            },wait)
-                
-        })
-    })
-
-    it('async deny with transition.next',function (done) {
         test({
             a: {
                 canDeactivate:function(transition){
@@ -108,14 +62,14 @@ describe('canDeactivate',function () {
             router.go('/c')
             setTimeout(function() {
                 assertCalls(calls,['a.canDeactivate'])
-                expect(router.routerView.children[0].content).toBe('a')
-                expect(router._currentRoute.path).toBe('/a')
-                expect(routerUtil.warn).toHaveBeenCalled()
+                expect(router.routerView.children[0].content).toBe('c')
+                expect(routerUtil.warn).not.toHaveBeenCalled()
                 done()
             },wait)
                 
         })
     })
+
 
     it('sync reject',function (done){
         test({
@@ -177,7 +131,7 @@ describe('canDeactivate',function () {
                 assertCalls(calls,['a.canDeactivate'])
                 expect(router.routerView.children[0].content).toBe('a')
                 expect(router._currentRoute.path).toBe('/a')
-                expect(routerUtil.warn).toHaveBeenCalled()
+                expect(routerUtil.warn).not.toHaveBeenCalled()
                 done()
             },wait)
         })
@@ -284,7 +238,7 @@ describe('canDeactivate',function () {
             expect(routerUtil.warn).not.toHaveBeenCalled()
             expect(router.routerView.children[0].content).toBe('a')
             router.go('/c')
-            expect(routerUtil.warn).toHaveBeenCalled()
+            expect(routerUtil.warn).not.toHaveBeenCalled()
             expect(router.routerView.children[0].content).toBe('a')
             assertCalls(calls,['a.canDeactivate'])
             done()

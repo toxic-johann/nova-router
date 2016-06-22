@@ -31,7 +31,6 @@ describe('full', function () {
                 },
                 deactivate:function(transition) {
                     // promise next
-                    console.log("deactivateing")
                     return new Promise((resolve,rejct)=>{
                         setTimeout(resolve,wait)
                     })
@@ -54,12 +53,11 @@ describe('full', function () {
                 expect(router.routerView.children[0].content).toBe('a')
                 expect(router.routerView.children[0].children.length).toBe(0)
                 setTimeout(function () {
-                expect(routerUtil.warn.calls.count()).toBe(2)
+                    expect(routerUtil.warn.calls.count()).toBe(2)
                     expect(routerUtil.warn).toHaveBeenCalledWith('transition.next() should be called only once.')
                     // expect(router.routerView.children[0].content).toBe('a')
                     expect(router.routerView.children[0].children[0].content).toBe('b')
                     router.go('/c/d')
-                    console.log("go to cd")
                     // done()
                 }, wait)
             })

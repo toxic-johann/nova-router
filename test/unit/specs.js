@@ -60,11 +60,9 @@
 
 	__webpack_require__(19);
 
-	__webpack_require__(29);
-
 	__webpack_require__(20);
 
-	__webpack_require__(23);
+	__webpack_require__(21);
 
 	__webpack_require__(24);
 
@@ -75,6 +73,8 @@
 	__webpack_require__(27);
 
 	__webpack_require__(28);
+
+	__webpack_require__(29);
 
 	var UA = navigator.userAgent.toLowerCase();
 	window.isIE9 = UA.indexOf('msie 9.0') > 0;
@@ -969,7 +969,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__1';
+	      var globalAlias = '__10';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1018,7 +1018,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__2';
+	            var globalAlias = '__11';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -2205,6 +2205,24 @@
 	        router.start(el);
 	    });
 
+	    // it('notfound',function(done) {
+	    //     router = new Router({abstract:true})
+	    //     let aView = createNovaView({content:"a"})
+	    //     router.map({
+	    //         '*':{
+	    //             component:aView
+	    //         }
+	    //     })
+	    //     let guide = assertRoutes([
+	    //         ['/notfound', 'a'],
+	    //         ['/notagain', 'a']
+	    //     ],done,matches=>{
+	    //         let content = router.routerView.children[0].content
+	    //         expect(content).toBe(matches[0][1])
+	    //     })
+	    //     router.start(el)
+	    // })
+
 	    if (!window.isIE9) {
 	        it('saveScrollPosition', function (done) {
 	            router = new _index2.default({
@@ -2560,7 +2578,11 @@
 	            if (!this.routerView) {
 	                if (!routerView) {
 	                    throw new Error("Must start router with router view");
+	                    return;
 	                }
+	            }
+	            if (typeof routerView === 'string') {
+	                routerView = document.querySelector(routerView);
 	            }
 	            this.routerView = routerView;
 	            this._components.unshift(routerView);
@@ -3196,7 +3218,7 @@
 	            var reverseDeactivateQueue = deactivateQueue.slice().reverse();
 
 	            // 获取重用队列
-	            transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue);
+	            transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue, this);
 
 	            // 此处有一个检测是否可以重用的部分
 	            transition.runQueue(reverseDeactivateQueue, _pipeline.canDeactivate, { factor: 1 }, function () {
@@ -3335,10 +3357,6 @@
 	                } else if (!hook.length) {
 	                    // 如果没有参数
 	                    onError("must return Boolean or Promise in " + hook);
-	                } else if (hook.length && !nextCalled && !aborted) {
-	                    // 通过transition提交会二次调用此处
-	                    // 如果使用了transition但是没有进行操作则会出现这种状况
-	                    (0, _util.warn)("advice use transition with sycn and add Boolean " + hook);
 	                }
 	            };
 
@@ -3364,7 +3382,7 @@
 	                abort: postActivate ? function () {
 	                    return true;
 	                } : abort,
-	                next: processData ? nextWithData : expectBoolean ? nextWithBoolean : next,
+	                next: processData ? nextWithData : next,
 	                redirect: function redirect() {
 	                    transition.redirect.apply(transition, arguments);
 	                }
@@ -3453,14 +3471,14 @@
 
 	var _util = __webpack_require__(6);
 
-	function getReuseQueue(deactivateQueue, activateQueue) {
+	function getReuseQueue(deactivateQueue, activateQueue, transition) {
 	    var depth = Math.min(deactivateQueue.length, activateQueue.length);
 	    var reuseQueue = [];
 	    for (var i = 0; i < depth; i++) {
 	        var deactivateComponent = deactivateQueue[i].handler.component;
 	        var activateComponent = activateQueue[i].handler.component;
 	        if (Object.is(deactivateComponent, activateComponent)) {
-	            var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse() : deactivateComponent.route.canReuse : true;
+	            var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse({ to: transition.to, from: transition.from }) : deactivateComponent.route.canReuse : true;
 	            if (canComponentReuse === false) {
 	                i--;
 	                break;
@@ -3690,7 +3708,128 @@
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _html = __webpack_require__(14);
+
+	var _html2 = _interopRequireDefault(_html);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	if (!window.isIE9) {
+	    describe('HTML5 history', function () {
+	        var url = location.href;
+	        var pathname = location.pathname;
+	        var history = void 0;
+	        afterEach(function (done) {
+	            history.stop();
+	            window.history.replaceState({}, '', url);
+	            setTimeout(done, 0);
+	        });
+
+	        it('notify change', function (done) {
+	            history = new _html2.default({
+	                onChange: step1
+	            });
+	            history.start();
+	            // init
+	            function step1(path) {
+	                expect(path).toBe(pathname);
+	                history.onChange = step2;
+	                history.go('/what/the#lol');
+	            }
+	            // root path & hash
+	            function step2(path, state, hash) {
+	                expect(location.pathname).toBe('/what/the');
+	                expect(path).toBe('/what/the');
+	                expect(state).toBeNull();
+	                expect(hash).toBe('#lol');
+	                history.onChange = step3;
+	                history.go('huh', true);
+	            }
+	            // relative path
+	            function step3(path) {
+	                expect(location.pathname).toBe('/what/huh');
+	                expect(path).toBe('/what/huh');
+	                done();
+	            }
+	        });
+
+	        it('root option', function (done) {
+	            history = new _html2.default({
+	                onChange: step1,
+	                root: 'root/'
+	            });
+	            expect(history.root).toBe('/root');
+	            history.start();
+	            function step1() {
+	                history.onChange = step2;
+	                history.go('/haha');
+	            }
+	            function step2(path) {
+	                expect(location.pathname).toBe('/root/haha');
+	                expect(path).toBe('/haha');
+	                done();
+	            }
+	        });
+
+	        it('popstate with root', function (done) {
+	            history = new _html2.default({
+	                onChange: step1,
+	                root: 'root/'
+	            });
+	            expect(history.root).toBe('/root');
+	            history.start();
+	            function step1() {
+	                history.onChange = step2;
+	                history.go('/');
+	            }
+	            function step2(path) {
+	                expect(location.pathname).toBe('/root/');
+	                expect(path).toBe('/');
+	                history.onChange = step3;
+	                history.go('/haha');
+	            }
+	            function step3(path) {
+	                expect(location.pathname).toBe('/root/haha');
+	                expect(path).toBe('/haha');
+	                history.onChange = step4;
+	                window.history.back();
+	            }
+	            function step4(path) {
+	                expect(location.pathname).toBe('/root/');
+	                expect(path).toBe('/');
+	                done();
+	            }
+	        });
+
+	        it('respect <base>', function (done) {
+	            var base = document.createElement('base');
+	            base.setAttribute('href', '/base/');
+	            document.head.appendChild(base);
+	            history = new _html2.default({
+	                onChange: step1
+	            });
+	            history.start();
+	            function step1(path) {
+	                history.onChange = step2;
+	                history.go('test');
+	            }
+	            function step2(path) {
+	                expect(location.pathname).toBe('/base/test');
+	                expect(path).toBe('/base/test');
+	                document.head.removeChild(base);
+	                done();
+	            }
+	        });
+	    });
+	}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -3844,7 +3983,7 @@
 	});
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3861,7 +4000,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Emitter = __webpack_require__(22).EventEmitter;
+	var Emitter = __webpack_require__(23).EventEmitter;
 
 
 	/**
@@ -3957,7 +4096,7 @@
 	}
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -4261,12 +4400,12 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -4299,29 +4438,13 @@
 	        (0, _pipelineTestUtil.test)({
 	            a: {
 	                canActivate: function canActivate(transition) {
-	                    transition.next(true);
+	                    transition.next();
 	                }
 	            }
 	        }, function (router, calls) {
 	            router.go('/a');
 	            expect(routerUtil.warn).not.toHaveBeenCalled();
 	            expect(router.routerView.children[0].content).toBe('a');
-	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
-	            done();
-	        });
-	    });
-
-	    it('sync deny with transition.next', function (done) {
-	        (0, _pipelineTestUtil.test)({
-	            a: {
-	                canActivate: function canActivate(transition) {
-	                    transition.next(false);
-	                }
-	            }
-	        }, function (router, calls) {
-	            router.go('/a');
-	            expect(routerUtil.warn).not.toHaveBeenCalled();
-	            expect(router.routerView.children.length).toBe(0);
 	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
 	            done();
 	        });
@@ -4343,35 +4466,10 @@
 	            router.go('/a');
 	            expect(router.routerView.children.length).toBe(0);
 	            setTimeout(function () {
-	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
 	                expect(router.routerView.children[0].content).toBe('a');
 	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
 	                expect(router._currentRoute.path).toBe('/a');
-	                done();
-	            }, wait);
-	        });
-	    });
-
-	    it('async deny with transition.next', function (done) {
-	        (0, _pipelineTestUtil.test)({
-	            a: {
-	                canActivate: function canActivate(transition) {
-	                    setTimeout(function () {
-	                        transition.next(false);
-	                    }, wait);
-	                }
-	            }
-	        }, function (router, calls) {
-	            // i would like that use promise
-	            // in case i don't know whether the user forget to return boolean
-	            // so that i will take a warn here
-	            router.go('/a');
-	            expect(router.routerView.children.length).toBe(0);
-	            setTimeout(function () {
-	                expect(routerUtil.warn).toHaveBeenCalled();
-	                expect(router.routerView.children.length).toBe(0);
-	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
-	                expect(router._currentRoute.path).toBe('/');
 	                done();
 	            }, wait);
 	        });
@@ -4427,7 +4525,7 @@
 	            router.go('/a');
 	            expect(router.routerView.children.length).toBe(0);
 	            setTimeout(function () {
-	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
 	                expect(router.routerView.children.length).toBe(0);
 	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
 	                expect(router._currentRoute.path).toBe('/');
@@ -4526,7 +4624,7 @@
 	            }
 	        }, function (router, calls) {
 	            router.go('/a');
-	            expect(routerUtil.warn).toHaveBeenCalled();
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
 	            expect(router.routerView.children.length).toBe(0);
 	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
 	            done();
@@ -4535,12 +4633,12 @@
 	});
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -4575,7 +4673,7 @@
 	        (0, _pipelineTestUtil.test)({
 	            a: {
 	                canDeactivate: function canDeactivate(transition) {
-	                    transition.next(true);
+	                    transition.next();
 	                }
 	            }
 	        }, function (router, calls) {
@@ -4589,53 +4687,7 @@
 	        });
 	    });
 
-	    it('sync deny with transition.next', function (done) {
-	        (0, _pipelineTestUtil.test)({
-	            a: {
-	                canDeactivate: function canDeactivate(transition) {
-	                    transition.next(false);
-	                }
-	            }
-	        }, function (router, calls) {
-	            router.go('/a');
-	            expect(router.routerView.children[0].content).toBe('a');
-	            expect(router._currentRoute.path).toBe('/a');
-	            router.go('/c');
-	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
-	            expect(router._currentRoute.path).toBe('/a');
-	            expect(router.routerView.children[0].content).toBe('a');
-	            expect(routerUtil.warn).not.toHaveBeenCalled();
-	            done();
-	        });
-	    });
-
 	    it('async allow with transition', function (done) {
-	        (0, _pipelineTestUtil.test)({
-	            a: {
-	                canDeactivate: function canDeactivate(transition) {
-	                    setTimeout(function () {
-	                        transition.next(true);
-	                    }, wait);
-	                }
-	            }
-	        }, function (router, calls) {
-	            // i would like that use promise
-	            // in case i don't know whether the user forget to return boolean
-	            // so that i will take a warn here
-	            router.go('/a');
-	            expect(router.routerView.children[0].content).toBe('a');
-	            expect(router._currentRoute.path).toBe('/a');
-	            router.go('/c');
-	            setTimeout(function () {
-	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
-	                expect(router.routerView.children[0].content).toBe('c');
-	                expect(routerUtil.warn).toHaveBeenCalled();
-	                done();
-	            }, wait);
-	        });
-	    });
-
-	    it('async deny with transition.next', function (done) {
 	        (0, _pipelineTestUtil.test)({
 	            a: {
 	                canDeactivate: function canDeactivate(transition) {
@@ -4654,9 +4706,8 @@
 	            router.go('/c');
 	            setTimeout(function () {
 	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
-	                expect(router.routerView.children[0].content).toBe('a');
-	                expect(router._currentRoute.path).toBe('/a');
-	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(router.routerView.children[0].content).toBe('c');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
 	                done();
 	            }, wait);
 	        });
@@ -4722,7 +4773,7 @@
 	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
 	                expect(router.routerView.children[0].content).toBe('a');
 	                expect(router._currentRoute.path).toBe('/a');
-	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
 	                done();
 	            }, wait);
 	        });
@@ -4826,7 +4877,7 @@
 	            expect(routerUtil.warn).not.toHaveBeenCalled();
 	            expect(router.routerView.children[0].content).toBe('a');
 	            router.go('/c');
-	            expect(routerUtil.warn).toHaveBeenCalled();
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
 	            expect(router.routerView.children[0].content).toBe('a');
 	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
 	            done();
@@ -4835,12 +4886,12 @@
 	});
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -4973,12 +5024,12 @@
 	});
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -5190,12 +5241,12 @@
 	});
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -5363,12 +5414,12 @@
 	});
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _pipelineTestUtil = __webpack_require__(21);
+	var _pipelineTestUtil = __webpack_require__(22);
 
 	var _util = __webpack_require__(6);
 
@@ -5406,7 +5457,6 @@
 	                },
 	                deactivate: function deactivate(transition) {
 	                    // promise next
-	                    console.log("deactivateing");
 	                    return new Promise(function (resolve, rejct) {
 	                        setTimeout(resolve, wait);
 	                    });
@@ -5433,7 +5483,6 @@
 	                    // expect(router.routerView.children[0].content).toBe('a')
 	                    expect(router.routerView.children[0].children[0].content).toBe('b');
 	                    router.go('/c/d');
-	                    console.log("go to cd");
 	                    // done()
 	                }, wait);
 	            });
@@ -5463,130 +5512,6 @@
 	        });
 	    });
 	});
-
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _html = __webpack_require__(14);
-
-	var _html2 = _interopRequireDefault(_html);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	if (!window.isIE9) {
-	    describe('HTML5 history', function () {
-	        var url = location.href;
-	        var pathname = location.pathname;
-	        var history = void 0;
-	        afterEach(function (done) {
-	            history.stop();
-	            window.history.replaceState({}, '', url);
-	            setTimeout(done, 0);
-	        });
-
-	        it('notify change', function (done) {
-	            history = new _html2.default({
-	                onChange: step1
-	            });
-	            console.log(history);
-	            console.log(_html2.default);
-	            console.log(history.onChange);
-	            history.start();
-	            // init
-	            function step1(path) {
-	                expect(path).toBe(pathname);
-	                history.onChange = step2;
-	                history.go('/what/the#lol');
-	            }
-	            // root path & hash
-	            function step2(path, state, hash) {
-	                expect(location.pathname).toBe('/what/the');
-	                expect(path).toBe('/what/the');
-	                expect(state).toBeNull();
-	                expect(hash).toBe('#lol');
-	                history.onChange = step3;
-	                history.go('huh', true);
-	            }
-	            // relative path
-	            function step3(path) {
-	                expect(location.pathname).toBe('/what/huh');
-	                expect(path).toBe('/what/huh');
-	                done();
-	            }
-	        });
-
-	        it('root option', function (done) {
-	            history = new _html2.default({
-	                onChange: step1,
-	                root: 'root/'
-	            });
-	            expect(history.root).toBe('/root');
-	            history.start();
-	            function step1() {
-	                history.onChange = step2;
-	                history.go('/haha');
-	            }
-	            function step2(path) {
-	                expect(location.pathname).toBe('/root/haha');
-	                expect(path).toBe('/haha');
-	                done();
-	            }
-	        });
-
-	        it('popstate with root', function (done) {
-	            history = new _html2.default({
-	                onChange: step1,
-	                root: 'root/'
-	            });
-	            expect(history.root).toBe('/root');
-	            history.start();
-	            function step1() {
-	                history.onChange = step2;
-	                history.go('/');
-	            }
-	            function step2(path) {
-	                expect(location.pathname).toBe('/root/');
-	                expect(path).toBe('/');
-	                history.onChange = step3;
-	                history.go('/haha');
-	            }
-	            function step3(path) {
-	                expect(location.pathname).toBe('/root/haha');
-	                expect(path).toBe('/haha');
-	                history.onChange = step4;
-	                window.history.back();
-	            }
-	            function step4(path) {
-	                expect(location.pathname).toBe('/root/');
-	                expect(path).toBe('/');
-	                done();
-	            }
-	        });
-
-	        it('respect <base>', function (done) {
-	            var base = document.createElement('base');
-	            base.setAttribute('href', '/base/');
-	            document.head.appendChild(base);
-	            history = new _html2.default({
-	                onChange: step1
-	            });
-	            history.start();
-	            function step1(path) {
-	                history.onChange = step2;
-	                history.go('test');
-	            }
-	            function step2(path) {
-	                expect(location.pathname).toBe('/base/test');
-	                expect(path).toBe('/base/test');
-	                document.head.removeChild(base);
-	                done();
-	            }
-	        });
-	    });
-	}
 
 /***/ }
 /******/ ]);

@@ -126,6 +126,8 @@ gulp.task('watch', function(){
 // watcher.on("all",(event, path) => {
 // })
 
+gulp.task('build',['build-router','build-router-view'])
+
 gulp.task('default', ['browserSync','build-router','build-router-view','build-component',"build-basic-example",'watch']);
 
 // gulp.task('build', function() {

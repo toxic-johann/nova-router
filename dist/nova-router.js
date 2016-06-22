@@ -279,7 +279,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!this.routerView) {
 	                if (!routerView) {
 	                    throw new Error("Must start router with router view");
+	                    return;
 	                }
+	            }
+	            if (typeof routerView === 'string') {
+	                routerView = document.querySelector(routerView);
 	            }
 	            this.routerView = routerView;
 	            this._components.unshift(routerView);
@@ -1708,7 +1712,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var reverseDeactivateQueue = deactivateQueue.slice().reverse();
 	
 	            // 获取重用队列
-	            transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue);
+	            transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue, this);
 	
 	            // 此处有一个检测是否可以重用的部分
 	            transition.runQueue(reverseDeactivateQueue, _pipeline.canDeactivate, { factor: 1 }, function () {
@@ -1847,10 +1851,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else if (!hook.length) {
 	                    // 如果没有参数
 	                    onError("must return Boolean or Promise in " + hook);
-	                } else if (hook.length && !nextCalled && !aborted) {
-	                    // 通过transition提交会二次调用此处
-	                    // 如果使用了transition但是没有进行操作则会出现这种状况
-	                    (0, _util.warn)("advice use transition with sycn and add Boolean " + hook);
 	                }
 	            };
 	
@@ -1876,7 +1876,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                abort: postActivate ? function () {
 	                    return true;
 	                } : abort,
-	                next: processData ? nextWithData : expectBoolean ? nextWithBoolean : next,
+	                next: processData ? nextWithData : next,
 	                redirect: function redirect() {
 	                    transition.redirect.apply(transition, arguments);
 	                }
@@ -1965,14 +1965,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _util = __webpack_require__(2);
 	
-	function getReuseQueue(deactivateQueue, activateQueue) {
+	function getReuseQueue(deactivateQueue, activateQueue, transition) {
 	    var depth = Math.min(deactivateQueue.length, activateQueue.length);
 	    var reuseQueue = [];
 	    for (var i = 0; i < depth; i++) {
 	        var deactivateComponent = deactivateQueue[i].handler.component;
 	        var activateComponent = activateQueue[i].handler.component;
 	        if (Object.is(deactivateComponent, activateComponent)) {
-	            var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse() : deactivateComponent.route.canReuse : true;
+	            var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse({ to: transition.to, from: transition.from }) : deactivateComponent.route.canReuse : true;
 	            if (canComponentReuse === false) {
 	                i--;
 	                break;

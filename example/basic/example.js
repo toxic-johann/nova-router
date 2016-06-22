@@ -94,6 +94,7 @@
 	    },
 	    '/bar': {
 	        component: barView,
+	        auth: false,
 	        subRoutes: {
 	            '/foo': {
 	                component: fooView,
@@ -152,7 +153,8 @@
 	// console.log(routerView)
 	
 	Nova.ready([routerView], function () {
-	    router.start(routerView);
+	    router.start('router-view');
+	    // router.start(routerView)
 	    // router.go('/bar/bay')
 	
 	    //     console.log("createing")
@@ -1062,7 +1064,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__1';
+	      var globalAlias = '__10';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1398,7 +1400,11 @@
 							if (!this.routerView) {
 								if (!routerView) {
 									throw new Error("Must start router with router view");
+									return;
 								}
+							}
+							if (typeof routerView === 'string') {
+								routerView = document.querySelector(routerView);
 							}
 							this.routerView = routerView;
 							this._components.unshift(routerView);
@@ -2960,7 +2966,7 @@
 							var reverseDeactivateQueue = deactivateQueue.slice().reverse();
 	
 							// 获取重用队列
-							transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue);
+							transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue, this);
 	
 							// 此处有一个检测是否可以重用的部分
 							transition.runQueue(reverseDeactivateQueue, _pipeline.canDeactivate, { factor: 1 }, function () {
@@ -3099,10 +3105,6 @@
 								} else if (!hook.length) {
 									// 如果没有参数
 									onError("must return Boolean or Promise in " + hook);
-								} else if (hook.length && !nextCalled && !aborted) {
-									// 通过transition提交会二次调用此处
-									// 如果使用了transition但是没有进行操作则会出现这种状况
-									(0, _util.warn)("advice use transition with sycn and add Boolean " + hook);
 								}
 							};
 	
@@ -3128,7 +3130,7 @@
 								abort: postActivate ? function () {
 									return true;
 								} : abort,
-								next: processData ? nextWithData : expectBoolean ? nextWithBoolean : next,
+								next: processData ? nextWithData : next,
 								redirect: function redirect() {
 									transition.redirect.apply(transition, arguments);
 								}
@@ -3217,14 +3219,14 @@
 	
 				var _util = __webpack_require__(2);
 	
-				function getReuseQueue(deactivateQueue, activateQueue) {
+				function getReuseQueue(deactivateQueue, activateQueue, transition) {
 					var depth = Math.min(deactivateQueue.length, activateQueue.length);
 					var reuseQueue = [];
 					for (var i = 0; i < depth; i++) {
 						var deactivateComponent = deactivateQueue[i].handler.component;
 						var activateComponent = activateQueue[i].handler.component;
 						if (Object.is(deactivateComponent, activateComponent)) {
-							var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse() : deactivateComponent.route.canReuse : true;
+							var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse({ to: transition.to, from: transition.from }) : deactivateComponent.route.canReuse : true;
 							if (canComponentReuse === false) {
 								i--;
 								break;
@@ -3415,7 +3417,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__3';
+	            var globalAlias = '__12';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -3429,7 +3431,7 @@
 	            return {}[name];
 	        }
 	
-	        var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n        <div>{{content}} attached</div>\n        <div>\n            {{JSON.stringify($route.params)}}\n            {{$route.path}}\n            {{JSON.stringify($route.query)}}\n        </div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{loadingRouteData != true}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    " };
+	        var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n        <div>{{content}} attached</div>\n        <div>\n            {{JSON.stringify($route.params)}}\n            {{$route.path}}\n            {{JSON.stringify($route.query)}}\n        </div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{!loadingRouteData}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    " };
 	        NovaExports({
 	            is: 'nova-view',
 	            props: {
@@ -3455,16 +3457,14 @@
 	            route: {
 	                waitForData: false,
 	                // canReuse:false,
-	                // data:function(){
-	                //     return new Promise(function(resolve,reject){
-	                //         setTimeout(function(){
-	                //             resolve()
-	                //         },1000)
-	                //     })
-	                // },
 	                data: function data() {
-	                    return { test: true };
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            resolve();
+	                        }, 1000);
+	                    });
 	                },
+	                // data:function(){return {test:true}},
 	                activate: function activate() {
 	                    console.log("activate", this.content);
 	                    return new Promise(function (resolve, reject) {

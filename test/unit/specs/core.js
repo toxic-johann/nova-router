@@ -314,6 +314,24 @@ describe('Core',function () {
         router.start(el)
     })
 
+    // it('notfound',function(done) {
+    //     router = new Router({abstract:true})
+    //     let aView = createNovaView({content:"a"})
+    //     router.map({
+    //         '*':{
+    //             component:aView
+    //         }
+    //     })
+    //     let guide = assertRoutes([
+    //         ['/notfound', 'a'],
+    //         ['/notagain', 'a']
+    //     ],done,matches=>{
+    //         let content = router.routerView.children[0].content
+    //         expect(content).toBe(matches[0][1])
+    //     })
+    //     router.start(el)
+    // })
+
     if(!window.isIE9) {
         it('saveScrollPosition',function(done) {
             router = new Router({
