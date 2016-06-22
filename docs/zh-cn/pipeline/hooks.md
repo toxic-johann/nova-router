@@ -78,9 +78,9 @@ Nova({
 
   调用此函数来终止或者拒绝此次切换。
 
-- ~~**transition.redirect(path)**~~
+- **transition.redirect(path)**
 
-  ~~取消当前切换并重定向到另一个路由。~~
+  取消当前切换并重定向到另一个路由。
 
 ### 钩子函数异步 resolve 规则
 
