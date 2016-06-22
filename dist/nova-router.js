@@ -126,6 +126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        // route recognizer
 	        this._recognizer = new _routeRecognizer2.default();
+	        this._guardRecognizer = new _routeRecognizer2.default();
 	
 	        // state
 	        this._started = false;
@@ -714,7 +715,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	
 	function inBrowser() {
-	  return Object.prototype.toString.call(window) === "[object Window]";
+	  var test = window || null;
+	  return Object.prototype.toString.call(test) === "[object Window]";
 	}
 
 /***/ },

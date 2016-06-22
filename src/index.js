@@ -24,6 +24,7 @@ export default class Router {
     } = {}) {
         // route recognizer
         this._recognizer = new RouteRecognizer();
+        this._guardRecognizer = new RouteRecognizer()
 
         // state
         this._started = false

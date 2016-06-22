@@ -105,5 +105,6 @@ export function mapParams (path, params = {}, query) {
 }
 
 export function inBrowser () {
-    return Object.prototype.toString.call(window) === "[object Window]"
+    const test = window || null
+    return Object.prototype.toString.call(test) === "[object Window]"
 }
