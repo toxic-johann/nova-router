@@ -140,9 +140,11 @@ export default class Transition {
     }={}){
         const transition = this;
         let nextCalled = false;
+        let aborted = false
 
         // abort the transition
         const abort = ()=>{
+            aborted = true
             cleanup && cleanup()
             transition.abort()
         }
@@ -189,10 +191,12 @@ export default class Transition {
                 res.then((ok) => {
                     ok ? next() : abort()
                 },onPromiseError)
-            } else if(!hook.length) {
-                next()
-            } else {
-                onError("must return Boolean in "+hook)
+            } else if(!hook.length) { // 如果没有参数
+                onError("must return Boolean or Promise in "+ hook)
+            } else if (hook.length && !nextCalled && !aborted){
+                // 通过transition提交会二次调用此处
+                // 如果使用了transition但是没有进行操作则会出现这种状况
+                warn("advice use transition with sycn and add Boolean "+ hook)
             }
             
         }
@@ -216,8 +220,8 @@ export default class Transition {
         const exposed = {
             to: transition.to,
             from: transition.from,
-            abort:abort,
-            next:processData ? nextWithData : next,
+            abort:postActivate?(()=>true):abort,
+            next:processData ? nextWithData : expectBoolean ? nextWithBoolean :next,
             redirect: function(){
                 transition.redirect.apply(transition,arguments)
             }
@@ -230,7 +234,6 @@ export default class Transition {
         } catch (err){
             return onError(err)
         }
-
         if(expectBoolean) {
             nextWithBoolean(res)
         } else if(isPromise(res)) {
@@ -241,7 +244,8 @@ export default class Transition {
             }
         } else if (processData && isPlainOjbect(res)){
             nextWithData(res)
-        } else if (!hook.length) {//不是数组的话
+        } else if (!hook.length) {
+            // 没有传入参数的情况下
             next()
         }
     }

@@ -1,0 +1,43 @@
+<template is="dom-module" id="nova-test-view">
+    <style type="text/css">
+    </style>
+    <template>
+    </template>
+    <script>
+        Nova({
+            is: 'nova-test-view',
+            props: {
+                content: {
+                    type: String,
+                    value: ''
+                },
+                loadingRouteData:{
+                    type:Boolean,
+                    value:false
+                },
+                $route:{
+                    type:Object,
+                    value:function(){
+                        return {
+                            params:"",
+                            path:"",
+                            query:"",
+                        }
+                    }
+                }
+            },
+            createdHandler: function() {
+                console.log("nova-test-view "+ this.content + " created");
+            },
+            attachedHandler: function() {
+                console.log("nova-test-view "+ this.content + " attached"); 
+            },
+            detachedHandler: function() { 
+                console.log("nova-test-view "+ this.content + " detached");
+            },
+            attributeChangedHandler: function(attrName, oldVal, newVal) { 
+                console.log("nova-test-view "+ this.content + " attributeChanged");
+            },
+        });
+    </script>
+</template>

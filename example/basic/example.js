@@ -106,9 +106,14 @@
 	    },
 	    '/user/:username': {
 	        name: "user",
-	        component: userView
+	        component: userView,
+	        subRoutes: {
+	            '/': {
+	                component: barView
+	            }
+	        }
 	    },
-	    '/melon/:id/:code': {
+	    '/melon/:id/code': {
 	        name: "melon",
 	        component: userView
 	    },
@@ -1057,7 +1062,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__3';
+	      var globalAlias = '__1';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1177,17 +1182,25 @@
 	
 				var _hash2 = _interopRequireDefault(_hash);
 	
-				__webpack_require__(3);
+				var _abstract = __webpack_require__(6);
 	
-				var _routeRecognizer = __webpack_require__(4);
+				var _abstract2 = _interopRequireDefault(_abstract);
+	
+				var _html = __webpack_require__(7);
+	
+				var _html2 = _interopRequireDefault(_html);
+	
+				__webpack_require__(8);
+	
+				var _routeRecognizer = __webpack_require__(3);
 	
 				var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
 	
-				var _route = __webpack_require__(7);
+				var _route = __webpack_require__(9);
 	
 				var _route2 = _interopRequireDefault(_route);
 	
-				var _transition = __webpack_require__(8);
+				var _transition = __webpack_require__(10);
 	
 				var _transition2 = _interopRequireDefault(_transition);
 	
@@ -1204,11 +1217,10 @@
 				}
 	
 				var historyBackends = {
-					// abstract: AbstractHistory,
-					hash: _hash2.default
+					abstract: _abstract2.default,
+					hash: _hash2.default,
+					html5: _html2.default
 				};
-	
-				// html5: HTML5History
 	
 				var Router = function () {
 					function Router() {
@@ -1245,9 +1257,20 @@
 						this._notFoundRedirect = null;
 						this._beforeEachHooks = [];
 						this._afterEachHooks = [];
+						this._rendered = false;
 	
+						// history mode
+						this._root = root;
 						this._hashbang = hashbang;
-						this.mode = 'hash';
+						this._abstract = abstract;
+	
+						// check if HTML5 histroy is available
+						var hasPushState = typeof window !== 'undefined' && window.history && window.history.pushState;
+						this._history = history && hasPushState;
+						this._historyFallBack = history && !hasPushState;
+	
+						// create history object
+						this.mode = !_util.inBrowser || this._abstract ? 'abstract' : this._history ? 'html5' : 'hash';
 						var History = historyBackends[this.mode];
 						this.history = new History({
 							root: root,
@@ -1372,16 +1395,16 @@
 								(0, _util.warn)("already started.");
 								return;
 							}
-							this._started = true;
-							this._startCb = cb;
 							if (!this.routerView) {
 								if (!routerView) {
 									throw new Error("Must start router with router view");
 								}
 							}
 							this.routerView = routerView;
-							this.history.start();
 							this._components.unshift(routerView);
+							this._started = true;
+							this._startCb = cb;
+							this.history.start();
 						}
 	
 						/**
@@ -1408,11 +1431,10 @@
 							if (path && (typeof path === 'undefined' ? 'undefined' : _typeof(path)) === 'object') {
 								if (path.name) {
 									// 具名路径
-									generatePath = encodeURI(this._recognizer.generate(path.name, path.params));
+									generatePath = encodeURI(this._recognizer.generate(path.name, path.params || {}));
 								} else if (path.path) {
 									generatePath = encodeURI(path.path);
 								}
-	
 								if (path.query) {
 									var query = this._recognizer.generateQueryString(path.query);
 									if (generatePath.indexOf('?') > -1) {
@@ -1461,7 +1483,7 @@
 							this._recognizer.add(segments, {
 								as: handler.name
 							});
-							if (!this._components.includes(handler.component)) {
+							if (handler.component && !this._components.includes(handler.component)) {
 								this._components.push(handler.component);
 								handler.component.$route = this._currentRoute;
 							}
@@ -1529,7 +1551,7 @@
 						}
 	
 						/**
-	      * called when we vaildate the transition can run
+	      * called when we validate the transition can run
 	      * @param  {[type]} transition [description]
 	      * @return {[type]}            [description]
 	      */
@@ -1553,6 +1575,11 @@
 					}, {
 						key: '_postTransition',
 						value: function _postTransition(transition) {
+							// the first time catch change we call the started callback
+							if (!this._rendered && this._startCb) {
+								this._rendered = true;
+								this._startCb.call(null);
+							}
 							this._currentTransition.done = true;
 							if (this._afterEachHooks.length) {
 								this._afterEachHooks.forEach(function (hook) {
@@ -1694,8 +1721,9 @@
 				exports.isObject = isObject;
 				exports.warn = warn;
 				exports.mapParams = mapParams;
+				exports.inBrowser = inBrowser;
 	
-				var _routeRecognizer = __webpack_require__(4);
+				var _routeRecognizer = __webpack_require__(3);
 	
 				var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
 	
@@ -1806,62 +1834,13 @@
 					return path;
 				}
 	
+				function inBrowser() {
+					return Object.prototype.toString.call(window) === "[object Window]";
+				}
+	
 				/***/
 			},
 			/* 3 */
-			/***/function (module, exports, __webpack_require__) {
-	
-				var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
-	
-				var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-					return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-				} : function (obj) {
-					return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-				};
-	
-				(function () {
-					(function (root, factory) {
-						if ((false ? 'undefined' : _typeof(exports)) === 'object') {
-							module.exports = factory();
-						} else if (true) {
-							!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-						} else {
-							var globalAlias = '__0';
-							var namespace = globalAlias.split('.');
-							var parent = root;
-							for (var i = 0; i < namespace.length - 1; i++) {
-								if (parent[namespace[i]] === undefined) parent[namespace[i]] = {};
-								parent = parent[namespace[i]];
-							}
-							parent[namespace[namespace.length - 1]] = factory();
-						}
-					})(this, function () {
-						function _requireDep(name) {
-							return {}[name];
-						}
-	
-						var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n    " };
-						NovaExports({
-							is: 'router-view',
-							props: {
-								content: {
-									type: String,
-									value: ''
-								}
-							},
-							createdHandler: function createdHandler() {},
-							attachedHandler: function attachedHandler() {},
-							detachedHandler: function detachedHandler() {},
-							attributeChangedHandler: function attributeChangedHandler(attrName, oldVal, newVal) {}
-						});
-	
-						return _bundleExports;
-					});
-				}).call(window);
-	
-				/***/
-			},
-			/* 4 */
 			/***/function (module, exports, __webpack_require__) {
 	
 				var __WEBPACK_AMD_DEFINE_RESULT__; /* WEBPACK VAR INJECTION */(function (module) {
@@ -2545,7 +2524,7 @@
 						var $$route$recognizer$$default = $$route$recognizer$$RouteRecognizer;
 	
 						/* global define:true module:true window: true */
-						if ("function" === 'function' && __webpack_require__(6)['amd']) {
+						if ("function" === 'function' && __webpack_require__(5)['amd']) {
 							!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
 								return $$route$recognizer$$default;
 							}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -2558,11 +2537,11 @@
 	
 					//# sourceMappingURL=route-recognizer.js.map
 					/* WEBPACK VAR INJECTION */
-				}).call(exports, __webpack_require__(5)(module));
+				}).call(exports, __webpack_require__(4)(module));
 	
 				/***/
 			},
-			/* 5 */
+			/* 4 */
 			/***/function (module, exports) {
 	
 				module.exports = function (module) {
@@ -2578,7 +2557,7 @@
 	
 				/***/
 			},
-			/* 6 */
+			/* 5 */
 			/***/function (module, exports) {
 	
 				module.exports = function () {
@@ -2587,7 +2566,241 @@
 	
 				/***/
 			},
+			/* 6 */
+			/***/function (module, exports, __webpack_require__) {
+	
+				'use strict';
+	
+				Object.defineProperty(exports, "__esModule", {
+					value: true
+				});
+	
+				var _createClass = function () {
+					function defineProperties(target, props) {
+						for (var i = 0; i < props.length; i++) {
+							var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+						}
+					}return function (Constructor, protoProps, staticProps) {
+						if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+					};
+				}();
+	
+				var _util = __webpack_require__(2);
+	
+				function _classCallCheck(instance, Constructor) {
+					if (!(instance instanceof Constructor)) {
+						throw new TypeError("Cannot call a class as a function");
+					}
+				}
+	
+				var AbstractHistory = function () {
+					function AbstractHistory(_ref) {
+						var onChange = _ref.onChange;
+	
+						_classCallCheck(this, AbstractHistory);
+	
+						this.onChange = onChange;
+						this.currentPath = '/';
+					}
+	
+					_createClass(AbstractHistory, [{
+						key: 'start',
+						value: function start() {
+							this.onChange('/');
+						}
+					}, {
+						key: 'stop',
+						value: function stop() {
+							// nothing to do
+						}
+					}, {
+						key: 'go',
+						value: function go(path, replace, append) {
+							path = this.currentPath = this.formatPath(path, append);
+							this.onChange(path);
+						}
+					}, {
+						key: 'formatPath',
+						value: function formatPath(path, append) {
+							return path.charAt(0) === '/' ? path : (0, _util.resolvePath)(this.currentPath, path, append);
+						}
+					}]);
+	
+					return AbstractHistory;
+				}();
+	
+				exports.default = AbstractHistory;
+	
+				/***/
+			},
 			/* 7 */
+			/***/function (module, exports, __webpack_require__) {
+	
+				'use strict';
+	
+				Object.defineProperty(exports, "__esModule", {
+					value: true
+				});
+	
+				var _createClass = function () {
+					function defineProperties(target, props) {
+						for (var i = 0; i < props.length; i++) {
+							var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+						}
+					}return function (Constructor, protoProps, staticProps) {
+						if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+					};
+				}();
+	
+				var _util = __webpack_require__(2);
+	
+				function _classCallCheck(instance, Constructor) {
+					if (!(instance instanceof Constructor)) {
+						throw new TypeError("Cannot call a class as a function");
+					}
+				}
+	
+				var hashRegExp = /#.*$/;
+	
+				var HTML5History = function () {
+					function HTML5History(_ref) {
+						var root = _ref.root;
+						var onChange = _ref.onChange;
+	
+						_classCallCheck(this, HTML5History);
+	
+						if (root && root !== '/') {
+							// make sure the startting
+							if (root.charAt(0) !== '/') {
+								root = '/' + root;
+							}
+							// remove trailing
+							this.root = root.replace(/\/$/, '');
+							this.rootRegExp = new RegExp('^\\' + this.root);
+						} else {
+							this.root = null;
+						}
+						this.onChange = onChange;
+						// check the base
+						var baseEl = document.querySelector('base');
+						this.base = baseEl && baseEl.getAttribute('href');
+					}
+	
+					_createClass(HTML5History, [{
+						key: 'start',
+						value: function start() {
+							var _this = this;
+	
+							this.listener = function (e) {
+								var url = location.pathname + location.search;
+								if (_this.root) {
+									url = url.replace(_this.rootRegExp, '') || '/';
+								}
+								_this.onChange(url, e && e.state, location.hash);
+							};
+							window.addEventListener('popstate', this.listener);
+							this.listener();
+						}
+					}, {
+						key: 'stop',
+						value: function stop() {
+							window.removeEventListener('popstate', this.listener);
+						}
+					}, {
+						key: 'go',
+						value: function go(path, replace, append) {
+							var url = this.formatPath(path, append);
+							if (replace) {
+								history.replaceState({}, '', url);
+							} else {
+								// record scroll position by replacing current state
+								history.replaceState({
+									pos: {
+										x: window.pageXOffset,
+										y: window.pageYOffset
+									}
+								}, '', location.href);
+								// then push new state
+								history.pushState({}, '', url);
+							}
+	
+							var hashMatch = path.match(hashRegExp);
+							var hash = hashMatch && hashMatch[0];
+							path = url
+							// strip hash so it doesn't mess up params
+							.replace(hashRegExp, '')
+							// remove root before matching
+							.replace(this.rootRegExp, '');
+							this.onChange(path, null, hash);
+						}
+					}, {
+						key: 'formatPath',
+						value: function formatPath(path, append) {
+							return path.charAt(0) === '/' ? this.root ? this.root + '/' + path.replace(/^\//, '') : path : (0, _util.resolvePath)(this.base || location.pathname, path, append);
+						}
+					}]);
+	
+					return HTML5History;
+				}();
+	
+				exports.default = HTML5History;
+	
+				/***/
+			},
+			/* 8 */
+			/***/function (module, exports, __webpack_require__) {
+	
+				var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+	
+				var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+					return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+				} : function (obj) {
+					return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+				};
+	
+				(function () {
+					(function (root, factory) {
+						if ((false ? 'undefined' : _typeof(exports)) === 'object') {
+							module.exports = factory();
+						} else if (true) {
+							!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = factory, __WEBPACK_AMD_DEFINE_RESULT__ = typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? __WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__) : __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+						} else {
+							var globalAlias = '__0';
+							var namespace = globalAlias.split('.');
+							var parent = root;
+							for (var i = 0; i < namespace.length - 1; i++) {
+								if (parent[namespace[i]] === undefined) parent[namespace[i]] = {};
+								parent = parent[namespace[i]];
+							}
+							parent[namespace[namespace.length - 1]] = factory();
+						}
+					})(this, function () {
+						function _requireDep(name) {
+							return {}[name];
+						}
+	
+						var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n    " };
+						NovaExports({
+							is: 'router-view',
+							props: {
+								content: {
+									type: String,
+									value: ''
+								}
+							},
+							createdHandler: function createdHandler() {},
+							attachedHandler: function attachedHandler() {},
+							detachedHandler: function detachedHandler() {},
+							attributeChangedHandler: function attributeChangedHandler(attrName, oldVal, newVal) {}
+						});
+	
+						return _bundleExports;
+					});
+				}).call(window);
+	
+				/***/
+			},
+			/* 9 */
 			/***/function (module, exports) {
 	
 				'use strict';
@@ -2644,7 +2857,7 @@
 	
 				/***/
 			},
-			/* 8 */
+			/* 10 */
 			/***/function (module, exports, __webpack_require__) {
 	
 				'use strict';
@@ -2665,7 +2878,7 @@
 	
 				var _util = __webpack_require__(2);
 	
-				var _pipeline = __webpack_require__(9);
+				var _pipeline = __webpack_require__(11);
 	
 				function _classCallCheck(instance, Constructor) {
 					if (!(instance instanceof Constructor)) {
@@ -2830,9 +3043,11 @@
 	
 							var transition = this;
 							var nextCalled = false;
+							var aborted = false;
 	
 							// abort the transition
 							var abort = function abort() {
+								aborted = true;
 								cleanup && cleanup();
 								transition.abort();
 							};
@@ -2882,9 +3097,12 @@
 										ok ? next() : abort();
 									}, onPromiseError);
 								} else if (!hook.length) {
-									next();
-								} else {
-									onError("must return Boolean in " + hook);
+									// 如果没有参数
+									onError("must return Boolean or Promise in " + hook);
+								} else if (hook.length && !nextCalled && !aborted) {
+									// 通过transition提交会二次调用此处
+									// 如果使用了transition但是没有进行操作则会出现这种状况
+									(0, _util.warn)("advice use transition with sycn and add Boolean " + hook);
 								}
 							};
 	
@@ -2907,8 +3125,10 @@
 							var exposed = {
 								to: transition.to,
 								from: transition.from,
-								abort: abort,
-								next: processData ? nextWithData : next,
+								abort: postActivate ? function () {
+									return true;
+								} : abort,
+								next: processData ? nextWithData : expectBoolean ? nextWithBoolean : next,
 								redirect: function redirect() {
 									transition.redirect.apply(transition, arguments);
 								}
@@ -2921,7 +3141,6 @@
 							} catch (err) {
 								return onError(err);
 							}
-	
 							if (expectBoolean) {
 								nextWithBoolean(res);
 							} else if ((0, _util.isPromise)(res)) {
@@ -2933,7 +3152,7 @@
 							} else if (processData && isPlainOjbect(res)) {
 								nextWithData(res);
 							} else if (!hook.length) {
-								//不是数组的话
+								// 没有传入参数的情况下
 								next();
 							}
 						}
@@ -2979,10 +3198,10 @@
 	
 				/***/
 			},
-			/* 9 */
-			/***/function (module, exports) {
+			/* 11 */
+			/***/function (module, exports, __webpack_require__) {
 	
-				"use strict";
+				'use strict';
 	
 				Object.defineProperty(exports, "__esModule", {
 					value: true
@@ -2995,12 +3214,18 @@
 				exports.canReuse = canReuse;
 				exports.data = data;
 				exports.isChildNode = isChildNode;
+	
+				var _util = __webpack_require__(2);
+	
 				function getReuseQueue(deactivateQueue, activateQueue) {
 					var depth = Math.min(deactivateQueue.length, activateQueue.length);
 					var reuseQueue = [];
 					for (var i = 0; i < depth; i++) {
-						if (Object.is(deactivateQueue[i].handler.component, activateQueue[i].handler.component)) {
-							if (deactivateQueue[i].handler.component.route.canReuse === false || activateQueue[i].handler.component.route.canReuse === false) {
+						var deactivateComponent = deactivateQueue[i].handler.component;
+						var activateComponent = activateQueue[i].handler.component;
+						if (Object.is(deactivateComponent, activateComponent)) {
+							var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse() : deactivateComponent.route.canReuse : true;
+							if (canComponentReuse === false) {
 								i--;
 								break;
 							}
@@ -3027,7 +3252,7 @@
 						transition.callHook(fn, component, function () {
 							parent.handler.component.removeChild(child.handler.component);
 							cb && cb();
-						});
+						}, { postActivate: true });
 					} else {
 						cb && cb && cb();
 					}
@@ -3050,7 +3275,7 @@
 							parent.handler.component.appendChild(child.handler.component);
 							data(component, transition);
 							cb && cb();
-						});
+						}, { postActivate: true });
 					} else {
 						data(component, transition);
 						cb && cb();
@@ -3099,10 +3324,31 @@
 				function data(component, transition) {
 					component.loadingRouteData = true;
 					var fn = component.route && component.route.data || function () {
-						return true;
+						return {};
 					};
 					transition.callHook(fn, component, function () {
 						component.loadingRouteData = false;
+					}, {
+						postActivate: true,
+						// 处理data语法糖
+						processData: function processData(data) {
+							var promises = [];
+							if (isPlainObject(data)) {
+								Object.keys(data).forEach(function (key) {
+									var val = data[key];
+									if ((0, _util.isPromise)(val)) {
+										promises.push(val.then(function (resolvedData) {
+											component[key] = resolvedData;
+										}));
+									} else {
+										component[key] = val;
+									}
+								});
+							}
+							if (promises.length) {
+								return promises[0].constructor.all(promises);
+							}
+						}
 					});
 				}
 	
@@ -3117,6 +3363,16 @@
 						}
 					}
 					return false;
+				}
+	
+				/**
+	    * Check plain object.
+	    *
+	    * @param {*} val
+	    */
+	
+				function isPlainObject(val) {
+					return Object.prototype.toString.call(val) === '[object Object]';
 				}
 	
 				/***/
@@ -3159,7 +3415,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__4';
+	            var globalAlias = '__3';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -3198,13 +3454,16 @@
 	            },
 	            route: {
 	                waitForData: false,
-	                canReuse: false,
+	                // canReuse:false,
+	                // data:function(){
+	                //     return new Promise(function(resolve,reject){
+	                //         setTimeout(function(){
+	                //             resolve()
+	                //         },1000)
+	                //     })
+	                // },
 	                data: function data() {
-	                    return new Promise(function (resolve, reject) {
-	                        setTimeout(function () {
-	                            resolve();
-	                        }, 1000);
-	                    });
+	                    return { test: true };
 	                },
 	                activate: function activate() {
 	                    console.log("activate", this.content);

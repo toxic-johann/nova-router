@@ -1,14 +1,16 @@
 import HashHistory from './history/hash'
+import AbstractHistory from './history/abstract'
+import HTML5History from './history/html5'
 import './component/router-view/main.js'
 import RouteRecognizer from 'route-recognizer'
 import Route from './route.js'
 import Transition from './transition.js'
-import { warn, mapParams,isObject } from './util'
+import {inBrowser, warn, mapParams,isObject } from './util'
 
 const historyBackends = {
-    // abstract: AbstractHistory,
+    abstract: AbstractHistory,
     hash: HashHistory,
-    // html5: HTML5History
+    html5: HTML5History
 }
 
 export default class Router {
@@ -33,9 +35,25 @@ export default class Router {
         this._notFoundRedirect = null
         this._beforeEachHooks = []
         this._afterEachHooks = []
+        this._rendered = false
 
-        this._hashbang = hashbang;
-        this.mode = 'hash';
+        // history mode
+        this._root = root
+        this._hashbang = hashbang
+        this._abstract = abstract
+
+        // check if HTML5 histroy is available
+        const hasPushState = 
+            typeof window !== 'undefined' && window.history && window.history.pushState
+        this._history = history && hasPushState
+        this._historyFallBack = history && !hasPushState
+
+        // create history object
+        this.mode = (!inBrowser || this._abstract)
+            ? 'abstract'
+            : this._history
+                ? 'html5'
+                : 'hash'
         const History = historyBackends[this.mode];
         this.history = new History({
             root:root,
@@ -103,16 +121,16 @@ export default class Router {
      * @return {[type]}      [description]
      */
     go (path){
-      let replace = false;
-      let append = false;
-      if(isObject(path)){
-          replace = path.replace
-          append = path.append
-      }
-      path = this.stringifyPath(path)
-      if(path){
-          this.history.go(path,replace,append)
-      }
+        let replace = false;
+        let append = false;
+        if(isObject(path)){
+            replace = path.replace
+            append = path.append
+        }
+        path = this.stringifyPath(path)
+        if(path){
+            this.history.go(path,replace,append)
+        }
     }
 
     /**
@@ -121,11 +139,11 @@ export default class Router {
      * @return {[type]}      [description]
      */
     replace (path) {
-      if (typeof path === "string"){
-          path = {path}
-      }
-      path.replace = true;
-      this.go(path)
+        if (typeof path === "string"){
+            path = {path}
+        }
+        path.replace = true;
+        this.go(path)
     }
 
     /**
@@ -139,16 +157,16 @@ export default class Router {
             warn("already started.")
             return
         }
-        this._started = true
-        this._startCb = cb
         if(!this.routerView){
             if(!routerView){
                 throw new Error("Must start router with router view")
             }
         }
         this.routerView = routerView
-        this.history.start()
         this._components.unshift(routerView)
+        this._started = true
+        this._startCb = cb
+        this.history.start()
     }
 
     /**
@@ -166,27 +184,26 @@ export default class Router {
      * @return {[type]}      [description]
      */
     stringifyPath (path) {
-      let generatePath = ''
-      if(path && typeof path === 'object'){
-        if(path.name) { 
-            // 具名路径
-            generatePath = encodeURI(this._recognizer.generate(path.name, path.params))
-        } else if(path.path){
-            generatePath = encodeURI(path.path)
-        }
-
-        if(path.query){
-            const query = this._recognizer.generateQueryString(path.query)
-            if(generatePath.indexOf('?') > -1){
-                generatePath += '&'+query.slice(1);
-            } else {
-                generatePath += query
+        let generatePath = ''
+        if(path && typeof path === 'object'){
+            if(path.name) { 
+                // 具名路径
+                generatePath = encodeURI(this._recognizer.generate(path.name, path.params || {}))
+            } else if(path.path){
+                generatePath = encodeURI(path.path)
             }
+            if(path.query){
+                const query = this._recognizer.generateQueryString(path.query)
+                if(generatePath.indexOf('?') > -1){
+                    generatePath += '&'+query.slice(1);
+                } else {
+                    generatePath += query
+                }
+            }
+        } else {
+            generatePath = encodeURI(path?path+'':'')
         }
-      } else {
-          generatePath = encodeURI(path?path+'':'')
-      }
-      return generatePath
+        return generatePath
     }
 
     // Internal methods ======================================
@@ -217,7 +234,7 @@ export default class Router {
         this._recognizer.add(segments,{
             as:handler.name
         })
-        if(!this._components.includes(handler.component)){
+        if(handler.component && !this._components.includes(handler.component)){
             this._components.push(handler.component)
             handler.component.$route = this._currentRoute
         }
@@ -274,14 +291,13 @@ export default class Router {
         })
         if(beforeHooks.length) {
             transition.callHooks(beforeHooks,null,startTransition,{expectBoolean:true})
-
         } else {
             startTransition()
         }
     }
 
     /**
-     * called when we vaildate the transition can run
+     * called when we validate the transition can run
      * @param  {[type]} transition [description]
      * @return {[type]}            [description]
      */
@@ -299,6 +315,11 @@ export default class Router {
      * @return {[type]} [description]
      */
     _postTransition(transition){
+        // the first time catch change we call the started callback
+        if (!this._rendered && this._startCb) {
+            this._rendered = true
+            this._startCb.call(null)
+        }
         this._currentTransition.done = true
         if(this._afterEachHooks.length) {
             this._afterEachHooks.forEach(hook =>hook.call(null,{

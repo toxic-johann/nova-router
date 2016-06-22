@@ -103,3 +103,7 @@ export function mapParams (path, params = {}, query) {
   }
   return path
 }
+
+export function inBrowser () {
+    return Object.prototype.toString.call(window) === "[object Window]"
+}

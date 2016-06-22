@@ -1,112 +1,97 @@
-var Vue = require('vue')
-var Router = require('../../../src')
-var Emitter = require('events').EventEmitter
+let Emitter = require('events').EventEmitter
+import Router from '../../../src/index.js'
 
 /**
- * Setup a router app for testing with two nested routes:
+ * setup a router for testing with two nested routes:
  *
  * - /a/b
  * - /c/d
  *
- * @param {Object} configs - an object that contains the
- *                           route configs for each component.
- * @param {Function} cb(router, calls, emitter)
+ * configs: - an object that contains the route configs for each component
+ * cb
  */
 
-exports.test = function (configs, cb) {
-  var emitter = new Emitter()
-  var router = new Router({ abstract: true })
-  var el = document.createElement('div')
-  var App = Vue.extend({ template: '<div><router-view></router-view></div>' })
-  var calls = []
-  // wrap hooks
-  Object.keys(configs).forEach(function (route) {
-    var config = configs[route]
-    Object.keys(config).forEach(function (hook) {
-      var fn = config[hook]
-      if (Array.isArray(fn) || hook === 'mixins') {
-        return
-      }
-      if (fn.length) {
-        config[hook] = function (transition) {
-          var event = route + '.' + hook
-          calls.push(event)
-          var res = typeof fn === 'function'
-            ? fn(transition)
-            : fn
-          emitter.emit(event)
-          return res
-        }
-      } else {
-        config[hook] = function () {
-          var event = route + '.' + hook
-          calls.push(event)
-          var res = typeof fn === 'function'
-            ? fn()
-            : fn
-          emitter.emit(event)
-          return res
-        }
-      }
+export function test (configs,cb) {
+    const emitter = new Emitter()
+    let router = new Router({abstract:true})
+    let el = document.createElement('router-view')
+    let calls = []
+    // wrap hooks
+    Object.keys(configs).forEach(route=>{
+        let config = configs[route]
+        Object.keys(config).forEach(hook=>{
+            let fn = config[hook]
+            if(Array.isArray(fn) || hook === 'mixins') {
+                return
+            }
+            // sort the funciton by arguments number
+            if(fn.length) {
+                config[hook] = function(transition) {
+                    let event = route + '.' + hook
+                    calls.push(event)
+                    let res = typeof fn === 'function'?fn(transition):fn
+                    emitter.emit(event)
+                    return res
+                }
+            } else {
+                config[hook] = function() {
+                    let event = route + '.' + hook
+                    calls.push(event)
+                    let res = typeof fn === 'function'?fn():fn
+                    emitter.emit(event)
+                    return res
+                }
+            }
+        })
     })
-  })
-  router.map({
-    '/a': {
-      component: {
-        template: 'A <router-view></router-view>',
-        route: configs.a
-      },
-      subRoutes: {
-        '/b': {
-          component: {
-            template: 'B',
-            route: configs.b
-          }
+    let aView = createNovaView('a',configs.a)
+    let bView = createNovaView('b',configs.b)
+    let cView = createNovaView('c',configs.c)
+    let dView = createNovaView('d',configs.d)
+    let eView = createNovaView('e',configs.e)
+    let dataView = createNovaView('data',configs.data)
+
+    router.map({
+        '/a':{
+            component:aView,
+            subRoutes: {
+                '/b':{
+                    component:bView
+                },
+                '/e':{
+                    component:eView
+                }
+            }
         },
-        '/e': {
-          component: {
-            template: 'E'
-          }
+        '/c':{
+            component:cView,
+            subRoutes:{
+                '/d':{
+                    component:dView
+                }
+            }
+        },
+        '/data/:msg':{
+            component:dataView
         }
-      }
-    },
-    '/c': {
-      component: {
-        template: 'C <router-view></router-view>',
-        route: configs.c
-      },
-      subRoutes: {
-        '/d': {
-          component: {
-            template: 'D',
-            route: configs.d
-          }
-        }
-      }
-    },
-    '/data/:msg': {
-      component: {
-        route: configs.data,
-        mixins: configs.data && configs.data.mixins,
-        template:
-          '<span v-if="$loadingRouteData">loading...</span>' +
-          '<span v-if="!$loadingRouteData">{{msg}}{{otherMsg}}{{thirdMsg}}</span>',
-        data: function () {
-          return {
-            msg: 'default',
-            otherMsg: '',
-            thirdMsg: ''
-          }
-        }
-      }
-    }
-  })
-  router.start(App, el)
-  cb(router, calls, emitter)
+    })
+
+    router.start(el,()=>{
+        cb(router, calls, emitter)
+    })
+
+    
+
+}
+function createNovaView(content,route){
+    let tmp = document.createElement('nova-test-view')
+    tmp.content = content
+    tmp.route = route
+    return tmp
 }
 
-exports.assertCalls = function (calls, expects) {
-  expects.forEach(function (e, i) {
-    expect(calls[i]).toBe(e)
-  })
+export function assertCalls (calls, expects) {
+    expects.forEach((each, index)=>{
+        expect(calls[index]).toBe(each)
+    })
 }

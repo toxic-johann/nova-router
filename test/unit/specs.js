@@ -52,13 +52,41 @@
 
 	__webpack_require__(3);
 
-	__webpack_require__(6);
+	__webpack_require__(4);
 
-	__webpack_require__(7);
+	__webpack_require__(5);
 
-	__webpack_require__(11);
+	__webpack_require__(10);
 
-	__webpack_require__(18);
+	__webpack_require__(19);
+
+	__webpack_require__(29);
+
+	__webpack_require__(20);
+
+	__webpack_require__(23);
+
+	__webpack_require__(24);
+
+	__webpack_require__(25);
+
+	__webpack_require__(26);
+
+	__webpack_require__(27);
+
+	__webpack_require__(28);
+
+	var UA = navigator.userAgent.toLowerCase();
+	window.isIE9 = UA.indexOf('msie 9.0') > 0;
+	window.isIE = UA.indexOf('trident') > 0;
+
+	// IE has some shaky timer precision issues when using the Promise polyfill...
+	window.wait = isIE ? 100 : 30;
+	// import Router from '../../../dist/nova-router.js'
+	// import '../../../example/basic/component/nova-view/main.js'
+
+
+	// window.router = new Router();
 
 /***/ },
 /* 1 */
@@ -941,7 +969,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__3';
+	      var globalAlias = '__1';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -976,24 +1004,7 @@
 	}).call(window);
 
 /***/ },
-/* 4 */,
-/* 5 */
-/***/ function(module, exports) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 6 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -1007,7 +1018,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__4';
+	            var globalAlias = '__2';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -1021,9 +1032,9 @@
 	            return {}[name];
 	        }
 
-	        var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n        <div>{{content}} attached</div>\n        <div>\n            {{JSON.stringify($route.params)}}\n            {{$route.path}}\n            {{JSON.stringify($route.query)}}\n        </div>\n        <template-if if=\"{{loadingRouteData}}\">\n            <div> {{content}} loading....</div>\n        </template-if>\n        <template-if if=\"{{loadingRouteData != true}}\">\n            <div>{{content}} loaded</div>\n        </template-if>\n    " };
+	        var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n    " };
 	        NovaExports({
-	            is: 'nova-view',
+	            is: 'nova-test-view',
 	            props: {
 	                content: {
 	                    type: String,
@@ -1044,63 +1055,17 @@
 	                    }
 	                }
 	            },
-	            route: {
-	                waitForData: false,
-	                canReuse: false,
-	                data: function data() {
-	                    return new Promise(function (resolve, reject) {
-	                        setTimeout(function () {
-	                            resolve();
-	                        }, 1000);
-	                    });
-	                },
-	                activate: function activate() {
-	                    console.log("activate", this.content);
-	                    return new Promise(function (resolve, reject) {
-	                        setTimeout(function () {
-	                            resolve();
-	                        }, 1000);
-	                    });
-	                },
-	                deactivate: function deactivate() {
-	                    console.log("deactivate", this.content);
-	                },
-	                canActivate: function canActivate(transition) {
-	                    console.log("canactivate", this.content);
-	                    // return true
-	                    // console.log(this.contents.hellow)
-	                    if (this.content == 'baz') {
-	                        return false;
-	                    }
-	                    return true;
-	                    // const self = this
-	                    // console.log("called")
-	                    // return new Promise(function(resolve,reject){
-	                    //     if(self.content == 'baz'){
-	                    //         console.log("reject")
-	                    //         return reject()
-
-	                    //     }
-	                    //     return resolve(true)
-	                    // })
-	                    // transition.abort()
-	                },
-	                canDeactivate: function canDeactivate(transition) {
-	                    console.log("candeactivate", this.content);
-	                    return true;
-	                }
-	            },
 	            createdHandler: function createdHandler() {
-	                console.log("nova-view " + this.content + " created");
+	                console.log("nova-test-view " + this.content + " created");
 	            },
 	            attachedHandler: function attachedHandler() {
-	                console.log("nova-view " + this.content + " attached");
+	                console.log("nova-test-view " + this.content + " attached");
 	            },
 	            detachedHandler: function detachedHandler() {
-	                console.log("nova-view " + this.content + " detached");
+	                console.log("nova-test-view " + this.content + " detached");
 	            },
 	            attributeChangedHandler: function attributeChangedHandler(attrName, oldVal, newVal) {
-	                console.log("nova-view " + this.content + " attributeChanged");
+	                console.log("nova-test-view " + this.content + " attributeChanged");
 	            }
 	        });
 
@@ -1109,12 +1074,12 @@
 	}).call(window);
 
 /***/ },
-/* 7 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _util = __webpack_require__(8);
+	var _util = __webpack_require__(6);
 
 	var util = _interopRequireWildcard(_util);
 
@@ -1145,7 +1110,7 @@
 	});
 
 /***/ },
-/* 8 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1161,8 +1126,9 @@
 	exports.isObject = isObject;
 	exports.warn = warn;
 	exports.mapParams = mapParams;
+	exports.inBrowser = inBrowser;
 
-	var _routeRecognizer = __webpack_require__(9);
+	var _routeRecognizer = __webpack_require__(7);
 
 	var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
 
@@ -1271,8 +1237,12 @@
 	  return path;
 	}
 
+	function inBrowser() {
+	  return Object.prototype.toString.call(window) === "[object Window]";
+	}
+
 /***/ },
-/* 9 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {(function() {
@@ -1897,7 +1867,7 @@
 	    var $$route$recognizer$$default = $$route$recognizer$$RouteRecognizer;
 
 	    /* global define:true module:true window: true */
-	    if ("function" === 'function' && __webpack_require__(10)['amd']) {
+	    if ("function" === 'function' && __webpack_require__(9)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return $$route$recognizer$$default; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if (typeof module !== 'undefined' && module['exports']) {
 	      module['exports'] = $$route$recognizer$$default;
@@ -1907,22 +1877,38 @@
 	}).call(this);
 
 	//# sourceMappingURL=route-recognizer.js.map
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)(module)))
 
 /***/ },
-/* 10 */
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _index = __webpack_require__(12);
+	var _index = __webpack_require__(11);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -1936,6 +1922,7 @@
 	        el = document.createElement('router-view');
 	        document.body.appendChild(el);
 	        spyOn(console, 'error');
+	        spyOn(window, 'scrollTo');
 	    });
 
 	    afterEach(function () {
@@ -1944,10 +1931,408 @@
 	            document.body.removeChild(el);
 	        }
 	    });
+
+	    it('try to create a nova-view', function () {
+	        expect(function () {
+	            document.createElement('nova-view');
+	        }).not.toThrow();
+	    });
+
+	    it('matching views', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var guide = assertRoutes([['/a', 'a'], ['/b', 'b'],
+	        // relative
+	        ['a', 'a'], ['b', 'b'],
+	        // relative with traversal
+	        ['../a', 'a', '/a'], ['./../b', 'b', '/b'],
+	        // no match
+	        ['/c', '']], done, function (matches) {
+	            var content = router.routerView.children.length > 0 ? router.routerView.children[0].content : '';
+	            expect(content).toBe(matches[0][1]);
+	        });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        router.map({
+	            '/a': {
+	                component: aView
+	            },
+	            '/b': {
+	                component: bView
+	            }
+	        });
+	        var cb = jasmine.createSpy();
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el, function () {
+	            expect(router.routerView).toBeTruthy();
+	            cb();
+	        });
+	        expect(cb).toHaveBeenCalled();
+	    });
+
+	    it('go() with object', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        var cView = createNovaView({ content: 'c' });
+	        var guide = assertRoutes([[{ path: '/a/A' }, 'aA'], [{ path: '/b/B' }, 'bB'],
+	        // relative
+	        [{ path: '../a/A' }, 'aA'], [{ path: '../b/B' }, 'bB'],
+	        // relative with append: true
+	        [{ path: 'c', append: true }, 'bBc'],
+	        // named routes
+	        [{ name: 'a', params: { msg: 'A' } }, 'aA'], [{ name: 'b', params: { msg: 'B' }, query: { msg: 'B' } }, 'bBB']], done, function (matches) {
+	            var parent = router.routerView.children[0];
+	            if (parent) {
+	                var content = parent.content || '';
+	                content += parent.$route.params.msg || '';
+	                content += parent.$route.query.msg || '';
+	                content += parent.children.length > 0 ? parent.children[0].content : '';
+	                expect(content).toBe(matches[0][1]);
+	            }
+	        });
+	        router.map({
+	            '/a/:msg': {
+	                name: 'a',
+	                component: aView
+	            },
+	            '/b/:msg': {
+	                name: 'b',
+	                component: bView,
+	                subRoutes: {
+	                    '/c': {
+	                        component: cView
+	                    }
+	                }
+	            }
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('go() querystring code', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        var cView = createNovaView({ content: 'c' });
+	        var query = { msg: 'https://www.google.com/#q=novajs' };
+	        var guide = assertRoutes([
+	        // object with path
+	        [{ path: '/a', query: query }, 'a' + query.msg],
+	        // object with named route
+	        [{ name: 'b', query: query }, 'b' + query.msg],
+	        // special char
+	        ['/c?msg=%!!!', 'c%!!!']], done, function (matches) {
+	            var parent = router.routerView.children[0];
+	            if (parent) {
+	                var content = parent.content || '';
+	                // content += parent.$route.params.msg || ''
+	                content += parent.$route.query.msg || '';
+	                // content += parent.children.length>0 ? parent.children[0].content : ''
+	                expect(content).toBe(matches[0][1]);
+	            }
+	        });
+	        router.map({
+	            '/a': {
+	                component: aView
+	            },
+	            '/b': {
+	                component: bView,
+	                name: 'b'
+	            },
+	            "/c": {
+	                component: cView
+	            }
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('matching nested views', function (done) {
+	        var aView = createNovaView({ content: 'a' });
+	        var adView = createNovaView({ content: 'ad' });
+	        var a1View = createNovaView({ content: 'a1' });
+	        var a2View = createNovaView({ content: 'a2' });
+	        var bView = createNovaView({ content: 'b' });
+	        var b1View = createNovaView({ content: 'b1' });
+	        router = new _index2.default({ abstract: true });
+	        var guide = assertRoutes([['/a', 'aad'], ['/a/sub-a', 'aa1'], ['/a/sub-a-2', 'aa2'], ['/b/sub-b', 'bb1'], ['/b', 'b'],
+	        // no match
+	        ['/b/sub-a', '']], done, function (matches) {
+	            var parent = router.routerView.children[0];
+	            if (parent) {
+	                var content = parent.content || '';
+	                // content += parent.$route.params.msg || ''
+	                // content += parent.$route.query.msg || ''
+	                content += parent.children.length > 0 ? parent.children[0].content : '';
+	                expect(content).toBe(matches[0][1]);
+	            }
+	        });
+	        router.map({
+	            '/a': {
+	                component: aView,
+	                subRoutes: {
+	                    '/': {
+	                        component: adView
+	                    },
+	                    "/sub-a": {
+	                        component: a1View
+	                    },
+	                    "/sub-a-2": {
+	                        component: a2View
+	                    }
+	                }
+	            },
+	            '/b': {
+	                component: bView,
+	                subRoutes: {
+	                    '/sub-b': {
+	                        component: b1View
+	                    }
+	                }
+	            }
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('matching nested views and canReuse', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var spya = jasmine.createSpy();
+	        aView.attachedHandler = spya;
+	        var adView = createNovaView({ content: 'ad' });
+	        var a1View = createNovaView({ content: 'a1' });
+	        var a2View = createNovaView({ content: 'a2' });
+	        var spya2 = jasmine.createSpy();
+	        a2View.attachedHandler = spya2;
+	        var bView = createNovaView({ content: 'b' });
+	        var b1View = createNovaView({ content: 'b1' });
+	        var guide = assertRoutes([['/a', 'aad'], ['/a/sub-a', 'aa1'], ['/a/sub-a-2', 'aa2'], ['/b/sub-b', 'bb1'], ['/b', 'b'],
+	        // no match
+	        ['/b/sub-a', '']], function () {
+	            expect(spya.calls.count()).toBe(1);
+	            expect(spya2.calls.count()).toBe(1);
+	            done();
+	        }, function (matches) {
+	            var parent = router.routerView.children[0];
+	            if (parent) {
+	                var content = parent.content || '';
+	                // content += parent.$route.params.msg || ''
+	                // content += parent.$route.query.msg || ''
+	                content += parent.children.length > 0 ? parent.children[0].content : '';
+	                expect(content).toBe(matches[0][1]);
+	            }
+	        });
+	        router.map({
+	            '/a': {
+	                component: aView,
+	                subRoutes: {
+	                    '/': {
+	                        component: adView
+	                    },
+	                    "/sub-a": {
+	                        component: a1View
+	                    },
+	                    "/sub-a-2": {
+	                        component: a2View
+	                    }
+	                }
+	            },
+	            '/b': {
+	                component: bView,
+	                subRoutes: {
+	                    '/sub-b': {
+	                        component: b1View
+	                    }
+	                }
+	            }
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('route context', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: "a" });
+	        router.map({
+	            '/a/:id': {
+	                customeField: 'custom',
+	                component: aView
+	            }
+	        });
+	        var guide = assertRoutes([
+	        // no param, no match (only view-b)
+	        ['/a', '/a,,,|'],
+	        // params only
+	        ['/a/123', '/a/123,123,,custom|/a/123,123,,custom'],
+	        // params + query
+	        ['/a/123?id=234', '/a/123?id=234,123,234,custom|/a/123?id=234,123,234,custom'],
+	        // relative query
+	        ['?id=345', '/a/123?id=345,123,345,custom|/a/123?id=345,123,345,custom']], done, function (matches) {
+	            var parent = router.routerView.children[0];
+	            var content = (router.routerView.$route.path || '') + ',';
+	            content += (router.routerView.$route.params && router.routerView.$route.params.id || '') + ',';
+	            content += (router.routerView.$route.query && router.routerView.$route.query.id || '') + ',';
+	            content += (router.routerView.$route.customeField || '') + '|';
+	            if (parent) {
+	                content += (parent.$route.path || '') + ',';
+	                content += (parent.$route.params.id || '') + ',';
+	                content += (parent.$route.query.id || '') + ',';
+	                content += parent.$route.customeField || '';
+	                // content += parent.children.length>0 ? parent.children[0].content : ''
+	            }
+	            expect(content).toBe(matches[0][1]);
+	        }, { defaultMatch: '/,,,|' });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    if (!window.isIE9) {
+	        it('saveScrollPosition', function (done) {
+	            router = new _index2.default({
+	                history: true,
+	                saveScrollPosition: true
+	            });
+	            var aView = createNovaView({ content: "a" });
+	            aView.template = '<div style="width:600px;height:1000px;">atest</div>';
+	            router.map({
+	                '/a': {
+	                    component: aView
+	                }
+	            });
+	            router.start(el);
+	            window.scrollTo(100, 100);
+	            var x = window.pageXOffset;
+	            var y = window.pageYOffset;
+	            router.go('/a');
+	            window.addEventListener('popstate', function onPop() {
+	                expect(window.scrollTo).toHaveBeenCalledWith(x, y);
+	                expect(window.scrollTo.calls.count()).toBe(2);
+	                window.removeEventListener('popstate', onPop);
+	                router.stop();
+	                done();
+	            });
+	            history.back();
+	        });
+	    }
+
+	    function assertRoutes() {
+	        var routes = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	        var done = arguments.length <= 1 || arguments[1] === undefined ? function () {
+	            return true;
+	        } : arguments[1];
+
+	        var _check = arguments.length <= 2 || arguments[2] === undefined ? function () {
+	            return true;
+	        } : arguments[2];
+
+	        var _ref = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
+	        var _ref$defaultMatch = _ref.defaultMatch;
+	        var defaultMatch = _ref$defaultMatch === undefined ? '' : _ref$defaultMatch;
+
+	        var matches = routes;
+	        // default start from none
+	        matches.unshift(['/', defaultMatch]);
+	        return {
+	            next: function next() {
+	                if (matches.length) {
+	                    router.go(matches[0][0]);
+	                } else {
+	                    done();
+	                }
+	            },
+	            check: function check() {
+	                _check(matches);
+	                matches.shift();
+	            }
+	        };
+	    }
+
+	    function createNovaView(_ref2) {
+	        var content = _ref2.content;
+	        var next = _ref2.next;
+	        var method = _ref2.method;
+
+	        var tmp = document.createElement('nova-test-view');
+	        tmp.content = content;
+	        return tmp;
+	    }
+	});
+	describe('Stringify Path', function () {
+
+	    var router = void 0;
+	    beforeEach(function () {
+	        router = new _index2.default({ abstract: true });
+	    });
+
+	    it('plain string', function () {
+	        expect(router.stringifyPath('a')).toBe('a');
+	    });
+
+	    it('object path', function () {
+	        expect(router.stringifyPath({ path: '/hi' })).toBe('/hi');
+	        expect(router.stringifyPath({ path: '/hi', query: { a: 1 } })).toBe('/hi?a=1');
+	        expect(router.stringifyPath({ path: '/hi', query: { a: 1, b: 2 } })).toBe('/hi?a=1&b=2');
+	        expect(router.stringifyPath({ path: '/hi?c=3', query: { a: 1, b: 2 } })).toBe('/hi?c=3&a=1&b=2');
+	        expect(router.stringifyPath({ path: '/hi', query: { a: '/c' } })).toBe('/hi?a=%2Fc');
+	    });
+
+	    it('named route', function () {
+	        router.map({
+	            '/test/:id': {
+	                name: 'a',
+	                component: {}
+	            }
+	        });
+	        expect(router.stringifyPath({ name: 'a' })).toBe('/test/undefined');
+	        expect(router.stringifyPath({ name: 'a', params: { id: 0 } })).toBe('/test/0');
+	        expect(router.stringifyPath({ name: 'a', params: { id: 'hi' } })).toBe('/test/hi');
+	        expect(router.stringifyPath({ name: 'a', params: { id: '你好' } })).toBe('/test/' + encodeURIComponent('你好'));
+	        expect(router.stringifyPath({ name: 'a', params: { id: 'hi' }, query: { b: '/c' } })).toBe('/test/hi?b=%2Fc');
+	    });
+
+	    it('named route not found should throw error', function () {
+	        expect(function () {
+	            router.stringifyPath({
+	                name: 'a'
+	            });
+	        }).toThrow();
+	    });
+
+	    it('encodeURI', function () {
+	        router.map({
+	            '/test/:id': {
+	                name: 'a',
+	                component: {}
+	            }
+	        });
+	        expect(router.stringifyPath('/hi/你好')).toBe(encodeURI('/hi/你好'));
+	        expect(router.stringifyPath({ path: '/hi/你好' })).toBe(encodeURI('/hi/你好'));
+	        expect(router.stringifyPath({ name: 'a', params: { id: '你好' } })).toBe(encodeURI('/test/你好'));
+	    });
 	});
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1960,36 +2345,43 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _hash = __webpack_require__(13);
+	var _hash = __webpack_require__(12);
 
 	var _hash2 = _interopRequireDefault(_hash);
 
-	__webpack_require__(14);
+	var _abstract = __webpack_require__(13);
 
-	var _routeRecognizer = __webpack_require__(9);
+	var _abstract2 = _interopRequireDefault(_abstract);
+
+	var _html = __webpack_require__(14);
+
+	var _html2 = _interopRequireDefault(_html);
+
+	__webpack_require__(15);
+
+	var _routeRecognizer = __webpack_require__(7);
 
 	var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
 
-	var _route = __webpack_require__(15);
+	var _route = __webpack_require__(16);
 
 	var _route2 = _interopRequireDefault(_route);
 
-	var _transition = __webpack_require__(16);
+	var _transition = __webpack_require__(17);
 
 	var _transition2 = _interopRequireDefault(_transition);
 
-	var _util = __webpack_require__(8);
+	var _util = __webpack_require__(6);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var historyBackends = {
-	    // abstract: AbstractHistory,
-	    hash: _hash2.default
+	    abstract: _abstract2.default,
+	    hash: _hash2.default,
+	    html5: _html2.default
 	};
-
-	// html5: HTML5History
 
 	var Router = function () {
 	    function Router() {
@@ -2026,9 +2418,20 @@
 	        this._notFoundRedirect = null;
 	        this._beforeEachHooks = [];
 	        this._afterEachHooks = [];
+	        this._rendered = false;
 
+	        // history mode
+	        this._root = root;
 	        this._hashbang = hashbang;
-	        this.mode = 'hash';
+	        this._abstract = abstract;
+
+	        // check if HTML5 histroy is available
+	        var hasPushState = typeof window !== 'undefined' && window.history && window.history.pushState;
+	        this._history = history && hasPushState;
+	        this._historyFallBack = history && !hasPushState;
+
+	        // create history object
+	        this.mode = !_util.inBrowser || this._abstract ? 'abstract' : this._history ? 'html5' : 'hash';
 	        var History = historyBackends[this.mode];
 	        this.history = new History({
 	            root: root,
@@ -2154,16 +2557,16 @@
 	                (0, _util.warn)("already started.");
 	                return;
 	            }
-	            this._started = true;
-	            this._startCb = cb;
 	            if (!this.routerView) {
 	                if (!routerView) {
 	                    throw new Error("Must start router with router view");
 	                }
 	            }
 	            this.routerView = routerView;
-	            this.history.start();
 	            this._components.unshift(routerView);
+	            this._started = true;
+	            this._startCb = cb;
+	            this.history.start();
 	        }
 
 	        /**
@@ -2190,11 +2593,10 @@
 	            if (path && (typeof path === 'undefined' ? 'undefined' : _typeof(path)) === 'object') {
 	                if (path.name) {
 	                    // 具名路径
-	                    generatePath = encodeURI(this._recognizer.generate(path.name, path.params));
+	                    generatePath = encodeURI(this._recognizer.generate(path.name, path.params || {}));
 	                } else if (path.path) {
 	                    generatePath = encodeURI(path.path);
 	                }
-
 	                if (path.query) {
 	                    var query = this._recognizer.generateQueryString(path.query);
 	                    if (generatePath.indexOf('?') > -1) {
@@ -2243,7 +2645,7 @@
 	            this._recognizer.add(segments, {
 	                as: handler.name
 	            });
-	            if (!this._components.includes(handler.component)) {
+	            if (handler.component && !this._components.includes(handler.component)) {
 	                this._components.push(handler.component);
 	                handler.component.$route = this._currentRoute;
 	            }
@@ -2311,7 +2713,7 @@
 	        }
 
 	        /**
-	         * called when we vaildate the transition can run
+	         * called when we validate the transition can run
 	         * @param  {[type]} transition [description]
 	         * @return {[type]}            [description]
 	         */
@@ -2335,6 +2737,11 @@
 	    }, {
 	        key: '_postTransition',
 	        value: function _postTransition(transition) {
+	            // the first time catch change we call the started callback
+	            if (!this._rendered && this._startCb) {
+	                this._rendered = true;
+	                this._startCb.call(null);
+	            }
 	            this._currentTransition.done = true;
 	            if (this._afterEachHooks.length) {
 	                this._afterEachHooks.forEach(function (hook) {
@@ -2353,7 +2760,7 @@
 	exports.default = Router;
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2364,7 +2771,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _util = __webpack_require__(8);
+	var _util = __webpack_require__(6);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2442,7 +2849,162 @@
 	exports.default = HashHistory;
 
 /***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _util = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var AbstractHistory = function () {
+	    function AbstractHistory(_ref) {
+	        var onChange = _ref.onChange;
+
+	        _classCallCheck(this, AbstractHistory);
+
+	        this.onChange = onChange;
+	        this.currentPath = '/';
+	    }
+
+	    _createClass(AbstractHistory, [{
+	        key: 'start',
+	        value: function start() {
+	            this.onChange('/');
+	        }
+	    }, {
+	        key: 'stop',
+	        value: function stop() {
+	            // nothing to do
+	        }
+	    }, {
+	        key: 'go',
+	        value: function go(path, replace, append) {
+	            path = this.currentPath = this.formatPath(path, append);
+	            this.onChange(path);
+	        }
+	    }, {
+	        key: 'formatPath',
+	        value: function formatPath(path, append) {
+	            return path.charAt(0) === '/' ? path : (0, _util.resolvePath)(this.currentPath, path, append);
+	        }
+	    }]);
+
+	    return AbstractHistory;
+	}();
+
+	exports.default = AbstractHistory;
+
+/***/ },
 /* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _util = __webpack_require__(6);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var hashRegExp = /#.*$/;
+
+	var HTML5History = function () {
+	    function HTML5History(_ref) {
+	        var root = _ref.root;
+	        var onChange = _ref.onChange;
+
+	        _classCallCheck(this, HTML5History);
+
+	        if (root && root !== '/') {
+	            // make sure the startting
+	            if (root.charAt(0) !== '/') {
+	                root = '/' + root;
+	            }
+	            // remove trailing
+	            this.root = root.replace(/\/$/, '');
+	            this.rootRegExp = new RegExp('^\\' + this.root);
+	        } else {
+	            this.root = null;
+	        }
+	        this.onChange = onChange;
+	        // check the base
+	        var baseEl = document.querySelector('base');
+	        this.base = baseEl && baseEl.getAttribute('href');
+	    }
+
+	    _createClass(HTML5History, [{
+	        key: 'start',
+	        value: function start() {
+	            var _this = this;
+
+	            this.listener = function (e) {
+	                var url = location.pathname + location.search;
+	                if (_this.root) {
+	                    url = url.replace(_this.rootRegExp, '') || '/';
+	                }
+	                _this.onChange(url, e && e.state, location.hash);
+	            };
+	            window.addEventListener('popstate', this.listener);
+	            this.listener();
+	        }
+	    }, {
+	        key: 'stop',
+	        value: function stop() {
+	            window.removeEventListener('popstate', this.listener);
+	        }
+	    }, {
+	        key: 'go',
+	        value: function go(path, replace, append) {
+	            var url = this.formatPath(path, append);
+	            if (replace) {
+	                history.replaceState({}, '', url);
+	            } else {
+	                // record scroll position by replacing current state
+	                history.replaceState({
+	                    pos: {
+	                        x: window.pageXOffset,
+	                        y: window.pageYOffset
+	                    }
+	                }, '', location.href);
+	                // then push new state
+	                history.pushState({}, '', url);
+	            }
+
+	            var hashMatch = path.match(hashRegExp);
+	            var hash = hashMatch && hashMatch[0];
+	            path = url
+	            // strip hash so it doesn't mess up params
+	            .replace(hashRegExp, '')
+	            // remove root before matching
+	            .replace(this.rootRegExp, '');
+	            this.onChange(path, null, hash);
+	        }
+	    }, {
+	        key: 'formatPath',
+	        value: function formatPath(path, append) {
+	            return path.charAt(0) === '/' ? this.root ? this.root + '/' + path.replace(/^\//, '') : path : (0, _util.resolvePath)(this.base || location.pathname, path, append);
+	        }
+	    }]);
+
+	    return HTML5History;
+	}();
+
+	exports.default = HTML5History;
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -2490,7 +3052,7 @@
 	}).call(window);
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2542,7 +3104,7 @@
 	exports.default = Route;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2553,9 +3115,9 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _util = __webpack_require__(8);
+	var _util = __webpack_require__(6);
 
-	var _pipeline = __webpack_require__(17);
+	var _pipeline = __webpack_require__(18);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2717,9 +3279,11 @@
 
 	            var transition = this;
 	            var nextCalled = false;
+	            var aborted = false;
 
 	            // abort the transition
 	            var abort = function abort() {
+	                aborted = true;
 	                cleanup && cleanup();
 	                transition.abort();
 	            };
@@ -2769,9 +3333,12 @@
 	                        ok ? next() : abort();
 	                    }, onPromiseError);
 	                } else if (!hook.length) {
-	                    next();
-	                } else {
-	                    onError("must return Boolean in " + hook);
+	                    // 如果没有参数
+	                    onError("must return Boolean or Promise in " + hook);
+	                } else if (hook.length && !nextCalled && !aborted) {
+	                    // 通过transition提交会二次调用此处
+	                    // 如果使用了transition但是没有进行操作则会出现这种状况
+	                    (0, _util.warn)("advice use transition with sycn and add Boolean " + hook);
 	                }
 	            };
 
@@ -2794,8 +3361,10 @@
 	            var exposed = {
 	                to: transition.to,
 	                from: transition.from,
-	                abort: abort,
-	                next: processData ? nextWithData : next,
+	                abort: postActivate ? function () {
+	                    return true;
+	                } : abort,
+	                next: processData ? nextWithData : expectBoolean ? nextWithBoolean : next,
 	                redirect: function redirect() {
 	                    transition.redirect.apply(transition, arguments);
 	                }
@@ -2808,7 +3377,6 @@
 	            } catch (err) {
 	                return onError(err);
 	            }
-
 	            if (expectBoolean) {
 	                nextWithBoolean(res);
 	            } else if ((0, _util.isPromise)(res)) {
@@ -2820,7 +3388,7 @@
 	            } else if (processData && isPlainOjbect(res)) {
 	                nextWithData(res);
 	            } else if (!hook.length) {
-	                //不是数组的话
+	                // 没有传入参数的情况下
 	                next();
 	            }
 	        }
@@ -2866,10 +3434,10 @@
 	}
 
 /***/ },
-/* 17 */
-/***/ function(module, exports) {
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -2882,12 +3450,18 @@
 	exports.canReuse = canReuse;
 	exports.data = data;
 	exports.isChildNode = isChildNode;
+
+	var _util = __webpack_require__(6);
+
 	function getReuseQueue(deactivateQueue, activateQueue) {
 	    var depth = Math.min(deactivateQueue.length, activateQueue.length);
 	    var reuseQueue = [];
 	    for (var i = 0; i < depth; i++) {
-	        if (Object.is(deactivateQueue[i].handler.component, activateQueue[i].handler.component)) {
-	            if (deactivateQueue[i].handler.component.route.canReuse === false || activateQueue[i].handler.component.route.canReuse === false) {
+	        var deactivateComponent = deactivateQueue[i].handler.component;
+	        var activateComponent = activateQueue[i].handler.component;
+	        if (Object.is(deactivateComponent, activateComponent)) {
+	            var canComponentReuse = deactivateComponent.route ? typeof deactivateComponent.route.canReuse === 'function' ? deactivateComponent.route.canReuse() : deactivateComponent.route.canReuse : true;
+	            if (canComponentReuse === false) {
 	                i--;
 	                break;
 	            }
@@ -2914,7 +3488,7 @@
 	        transition.callHook(fn, component, function () {
 	            parent.handler.component.removeChild(child.handler.component);
 	            cb && cb();
-	        });
+	        }, { postActivate: true });
 	    } else {
 	        cb && cb && cb();
 	    }
@@ -2937,7 +3511,7 @@
 	            parent.handler.component.appendChild(child.handler.component);
 	            data(component, transition);
 	            cb && cb();
-	        });
+	        }, { postActivate: true });
 	    } else {
 	        data(component, transition);
 	        cb && cb();
@@ -2986,10 +3560,31 @@
 	function data(component, transition) {
 	    component.loadingRouteData = true;
 	    var fn = component.route && component.route.data || function () {
-	        return true;
+	        return {};
 	    };
 	    transition.callHook(fn, component, function () {
 	        component.loadingRouteData = false;
+	    }, {
+	        postActivate: true,
+	        // 处理data语法糖
+	        processData: function processData(data) {
+	            var promises = [];
+	            if (isPlainObject(data)) {
+	                Object.keys(data).forEach(function (key) {
+	                    var val = data[key];
+	                    if ((0, _util.isPromise)(val)) {
+	                        promises.push(val.then(function (resolvedData) {
+	                            component[key] = resolvedData;
+	                        }));
+	                    } else {
+	                        component[key] = val;
+	                    }
+	                });
+	            }
+	            if (promises.length) {
+	                return promises[0].constructor.all(promises);
+	            }
+	        }
 	    });
 	}
 
@@ -3006,13 +3601,23 @@
 	    return false;
 	}
 
+	/**
+	 * Check plain object.
+	 *
+	 * @param {*} val
+	 */
+
+	function isPlainObject(val) {
+	    return Object.prototype.toString.call(val) === '[object Object]';
+	}
+
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _hash = __webpack_require__(13);
+	var _hash = __webpack_require__(12);
 
 	var _hash2 = _interopRequireDefault(_hash);
 
@@ -3078,6 +3683,1910 @@
 	        }
 	    });
 	});
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('activate', function () {
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('sync', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate(transition) {
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync (no arg)', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate() {}
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('async', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate(transition) {
+	                    setTimeout(function () {
+	                        transition.next();
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('abort sync', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate(transition) {
+	                    // abort should have no effect now
+	                    // it will be next
+	                    transition.abort();
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('promise', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(resolve, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(reject, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            expect(router.routerView.children.length).toBe(0);
+	            expect(router._currentRoute.path).toBe('/a');
+	            setTimeout(function () {
+	                // should continue transition
+	                expect(router._currentRoute.path).toBe('/a');
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('error', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                activate: function activate(transition) {
+	                    throw new Error('i throw an error');
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            var errorThrown = jasmine.createSpy();
+	            try {
+	                router.go('/a');
+	            } catch (e) {
+	                errorThrown();
+	            }
+	            expect(routerUtil.warn).toHaveBeenCalled();
+	            expect(errorThrown).toHaveBeenCalled();
+	            // should continue transition
+	            expect(router._currentRoute.path).toBe('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            done();
+	        });
+	    });
+	});
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.test = test;
+	exports.assertCalls = assertCalls;
+
+	var _index = __webpack_require__(11);
+
+	var _index2 = _interopRequireDefault(_index);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Emitter = __webpack_require__(22).EventEmitter;
+
+
+	/**
+	 * setup a router for testing with two nested routes:
+	 *
+	 * - /a/b
+	 * - /c/d
+	 *
+	 * configs: - an object that contains the route configs for each component
+	 * cb
+	 */
+
+	function test(configs, cb) {
+	    var emitter = new Emitter();
+	    var router = new _index2.default({ abstract: true });
+	    var el = document.createElement('router-view');
+	    var calls = [];
+	    // wrap hooks
+	    Object.keys(configs).forEach(function (route) {
+	        var config = configs[route];
+	        Object.keys(config).forEach(function (hook) {
+	            var fn = config[hook];
+	            if (Array.isArray(fn) || hook === 'mixins') {
+	                return;
+	            }
+	            // sort the funciton by arguments number
+	            if (fn.length) {
+	                config[hook] = function (transition) {
+	                    var event = route + '.' + hook;
+	                    calls.push(event);
+	                    var res = typeof fn === 'function' ? fn(transition) : fn;
+	                    emitter.emit(event);
+	                    return res;
+	                };
+	            } else {
+	                config[hook] = function () {
+	                    var event = route + '.' + hook;
+	                    calls.push(event);
+	                    var res = typeof fn === 'function' ? fn() : fn;
+	                    emitter.emit(event);
+	                    return res;
+	                };
+	            }
+	        });
+	    });
+	    var aView = createNovaView('a', configs.a);
+	    var bView = createNovaView('b', configs.b);
+	    var cView = createNovaView('c', configs.c);
+	    var dView = createNovaView('d', configs.d);
+	    var eView = createNovaView('e', configs.e);
+	    var dataView = createNovaView('data', configs.data);
+
+	    router.map({
+	        '/a': {
+	            component: aView,
+	            subRoutes: {
+	                '/b': {
+	                    component: bView
+	                },
+	                '/e': {
+	                    component: eView
+	                }
+	            }
+	        },
+	        '/c': {
+	            component: cView,
+	            subRoutes: {
+	                '/d': {
+	                    component: dView
+	                }
+	            }
+	        },
+	        '/data/:msg': {
+	            component: dataView
+	        }
+	    });
+
+	    router.start(el, function () {
+	        cb(router, calls, emitter);
+	    });
+	}
+	function createNovaView(content, route) {
+	    var tmp = document.createElement('nova-test-view');
+	    tmp.content = content;
+	    tmp.route = route;
+	    return tmp;
+	}
+
+	function assertCalls(calls, expects) {
+	    expects.forEach(function (each, index) {
+	        expect(calls[index]).toBe(each);
+	    });
+	}
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      }
+	      throw TypeError('Uncaught, unspecified "error" event.');
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        args = Array.prototype.slice.call(arguments, 1);
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    args = Array.prototype.slice.call(arguments, 1);
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else if (listeners) {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.prototype.listenerCount = function(type) {
+	  if (this._events) {
+	    var evlistener = this._events[type];
+
+	    if (isFunction(evlistener))
+	      return 1;
+	    else if (evlistener)
+	      return evlistener.length;
+	  }
+	  return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('canActivate', function () {
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('sync allow', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate() {
+	                    return true;
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync allow with transition.next', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    transition.next(true);
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            expect(router.routerView.children[0].content).toBe('a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	            done();
+	        });
+	    });
+
+	    it('sync deny with transition.next', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    transition.next(false);
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	            done();
+	        });
+	    });
+
+	    it('async allow with transition.next', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    setTimeout(function () {
+	                        transition.next(true);
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(router.routerView.children[0].content).toBe('a');
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	                expect(router._currentRoute.path).toBe('/a');
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('async deny with transition.next', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    setTimeout(function () {
+	                        transition.next(false);
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(router.routerView.children.length).toBe(0);
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	                expect(router._currentRoute.path).toBe('/');
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('sync reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate() {
+	                    return false;
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	            expect(router._currentRoute.path).toBe('/');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync reject with transition.abort', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    transition.abort();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	            expect(router._currentRoute.path).toBe('/');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('async reject with transition', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    setTimeout(function () {
+	                        transition.abort();
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                expect(routerUtil.warn).toHaveBeenCalled();
+	                expect(router.routerView.children.length).toBe(0);
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	                expect(router._currentRoute.path).toBe('/');
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('promise allow', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            resolve(true);
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                expect(router.routerView.children[0].content).toBe('a');
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	                expect(router._currentRoute.path).toBe('/a');
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise resolve false', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            resolve(false);
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                expect(router.routerView.children.length).toBe(0);
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	                expect(router._currentRoute.path).toBe('/');
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            reject();
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children.length).toBe(0);
+	            setTimeout(function () {
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                expect(router.routerView.children.length).toBe(0);
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	                expect(router._currentRoute.path).toBe('/');
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('sync with transition but do noting', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canActivate: function canActivate(transition) {
+	                    // do nothing
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(routerUtil.warn).toHaveBeenCalled();
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canActivate']);
+	            done();
+	        });
+	    });
+	});
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('canDeactivate', function () {
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('sync allow', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate() {
+	                    return true;
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/c');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	            expect(router.routerView.children[0].content).toBe('c');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync allow with transition', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    transition.next(true);
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/c');
+	            expect(router.routerView.children[0].content).toBe('c');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync deny with transition.next', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    transition.next(false);
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	            expect(router._currentRoute.path).toBe('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('async allow with transition', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    setTimeout(function () {
+	                        transition.next(true);
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	                expect(router.routerView.children[0].content).toBe('c');
+	                expect(routerUtil.warn).toHaveBeenCalled();
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('async deny with transition.next', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    setTimeout(function () {
+	                        transition.next();
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(router._currentRoute.path).toBe('/a');
+	                expect(routerUtil.warn).toHaveBeenCalled();
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('sync reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate() {
+	                    return false;
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	            expect(router._currentRoute.path).toBe('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync reject with transition.abort', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    transition.abort();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/c');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	            expect(router._currentRoute.path).toBe('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('async reject with transition.abort', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    setTimeout(function () {
+	                        transition.abort();
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(router._currentRoute.path).toBe('/a');
+	                expect(routerUtil.warn).toHaveBeenCalled();
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('promise allow', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            resolve(true);
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	                expect(router.routerView.children[0].content).toBe('c');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise resolve false', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            resolve(false);
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(router._currentRoute.path).toBe('/a');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(function () {
+	                            reject();
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            // i would like that use promise
+	            // in case i don't know whether the user forget to return boolean
+	            // so that i will take a warn here
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/c');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(router._currentRoute.path).toBe('/a');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('sync with transition but do nothing', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canDeactivate: function canDeactivate(transition) {
+	                    // transition.next(true)
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a');
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/c');
+	            expect(routerUtil.warn).toHaveBeenCalled();
+	            expect(router.routerView.children[0].content).toBe('a');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.canDeactivate']);
+	            done();
+	        });
+	    });
+	});
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('canReuse', function () {
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('allow', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canReuse: true,
+	                activate: function activate(transition) {
+	                    // just for loggin
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a/b');
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ab');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            var a = router.routerView.children[0];
+	            router.go('/a/e');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate', 'a.canReuse']);
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ae');
+	            expect(router.routerView.children[0]).toBe(a);
+	            done();
+	        });
+	    });
+
+	    it('not set', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canReuse: '',
+	                activate: function activate(transition) {
+	                    // just for loggin
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a/b');
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ab');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            var a = router.routerView.children[0];
+	            router.go('/a/e');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate', 'a.canReuse']);
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ae');
+	            expect(router.routerView.children[0]).toBe(a);
+	            done();
+	        });
+	    });
+
+	    it('deny', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canReuse: false,
+	                activate: function activate(transition) {
+	                    // just for loggin
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a/b');
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ab');
+	            // assertCalls(calls, ['a.activate'])
+	            var a = router.routerView.children[0];
+	            router.go('/a/e');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate', 'a.canReuse', 'a.activate']);
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ae');
+	            // actually though i detach and attach
+	            // it still that component
+	            expect(router.routerView.children[0]).toBe(a);
+	            done();
+	        });
+	    });
+
+	    it('function allow', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canReuse: function canReuse() {
+	                    return true;
+	                },
+	                activate: function activate(transition) {
+	                    // just for loggin
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a/b');
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ab');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate']);
+	            var a = router.routerView.children[0];
+	            router.go('/a/e');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate', 'a.canReuse']);
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ae');
+	            expect(router.routerView.children[0]).toBe(a);
+	            done();
+	        });
+	    });
+
+	    it('function deny', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                canReuse: function canReuse() {
+	                    return false;
+	                },
+	                activate: function activate(transition) {
+	                    // just for loggin
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/a/b');
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ab');
+	            // assertCalls(calls, ['a.activate'])
+	            var a = router.routerView.children[0];
+	            router.go('/a/e');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.activate', 'a.canReuse', 'a.activate']);
+	            expect(router.routerView.children[0].content + router.routerView.children[0].children[0].content).toBe('ae');
+	            // actually though i detach and attach
+	            // it still that component
+	            expect(router.routerView.children[0]).toBe(a);
+	            done();
+	        });
+	    });
+	});
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('data', function () {
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('initial load', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    setTimeout(function () {
+	                        transition.next({
+	                            msg: transition.to.params.msg
+	                        });
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe('hello');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('reload', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    setTimeout(function () {
+	                        transition.next({
+	                            msg: transition.to.params.msg
+	                        });
+	                    }, wait);
+	                },
+	                activate: function activate() {
+	                    // just for logging
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.activate', 'data.data']);
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe('hello');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                router.go('/data/reload');
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['data.activate', 'data.data', 'data.data']);
+	                expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	                setTimeout(function () {
+	                    expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                    expect(router.routerView.children[0].$route.params.msg).toBe('reload');
+	                    expect(router.routerView.children[0].msg).toBe('reload');
+	                    expect(routerUtil.warn).not.toHaveBeenCalled();
+	                    done();
+	                }, wait * 2);
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reslove', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    return new Promise(function (reslove, reject) {
+	                        setTimeout(function () {
+	                            reslove();
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe(undefined);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reslove with msg', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    return new Promise(function (reslove, reject) {
+	                        setTimeout(function () {
+	                            reslove(transition.to.params.msg);
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe(undefined);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    return new Promise(function (reslove, reject) {
+	                        setTimeout(function () {
+	                            reject();
+	                        }, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe(undefined);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('return object containing promise', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    return {
+	                        msg: new Promise(function (reslove, reject) {
+	                            setTimeout(function () {
+	                                reslove(transition.to.params.msg);
+	                            }, wait);
+	                        })
+	                    };
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe('hello');
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('return object containing promise reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    return {
+	                        msg: new Promise(function (reslove, reject) {
+	                            setTimeout(function () {
+	                                reject();
+	                            }, wait);
+	                        })
+	                    };
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(true);
+	            setTimeout(function () {
+	                expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	                expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	                expect(router.routerView.children[0].msg).toBe(undefined);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+	});
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('deactivate', function () {
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('sync', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate(transition) {
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/b');
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('sync (no arg)', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate() {}
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/b');
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('async', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate(transition) {
+	                    setTimeout(function () {
+	                        transition.next();
+	                    }, wait);
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/b');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	                expect(router.routerView.children.length).toBe(0);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait);
+	        });
+	    });
+
+	    it('abort sync', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate(transition) {
+	                    // abort should have no effect now
+	                    // it will be next
+	                    transition.abort();
+	                    transition.next();
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            router.go('/b');
+	            expect(router.routerView.children.length).toBe(0);
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
+	        });
+	    });
+
+	    it('promise', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(resolve, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/b');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/b');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	                expect(router.routerView.children.length).toBe(0);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('promise reject', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate(transition) {
+	                    return new Promise(function (resolve, reject) {
+	                        setTimeout(reject, wait);
+	                    });
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            router.go('/b');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/b');
+	            setTimeout(function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	                expect(router.routerView.children.length).toBe(0);
+	                expect(routerUtil.warn).not.toHaveBeenCalled();
+	                done();
+	            }, wait * 2);
+	        });
+	    });
+
+	    it('error', function (done) {
+	        (0, _pipelineTestUtil.test)({
+	            a: {
+	                deactivate: function deactivate(transition) {
+	                    throw new Error('i throw an error');
+	                }
+	            }
+	        }, function (router, calls, emitter) {
+	            var errorThrown = jasmine.createSpy();
+	            router.go('/a');
+	            expect(router.routerView.children[0].content).toBe('a');
+	            expect(router._currentRoute.path).toBe('/a');
+	            try {
+	                router.go('/b');
+	            } catch (e) {
+	                errorThrown();
+	            }
+	            expect(router._currentRoute.path).toBe('/b');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['a.deactivate']);
+	            expect(router.routerView.children.length).toBe(0);
+	            expect(routerUtil.warn).toHaveBeenCalled();
+	            done();
+	        });
+	    });
+	});
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _pipelineTestUtil = __webpack_require__(21);
+
+	var _util = __webpack_require__(6);
+
+	var routerUtil = _interopRequireWildcard(_util);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	describe('full', function () {
+
+	    beforeEach(function () {
+	        spyOn(routerUtil, 'warn');
+	    });
+
+	    it('should call hooks in correct order', function (done) {
+	        function makeConfig() {
+	            return {
+	                canActivate: function canActivate() {
+	                    // sync boolean
+	                    return true;
+	                },
+	                activate: function activate(transition) {
+	                    setTimeout(function () {
+	                        transition.next();
+	                        // multiple call should warn
+	                        transition.next();
+	                    }, wait);
+	                },
+	                canDeactivate: function canDeactivate() {
+	                    // promise boolean
+	                    return new Promise(function (resolve, rejct) {
+	                        setTimeout(function () {
+	                            resolve(true);
+	                        }, wait);
+	                    });
+	                },
+	                deactivate: function deactivate(transition) {
+	                    // promise next
+	                    console.log("deactivateing");
+	                    return new Promise(function (resolve, rejct) {
+	                        setTimeout(resolve, wait);
+	                    });
+	                }
+	            };
+	        }
+
+	        (0, _pipelineTestUtil.test)({
+	            a: makeConfig(),
+	            b: makeConfig(),
+	            c: makeConfig(),
+	            d: makeConfig()
+	        }, function (router, calls, emitter) {
+	            router.go('/a/b');
+	            emitter.once('b.activate', function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, [
+	                // initial render
+	                'a.canActivate', 'b.canActivate', 'a.activate', 'b.activate']);
+	                expect(router.routerView.children[0].content).toBe('a');
+	                expect(router.routerView.children[0].children.length).toBe(0);
+	                setTimeout(function () {
+	                    expect(routerUtil.warn.calls.count()).toBe(2);
+	                    expect(routerUtil.warn).toHaveBeenCalledWith('transition.next() should be called only once.');
+	                    // expect(router.routerView.children[0].content).toBe('a')
+	                    expect(router.routerView.children[0].children[0].content).toBe('b');
+	                    router.go('/c/d');
+	                    console.log("go to cd");
+	                    // done()
+	                }, wait);
+	            });
+
+	            emitter.once('d.activate', function () {
+	                (0, _pipelineTestUtil.assertCalls)(calls, [
+	                // initial render
+	                'a.canActivate', 'b.canActivate', 'a.activate', 'b.activate',
+	                // check can deactivate current views from bottom up
+	                'b.canDeactivate', 'a.canDeactivate',
+	                // check can activate new views from top down
+	                'c.canActivate', 'd.canActivate',
+	                // deactivate old views from bottom up
+	                'b.deactivate', 'a.deactivate',
+	                // activate new views from top down
+	                'c.activate', 'd.activate']);
+	                expect(router.routerView.children[0].content).toBe('c');
+	                expect(router.routerView.children[0].children.length).toBe(0);
+	                // wait until activation to assert render content
+	                setTimeout(function () {
+	                    expect(routerUtil.warn.calls.count()).toBe(4);
+	                    expect(router.routerView.children[0].content).toBe('c');
+	                    expect(router.routerView.children[0].children[0].content).toBe('d');
+	                    done();
+	                }, wait);
+	            });
+	        });
+	    });
+	});
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _html = __webpack_require__(14);
+
+	var _html2 = _interopRequireDefault(_html);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	if (!window.isIE9) {
+	    describe('HTML5 history', function () {
+	        var url = location.href;
+	        var pathname = location.pathname;
+	        var history = void 0;
+	        afterEach(function (done) {
+	            history.stop();
+	            window.history.replaceState({}, '', url);
+	            setTimeout(done, 0);
+	        });
+
+	        it('notify change', function (done) {
+	            history = new _html2.default({
+	                onChange: step1
+	            });
+	            console.log(history);
+	            console.log(_html2.default);
+	            console.log(history.onChange);
+	            history.start();
+	            // init
+	            function step1(path) {
+	                expect(path).toBe(pathname);
+	                history.onChange = step2;
+	                history.go('/what/the#lol');
+	            }
+	            // root path & hash
+	            function step2(path, state, hash) {
+	                expect(location.pathname).toBe('/what/the');
+	                expect(path).toBe('/what/the');
+	                expect(state).toBeNull();
+	                expect(hash).toBe('#lol');
+	                history.onChange = step3;
+	                history.go('huh', true);
+	            }
+	            // relative path
+	            function step3(path) {
+	                expect(location.pathname).toBe('/what/huh');
+	                expect(path).toBe('/what/huh');
+	                done();
+	            }
+	        });
+
+	        it('root option', function (done) {
+	            history = new _html2.default({
+	                onChange: step1,
+	                root: 'root/'
+	            });
+	            expect(history.root).toBe('/root');
+	            history.start();
+	            function step1() {
+	                history.onChange = step2;
+	                history.go('/haha');
+	            }
+	            function step2(path) {
+	                expect(location.pathname).toBe('/root/haha');
+	                expect(path).toBe('/haha');
+	                done();
+	            }
+	        });
+
+	        it('popstate with root', function (done) {
+	            history = new _html2.default({
+	                onChange: step1,
+	                root: 'root/'
+	            });
+	            expect(history.root).toBe('/root');
+	            history.start();
+	            function step1() {
+	                history.onChange = step2;
+	                history.go('/');
+	            }
+	            function step2(path) {
+	                expect(location.pathname).toBe('/root/');
+	                expect(path).toBe('/');
+	                history.onChange = step3;
+	                history.go('/haha');
+	            }
+	            function step3(path) {
+	                expect(location.pathname).toBe('/root/haha');
+	                expect(path).toBe('/haha');
+	                history.onChange = step4;
+	                window.history.back();
+	            }
+	            function step4(path) {
+	                expect(location.pathname).toBe('/root/');
+	                expect(path).toBe('/');
+	                done();
+	            }
+	        });
+
+	        it('respect <base>', function (done) {
+	            var base = document.createElement('base');
+	            base.setAttribute('href', '/base/');
+	            document.head.appendChild(base);
+	            history = new _html2.default({
+	                onChange: step1
+	            });
+	            history.start();
+	            function step1(path) {
+	                history.onChange = step2;
+	                history.go('test');
+	            }
+	            function step2(path) {
+	                expect(location.pathname).toBe('/base/test');
+	                expect(path).toBe('/base/test');
+	                document.head.removeChild(base);
+	                done();
+	            }
+	        });
+	    });
+	}
 
 /***/ }
 /******/ ]);

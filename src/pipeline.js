@@ -1,10 +1,20 @@
+import {
+  isPromise,
+} from './util'
+
 export function getReuseQueue (deactivateQueue,activateQueue) {
     let depth = Math.min(deactivateQueue.length,activateQueue.length)
     let reuseQueue = [];
     for(let i=0;i<depth;i++){
-        if(Object.is(deactivateQueue[i].handler.component,activateQueue[i].handler.component)){
-            if(deactivateQueue[i].handler.component.route.canReuse === false ||
-                activateQueue[i].handler.component.route.canReuse === false){
+        let deactivateComponent = deactivateQueue[i].handler.component
+        let activateComponent = activateQueue[i].handler.component
+        if(Object.is(deactivateComponent,activateComponent)){
+            let canComponentReuse = deactivateComponent.route 
+            ? typeof deactivateComponent.route.canReuse === 'function' 
+                ? deactivateComponent.route.canReuse()
+                : deactivateComponent.route.canReuse
+            : true
+            if(canComponentReuse === false){
                 i--;
                 break;
             }
@@ -29,7 +39,7 @@ export function deactivate (parent, child, transition, cb){
         transition.callHook(fn,component,()=>{
             parent.handler.component.removeChild(child.handler.component)
             cb && cb()
-        })
+        },{postActivate:true})
     } else {
         cb && cb && cb()
     }
@@ -50,7 +60,7 @@ export function activate (parent, child, transition, cb){
             parent.handler.component.appendChild(child.handler.component)
             data(component,transition)
             cb && cb()
-        })
+        },{postActivate:true})
     } else {
         data(component,transition)
         cb && cb()
@@ -95,9 +105,30 @@ export function canReuse(child,transition){
 
 export function data(component,transition){
     component.loadingRouteData = true;
-    let fn = (component.route && component.route.data) || (()=>true)
+    let fn = (component.route && component.route.data) || (()=>{return {}})
     transition.callHook(fn,component,()=>{
         component.loadingRouteData = false;
+    },{
+        postActivate:true,
+        // 处理data语法糖
+        processData: data=>{
+            const promises = []
+            if(isPlainObject(data)){
+                Object.keys(data).forEach(key => {
+                    const val = data[key]
+                    if(isPromise(val)) {
+                        promises.push(val.then(resolvedData=>{
+                            component[key] = resolvedData
+                        }))
+                    } else {
+                        component[key] = val
+                    }
+                })
+            }
+            if(promises.length) {
+                return promises[0].constructor.all(promises)
+            }
+        }
     })
 }
 
@@ -112,4 +143,14 @@ export function isChildNode(parent,child){
         }
     }
     return false
+}
+
+/**
+ * Check plain object.
+ *
+ * @param {*} val
+ */
+
+function isPlainObject (val) {
+    return Object.prototype.toString.call(val) === '[object Object]'
 }

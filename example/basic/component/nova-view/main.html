@@ -40,14 +40,15 @@
             },
             route:{
                 waitForData:false,
-                canReuse:false,
-                data:function(){
-                    return new Promise(function(resolve,reject){
-                        setTimeout(function(){
-                            resolve()
-                        },1000)
-                    })
-                },
+                // canReuse:false,
+                // data:function(){
+                //     return new Promise(function(resolve,reject){
+                //         setTimeout(function(){
+                //             resolve()
+                //         },1000)
+                //     })
+                // },
+                data:function(){return {test:true}},
                 activate:function(){
                     console.log("activate",this.content)
                     return new Promise(function(resolve,reject){
