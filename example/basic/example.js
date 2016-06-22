@@ -77,6 +77,9 @@
 	userView.content = "user";
 	
 	router.map({
+	    '*': {
+	        component: bayView
+	    },
 	    '/foo': {
 	        component: fooView,
 	        // 在/foo下设置一个子路由
@@ -2851,7 +2854,7 @@
 	
 					this.path = path;
 					// set some property for internal use
-					this.matched = matched || router._notFoundHanlder;
+					this.matched = matched || router._notFoundHandler;
 					Object.defineProperty(this, 'router', {
 						enumeralbe: false,
 						value: router

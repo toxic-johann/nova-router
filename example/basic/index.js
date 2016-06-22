@@ -20,6 +20,9 @@ window.userView = document.createElement("nova-view");
 userView.content = "user"
 
 router.map({
+    '*': {
+        component:bayView
+    },
     '/foo': {
         component: fooView,
         // 在/foo下设置一个子路由

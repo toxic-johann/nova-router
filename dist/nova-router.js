@@ -1609,7 +1609,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.path = path;
 	    // set some property for internal use
-	    this.matched = matched || router._notFoundHanlder;
+	    this.matched = matched || router._notFoundHandler;
 	    Object.defineProperty(this, 'router', {
 	        enumeralbe: false,
 	        value: router

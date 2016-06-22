@@ -2205,23 +2205,24 @@
 	        router.start(el);
 	    });
 
-	    // it('notfound',function(done) {
-	    //     router = new Router({abstract:true})
-	    //     let aView = createNovaView({content:"a"})
-	    //     router.map({
-	    //         '*':{
-	    //             component:aView
-	    //         }
-	    //     })
-	    //     let guide = assertRoutes([
-	    //         ['/notfound', 'a'],
-	    //         ['/notagain', 'a']
-	    //     ],done,matches=>{
-	    //         let content = router.routerView.children[0].content
-	    //         expect(content).toBe(matches[0][1])
-	    //     })
-	    //     router.start(el)
-	    // })
+	    it('notfound', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: "a" });
+	        router.map({
+	            '*': {
+	                component: aView
+	            }
+	        });
+	        var guide = assertRoutes([['/notfound', 'a'], ['/notagain', 'a']], done, function (matches) {
+	            var content = router.routerView.children[0].content;
+	            expect(content).toBe(matches[0][1]);
+	        }, { defaultMatch: 'a' });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
 
 	    if (!window.isIE9) {
 	        it('saveScrollPosition', function (done) {
@@ -3115,7 +3116,7 @@
 
 	    this.path = path;
 	    // set some property for internal use
-	    this.matched = matched || router._notFoundHanlder;
+	    this.matched = matched || router._notFoundHandler;
 	    Object.defineProperty(this, 'router', {
 	        enumeralbe: false,
 	        value: router
