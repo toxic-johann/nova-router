@@ -1,6 +1,5 @@
 # `router.alias(aliasMap)`
 
-### 此功能正在开发中
 
 为路由器配置全局的别名规则。别名和重定向的区别在于，相对于重定向把 `fromPath` 替换为 `toPath` ，别名会保留 `fromPath` ，但是匹配时使用的是 `toPath` 。
 
