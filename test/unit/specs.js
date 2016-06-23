@@ -969,7 +969,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__10';
+	      var globalAlias = '__16';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1018,7 +1018,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__11';
+	            var globalAlias = '__17';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {
@@ -1043,16 +1043,6 @@
 	                loadingRouteData: {
 	                    type: Boolean,
 	                    value: false
-	                },
-	                $route: {
-	                    type: Object,
-	                    value: function value() {
-	                        return {
-	                            params: "",
-	                            path: "",
-	                            query: ""
-	                        };
-	                    }
 	                }
 	            },
 	            createdHandler: function createdHandler() {
@@ -1116,8 +1106,9 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
+	exports.setNovaProperty = undefined;
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
@@ -1127,6 +1118,7 @@
 	exports.warn = warn;
 	exports.mapParams = mapParams;
 	exports.inBrowser = inBrowser;
+	exports.initialCaps = initialCaps;
 
 	var _routeRecognizer = __webpack_require__(7);
 
@@ -1136,109 +1128,130 @@
 
 	var genQuery = _routeRecognizer2.default.prototype.generateQueryString;
 	/**
-	 * Resolve a relative path.
-	 * 根据相对路径拼接出绝对路径
-	 *
-	 * @param {String} base
-	 * @param {String} relative
-	 * @param {Boolean} append ?是否要拼接
-	 * @return {String}
-	 */
+	* Resolve a relative path.
+	* 根据相对路径拼接出绝对路径
+	*
+	* @param {String} base
+	* @param {String} relative
+	* @param {Boolean} append ?是否要拼接
+	* @return {String}
+	*/
 	function resolvePath(base, relative, append) {
-	  var query = base.match(/(\?.*)$/);
-	  if (query) {
-	    query = query[1];
-	    base = base.slice(0, -query.length);
-	  }
-	  // a query!
-	  if (relative.charAt(0) === '?') {
-	    return base + relative;
-	  }
-	  var stack = base.split('/');
-	  // remove trailing segment if:
-	  // - not appending
-	  // - appending to trailing slash (last segment is empty)
-	  if (!append || !stack[stack.length - 1]) {
-	    stack.pop();
-	  }
-	  // resolve relative path
-	  var segments = relative.replace(/^\//, '').split('/');
-	  for (var i = 0; i < segments.length; i++) {
-	    var segment = segments[i];
-	    if (segment === '.') {
-	      continue;
-	    } else if (segment === '..') {
-	      stack.pop();
-	    } else {
-	      stack.push(segment);
+	    var query = base.match(/(\?.*)$/);
+	    if (query) {
+	        query = query[1];
+	        base = base.slice(0, -query.length);
 	    }
-	  }
-	  // ensure leading slash
-	  if (stack[0] !== '') {
-	    stack.unshift('');
-	  }
-	  return stack.join('/');
+	    // a query!
+	    if (relative.charAt(0) === '?') {
+	        return base + relative;
+	    }
+	    var stack = base.split('/');
+	    // remove trailing segment if:
+	    // - not appending
+	    // - appending to trailing slash (last segment is empty)
+	    if (!append || !stack[stack.length - 1]) {
+	        stack.pop();
+	    }
+	    // resolve relative path
+	    var segments = relative.replace(/^\//, '').split('/');
+	    for (var i = 0; i < segments.length; i++) {
+	        var segment = segments[i];
+	        if (segment === '.') {
+	            continue;
+	        } else if (segment === '..') {
+	            stack.pop();
+	        } else {
+	            stack.push(segment);
+	        }
+	    }
+	    // ensure leading slash
+	    if (stack[0] !== '') {
+	        stack.unshift('');
+	    }
+	    return stack.join('/');
 	}
 
 	/**
-	 * 判断是否是promise
-	 * @param  {[type]}  p [description]
-	 * @return {Boolean}   [description]
-	 */
+	* 判断是否是promise
+	* @param  {[type]}  p [description]
+	* @return {Boolean}   [description]
+	*/
 	function isPromise(p) {
-	  return p && typeof p.then === 'function';
+	    return p && typeof p.then === 'function';
 	}
 
 	/**
-	 * 判断是不是object
-	 * @param  {[type]}  val [description]
-	 * @return {Boolean}     [description]
-	 */
+	* 判断是不是object
+	* @param  {[type]}  val [description]
+	* @return {Boolean}     [description]
+	*/
 	function isObject(val) {
-	  return val != null && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && Array.isArray(val) === false;
+	    return val != null && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && Array.isArray(val) === false;
 	};
 
 	/**
-	 * 通用warn函数
-	 * @param  {[type]} msg [description]
-	 * @return {[type]}     [description]
-	 */
+	* 通用warn函数
+	* @param  {[type]} msg [description]
+	* @return {[type]}     [description]
+	*/
 	function warn(msg) {
-	  /* istanbul ignore next */
-	  if (typeof console !== 'undefined') {
-	    console.error('[nova-router] ' + msg);
-	  }
+	    /* istanbul ignore next */
+	    if (typeof console !== 'undefined') {
+	        console.error('[nova-router] ' + msg);
+	    }
 	}
 
 	/**
-	 * Map the dynamic segments in a path to params.
-	 * 将动态片段置换为相应数值
-	 *
-	 * @param {String} path
-	 * @param {Object} params
-	 * @param {Object} query
-	 */
+	* Map the dynamic segments in a path to params.
+	* 将动态片段置换为相应数值
+	*
+	* @param {String} path
+	* @param {Object} params
+	* @param {Object} query
+	*/
 
 	function mapParams(path) {
-	  var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	  var query = arguments[2];
+	    var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	    var query = arguments[2];
 
-	  path = path.replace(/:([^\/]+)/g, function (_, key) {
-	    var val = params[key];
-	    /* istanbul ignore if */
-	    if (!val) {
-	      warn('param "' + key + '" not found when generating ' + 'path for "' + path + '" with params ' + JSON.stringify(params));
+	    path = path.replace(/:([^\/]+)/g, function (_, key) {
+	        var val = params[key];
+	        /* istanbul ignore if */
+	        if (!val) {
+	            warn('param "' + key + '" not found when generating ' + 'path for "' + path + '" with params ' + JSON.stringify(params));
+	        }
+	        return val || '';
+	    });
+	    if (query) {
+	        path += genQuery(query);
 	    }
-	    return val || '';
-	  });
-	  if (query) {
-	    path += genQuery(query);
-	  }
-	  return path;
+	    return path;
 	}
 
 	function inBrowser() {
-	  return Object.prototype.toString.call(window) === "[object Window]";
+	    var test = window || null;
+	    return Object.prototype.toString.call(test) === "[object Window]";
+	}
+
+	function setNovaProperty(component, key, _value) {
+	    if (component.hasProperty(key)) {
+	        component.set(key, _value);
+	    } else {
+	        component.addProperty(key, {
+	            type: initialCaps(typeof _value === 'undefined' ? 'undefined' : _typeof(_value)),
+	            value: function value() {
+	                return _value;
+	            }
+	        });
+	    }
+	}
+
+	exports.setNovaProperty = setNovaProperty;
+	function initialCaps(str) {
+	    return str.replace(/^\S/, function (s) {
+	        return s.toUpperCase();
+	    });
 	}
 
 /***/ },
@@ -2206,6 +2219,152 @@
 	        router.start(el);
 	    });
 
+	    it('alias', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        router.map({
+	            '/a': {
+	                component: aView
+	            },
+	            '/b': {
+	                component: bView
+	            }
+	        });
+	        router.alias({
+	            '/c/a': '/a',
+	            '/c/b': '/b'
+	        });
+	        var guide = assertRoutes([['/a', 'a'], ['/b', 'b'], ['/c/a', 'a'], ['/c/b', 'b']], done, function (matches) {
+	            var content = router.routerView.children[0] ? router.routerView.children[0].content : '';
+	            expect(content).toBe(matches[0][1]);
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('multi-variable alias', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        router.map({
+	            '/a/:foo': {
+	                component: aView,
+	                subRoutes: {
+	                    '/b/:bar': {
+	                        component: bView
+	                    }
+	                }
+	            }
+	        });
+	        router.alias({ '/c/a/:foo/b/:bar': '/a/:foo/b/:bar' });
+	        var guide = assertRoutes([['/c/a/123/b/456', '123456'], ['/c/a/234/b/567', '234567']], done, function (matches) {
+	            var content = router.routerView.children[0] ? router.routerView.children[0].$route.params.foo + router.routerView.children[0].$route.params.bar : '';
+	            expect(content).toBe(matches[0][1]);
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('redirect', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        var cView = createNovaView({ content: 'c' });
+	        router.map({
+	            '/a': {
+	                component: aView,
+	                subRoutes: {
+	                    '/b': {
+	                        component: bView
+	                    },
+	                    '/c': {
+	                        component: cView
+	                    }
+	                }
+	            }
+	        });
+	        router.redirect({
+	            '/whatever': '/a/b',
+	            '/ok': '/a/c',
+	            '*': '/a/b'
+	        });
+	        var guide = assertRoutes([['/whatever', 'a'], ['/ok?msg=world', 'world'], ['/fesfsefsef', 'a']], done, function (matches) {
+	            var content = router.routerView.children[0] ? router.routerView.children[0].$route.query && router.routerView.children[0].$route.query.msg || router.routerView.children[0].content : '';
+	            expect(content).toBe(matches[0][1]);
+	        }, { defaultMatch: false });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('redirect without notfound', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        var cView = createNovaView({ content: 'c' });
+	        router.map({
+	            '/a': {
+	                component: aView,
+	                subRoutes: {
+	                    '/b': {
+	                        component: bView
+	                    },
+	                    '/c': {
+	                        component: cView
+	                    }
+	                }
+	            }
+	        });
+	        router.redirect({
+	            '/whatever': '/a/b',
+	            '/ok': '/a/c'
+	        });
+	        var guide = assertRoutes([['/whatever', 'a'], ['/ok?msg=world', 'world'], ['/fesfsefsef', '']], done, function (matches) {
+	            var content = router.routerView.children[0] ? router.routerView.children[0].$route.query.msg || router.routerView.children[0].content : '';
+	            expect(content).toBe(matches[0][1]);
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
+	    it('multi-variable redirect', function (done) {
+	        router = new _index2.default({ abstract: true });
+	        var aView = createNovaView({ content: 'a' });
+	        var bView = createNovaView({ content: 'b' });
+	        router.map({
+	            '/a/:foo': {
+	                component: aView,
+	                subRoutes: {
+	                    '/b/:bar': {
+	                        component: bView
+	                    }
+	                }
+	            }
+	        });
+	        router.redirect({ '/c/a/:foo/b/:bar': '/a/:foo/b/:bar' });
+	        var guide = assertRoutes([['/c/a/123/b/456', '123456'], ['/c/a/234/b/567', '234567']], done, function (matches) {
+	            var content = router.routerView.children[0] ? router.routerView.children[0].$route.params.foo + router.routerView.children[0].$route.params.bar : '';
+	            expect(content).toBe(matches[0][1]);
+	        });
+	        router.afterEach(function () {
+	            guide.check();
+	            guide.next();
+	        });
+	        router.start(el);
+	    });
+
 	    it('notfound', function (done) {
 	        router = new _index2.default({ abstract: true });
 	        var aView = createNovaView({ content: "a" });
@@ -2386,7 +2545,9 @@
 
 	        var matches = routes;
 	        // default start from none
-	        matches.unshift(['/', defaultMatch]);
+	        if (defaultMatch !== false) {
+	            matches.unshift(['/', defaultMatch]);
+	        }
 	        return {
 	            next: function next() {
 	                if (matches.length) {
@@ -2542,6 +2703,7 @@
 
 	        // route recognizer
 	        this._recognizer = new _routeRecognizer2.default();
+	        this._guardRecognizer = new _routeRecognizer2.default();
 
 	        // state
 	        this._started = false;
@@ -2612,6 +2774,29 @@
 	                this._notFound(handler);
 	            } else {
 	                this._addRoute(rootPath, handler, []);
+	            }
+	            return this;
+	        }
+
+	        /**
+	         * set redirects
+	         * @param  {[type]} map [description]
+	         * @return {[type]}     [description]
+	         */
+
+	    }, {
+	        key: 'redirect',
+	        value: function redirect(map) {
+	            for (var path in map) {
+	                this._addRedirect(path, map[path]);
+	            }
+	            return this;
+	        }
+	    }, {
+	        key: 'alias',
+	        value: function alias(map) {
+	            for (var path in map) {
+	                this._addAlias(path, map[path]);
 	            }
 	            return this;
 	        }
@@ -2799,6 +2984,77 @@
 	        }
 
 	        /**
+	         * add redirect record
+	         * @param {[type]} path         [description]
+	         * @param {[type]} redirectPath [description]
+	         */
+
+	    }, {
+	        key: '_addRedirect',
+	        value: function _addRedirect(path, redirectPath) {
+	            if (path === '*') {
+	                this._notFoundRedirect = redirectPath;
+	            } else {
+	                this._addGuard(path, redirectPath, this.replace);
+	            }
+	        }
+
+	        /**
+	         * add alias record
+	         * @param {[type]} path      [description]
+	         * @param {[type]} aliasPath [description]
+	         */
+
+	    }, {
+	        key: '_addAlias',
+	        value: function _addAlias(path, aliasPath) {
+	            this._addGuard(path, aliasPath, this._match);
+	        }
+
+	        /**
+	         * add a guard to pass the path into the real path
+	         * @param {[type]} path       [description]
+	         * @param {[type]} mappedPath [description]
+	         * @param {[type]} handler    [description]
+	         */
+
+	    }, {
+	        key: '_addGuard',
+	        value: function _addGuard(path, mappedPath, _handler) {
+	            var _this2 = this;
+
+	            this._guardRecognizer.add([{
+	                path: path,
+	                handler: function handler(match, query) {
+	                    var realPath = (0, _util.mapParams)(mappedPath, match.params, query);
+	                    _handler.call(_this2, realPath);
+	                }
+	            }]);
+	        }
+
+	        /**
+	         * check if  the path match redirect records
+	         * @param  {[type]} path [description]
+	         * @return {[type]}      [description]
+	         */
+
+	    }, {
+	        key: '_checkGuard',
+	        value: function _checkGuard(path) {
+	            var matched = this._guardRecognizer.recognize(path, true);
+	            if (matched) {
+	                matched[0].handler(matched[0], matched.queryParams);
+	                return true;
+	            } else if (this._notFoundRedirect) {
+	                matched = this._recognizer.recognize(path);
+	                if (!matched) {
+	                    this.replace(this._notFoundRedirect);
+	                    return true;
+	                }
+	            }
+	        }
+
+	        /**
 	         * match the url path and move to the correct view
 	         * @param  {[type]} path   [description]
 	         * @param  {[type]} state  [description]
@@ -2809,9 +3065,13 @@
 	    }, {
 	        key: '_match',
 	        value: function _match(path, state, anchor) {
-	            var _this2 = this;
+	            var _this3 = this;
 
-	            // 这里有一个检查路径的操作
+	            // check if it redirect
+	            if (this._checkGuard(path)) {
+	                return;
+	            }
+
 	            var currentRoute = this._currentRoute;
 	            var currentTransition = this._currentTransition;
 
@@ -2842,7 +3102,7 @@
 	            var beforeHooks = this._beforeEachHooks;
 	            var startTransition = function startTransition() {
 	                transition.start(function () {
-	                    _this2._postTransition(transition, state, anchor);
+	                    _this3._postTransition(transition, state, anchor);
 	                });
 	            };
 	            if (beforeHooks.length) {
@@ -2861,11 +3121,12 @@
 	    }, {
 	        key: '_onTransitionValidated',
 	        value: function _onTransitionValidated(transition) {
+	            var _this4 = this;
+
 	            this._currentRoute = transition.to;
 	            // copy one in case of the user change our route
-	            var route = Object.assign({}, this._currentRoute);
 	            this._components.forEach(function (each) {
-	                each.$route = route;
+	                (0, _util.setNovaProperty)(each, "$route", _this4._currentRoute);
 	            });
 	        }
 
@@ -2886,13 +3147,13 @@
 	            var pos = state && state.pos;
 	            if (pos && this._saveScrollPosition) {
 	                setTimeout(function () {
-	                    window.scrollTo(pos.x, pos.y);
+	                    window && window.scrollTo(pos.x, pos.y);
 	                }, 0);
 	            } else if (anchor) {
 	                setTimeout(function () {
 	                    var el = document.getElementById(anchor.slice(1));
 	                    if (el) {
-	                        window.scrollTo(window.scrollX, el.offsetTop);
+	                        window && window.scrollTo(window.scrollX, el.offsetTop);
 	                    }
 	                }, 0);
 	            }
@@ -3399,7 +3660,6 @@
 	                    Args = Args.concat([transition, function () {
 	                        step(index + 1);
 	                    }]).concat(fnArgs);
-	                    // console.log(fn,Args)
 	                    fn.apply(transition, Args);
 	                }
 	            }
@@ -3646,12 +3906,6 @@
 	function activate(parent, child, transition, cb) {
 	    parent = parent || { handler: { component: transition.router.routerView } };
 	    var component = child.handler.component;
-	    // component.$route = {
-	    //     path:transition.router._currentRoute.path,
-	    //     params:transition.router._currentRoute.params,
-	    //     query:transition.router._currentRoute.query,
-	    // }
-	    // console.log(component.$route)
 	    if (!isChildNode(parent.handler.component, child.handler.component)) {
 	        var fn = component.route && component.route.activate || function () {
 	            return true;
@@ -3707,12 +3961,12 @@
 	}
 
 	function data(component, transition) {
-	    component.loadingRouteData = true;
+	    (0, _util.setNovaProperty)(component, 'loadingRouteData', true);
 	    var fn = component.route && component.route.data || function () {
 	        return {};
 	    };
 	    transition.callHook(fn, component, function () {
-	        component.loadingRouteData = false;
+	        (0, _util.setNovaProperty)(component, 'loadingRouteData', false);
 	    }, {
 	        postActivate: true,
 	        // 处理data语法糖
@@ -3723,10 +3977,10 @@
 	                    var val = data[key];
 	                    if ((0, _util.isPromise)(val)) {
 	                        promises.push(val.then(function (resolvedData) {
-	                            component[key] = resolvedData;
+	                            (0, _util.setNovaProperty)(component, key, resolvedData);
 	                        }));
 	                    } else {
-	                        component[key] = val;
+	                        (0, _util.setNovaProperty)(component, key, val);
 	                    }
 	                });
 	            }
@@ -5315,6 +5569,7 @@
 	    });
 
 	    it('return object containing promise', function (done) {
+	        var date = new Date();
 	        (0, _pipelineTestUtil.test)({
 	            data: {
 	                data: function data(transition) {
@@ -5339,6 +5594,40 @@
 	                expect(routerUtil.warn).not.toHaveBeenCalled();
 	                done();
 	            }, wait * 2);
+	        });
+	    });
+
+	    it('return object with many types of data', function (done) {
+	        var date = new Date();
+	        var arr = [4, 5, 6];
+	        var obj = { test: { test: 'i am a test' } };
+	        (0, _pipelineTestUtil.test)({
+	            data: {
+	                data: function data(transition) {
+	                    return {
+	                        booleanTest: true,
+	                        numberTest: 10,
+	                        stringTest: "test",
+	                        dateTest: date,
+	                        arrayTest: arr,
+	                        objectTest: obj
+	                    };
+	                }
+	            }
+	        }, function (router, calls) {
+	            router.go('/data/hello');
+	            (0, _pipelineTestUtil.assertCalls)(calls, ['data.data']);
+	            expect(router.routerView.children[0].content).toBe('data');
+	            expect(router.routerView.children[0].loadingRouteData).toBe(false);
+	            expect(router.routerView.children[0].$route.params.msg).toBe('hello');
+	            expect(router.routerView.children[0].booleanTest).toBe(true);
+	            expect(router.routerView.children[0].numberTest).toBe(10);
+	            expect(router.routerView.children[0].dateTest).toBe(date);
+	            expect(router.routerView.children[0].dateTest instanceof Date).toBe(true);
+	            expect(router.routerView.children[0].arrayTest).toBe(arr);
+	            expect(router.routerView.children[0].objectTest).toBe(obj);
+	            expect(routerUtil.warn).not.toHaveBeenCalled();
+	            done();
 	        });
 	    });
 

@@ -1,7 +1,7 @@
 import './libs/nova.1.0.1.js'
 import './libs/nova_polyfills.1.0.1.js'
 import './component/nova-link/main.js'
-import Router from '../../dist/nova-router.js'
+import Router from '../../dist/nova-router.dev.js'
 import './component/nova-view/main.js'
 window.router = new Router();
 window.fooView = document.createElement("nova-view");
@@ -9,6 +9,7 @@ fooView.content = 'foo';
 
 window.barView = document.createElement("nova-view");
 barView.content = "bar";
+// barView.set("content","bar")
 
 window.bazView = document.createElement("nova-view");
 bazView.content = "baz";
@@ -69,7 +70,7 @@ router.map({
     }
 })
 
-router.beforeEach((transition)=>{
+router.beforeEach(()=>{
     // console.log(transition)
     // console.log("beforeEach",transition.from,transition.to)
     return true

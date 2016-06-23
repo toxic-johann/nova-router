@@ -5,7 +5,7 @@ import './component/router-view/main.js'
 import RouteRecognizer from 'route-recognizer'
 import Route from './route.js'
 import Transition from './transition.js'
-import {inBrowser, warn, mapParams,isObject } from './util'
+import {inBrowser, warn, mapParams,isObject,setNovaProperty } from './util'
 
 const historyBackends = {
     abstract: AbstractHistory,
@@ -98,6 +98,25 @@ export default class Router {
     }
 
     /**
+     * set redirects
+     * @param  {[type]} map [description]
+     * @return {[type]}     [description]
+     */
+    redirect (map) {
+        for( let path in map){
+            this._addRedirect(path, map[path])
+        }
+        return this
+    }
+
+    alias (map) {
+        for(let path in map){
+            this._addAlias(path, map[path])
+        }
+        return this
+    }
+
+    /**
      * set global before hook
      * @param  {Function} fn [description]
      * @return {[type]}      [description]
@@ -162,7 +181,6 @@ export default class Router {
         if(!this.routerView){
             if(!routerView){
                 throw new Error("Must start router with router view")
-                return
             }
         }
         if(typeof routerView === 'string') {
@@ -254,6 +272,64 @@ export default class Router {
     }
 
     /**
+     * add redirect record
+     * @param {[type]} path         [description]
+     * @param {[type]} redirectPath [description]
+     */
+    _addRedirect (path, redirectPath) {
+        if(path === '*') {
+            this._notFoundRedirect = redirectPath
+        } else {
+            this._addGuard(path, redirectPath, this.replace)
+        }
+    }
+
+    /**
+     * add alias record
+     * @param {[type]} path      [description]
+     * @param {[type]} aliasPath [description]
+     */
+    _addAlias (path, aliasPath) {
+        this._addGuard (path, aliasPath, this._match)
+    }
+
+    /**
+     * add a guard to pass the path into the real path
+     * @param {[type]} path       [description]
+     * @param {[type]} mappedPath [description]
+     * @param {[type]} handler    [description]
+     */
+    _addGuard(path, mappedPath, handler) {
+        this._guardRecognizer.add([{
+            path:path,
+            handler:(match,query) => {
+                const realPath = mapParams(mappedPath,match.params,query)
+                handler.call(this, realPath)
+            }
+        }])
+    }
+
+    /**
+     * check if  the path match redirect records
+     * @param  {[type]} path [description]
+     * @return {[type]}      [description]
+     */
+    _checkGuard (path) {
+        let matched = this._guardRecognizer.recognize(path,true)
+        if(matched) {
+            matched[0].handler(matched[0],matched.queryParams)
+            return true
+        } else if (this._notFoundRedirect) {
+            matched = this._recognizer.recognize(path)
+            if(!matched) {
+                this.replace(this._notFoundRedirect)
+                return true
+            }
+        }
+
+    }
+
+    /**
      * match the url path and move to the correct view
      * @param  {[type]} path   [description]
      * @param  {[type]} state  [description]
@@ -261,7 +337,11 @@ export default class Router {
      * @return {[type]}        [description]
      */
     _match (path,state,anchor) {
-        // 这里有一个检查路径的操作
+        // check if it redirect
+        if (this._checkGuard(path)) {
+            return
+        }
+
         const currentRoute = this._currentRoute
         const currentTransition = this._currentTransition
 
@@ -310,9 +390,8 @@ export default class Router {
     _onTransitionValidated (transition) {
         this._currentRoute = transition.to
         // copy one in case of the user change our route
-        const route = Object.assign({},this._currentRoute)
         this._components.forEach(each=>{
-            each.$route = route;
+            setNovaProperty(each,"$route",this._currentRoute)
         })
     }
 
@@ -330,13 +409,13 @@ export default class Router {
         const pos = state && state.pos
         if(pos && this._saveScrollPosition) {
             setTimeout(()=>{
-                window.scrollTo(pos.x,pos.y)
+                window && window.scrollTo(pos.x,pos.y)
             },0)
         } else if (anchor) {
             setTimeout(()=>{
                 const el = document.getElementById(anchor.slice(1))
                 if(el) {
-                    window.scrollTo(window.scrollX, el.offsetTop)
+                    window && window.scrollTo(window.scrollX, el.offsetTop)
                 }
             },0)
         }

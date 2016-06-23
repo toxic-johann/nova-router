@@ -151,6 +151,7 @@ describe('data',function () {
     })
 
     it('return object containing promise', function (done) {
+        let date = new Date()
         test({
             data: {
                 data:function(transition){
@@ -175,6 +176,40 @@ describe('data',function () {
                 expect(routerUtil.warn).not.toHaveBeenCalled()
                 done()
             },wait * 2)
+        })
+    })
+
+    it('return object with many types of data', function (done) {
+        let date = new Date()
+        let arr = [4,5,6]
+        let obj = {test:{test:'i am a test'}}
+        test({
+            data: {
+                data:function(transition){
+                    return {
+                        booleanTest:true,
+                        numberTest:10,
+                        stringTest:"test",
+                        dateTest:date,
+                        arrayTest:arr,
+                        objectTest:obj
+                    }
+                }
+            }
+        },function(router,calls){
+            router.go('/data/hello')
+            assertCalls(calls,['data.data'])
+            expect(router.routerView.children[0].content).toBe('data')
+            expect(router.routerView.children[0].loadingRouteData).toBe(false)
+            expect(router.routerView.children[0].$route.params.msg).toBe('hello')
+            expect(router.routerView.children[0].booleanTest).toBe(true)
+            expect(router.routerView.children[0].numberTest).toBe(10)
+            expect(router.routerView.children[0].dateTest).toBe(date)
+            expect(router.routerView.children[0].dateTest instanceof Date).toBe(true)
+            expect(router.routerView.children[0].arrayTest).toBe(arr)
+            expect(router.routerView.children[0].objectTest).toBe(obj)
+            expect(routerUtil.warn).not.toHaveBeenCalled()
+            done()
         })
     })
     

@@ -115,7 +115,6 @@ export default class Transition {
                 Args = Args.concat([transition,()=>{
                     step(index+1)
                 }]).concat(fnArgs)
-                // console.log(fn,Args)
                 fn.apply(transition,Args)
             }
         }
@@ -269,8 +268,4 @@ export default class Transition {
 
 function isPlainOjbect (val) {
     return Object.prototype.toString.call(val) === '[object Object]'
-}
-
-function toArray (val) {
-    return val? Array.prototype.slice.call(val): []
 }

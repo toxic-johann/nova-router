@@ -52,20 +52,21 @@
 	
 	__webpack_require__(3);
 	
-	var _novaRouter = __webpack_require__(4);
+	var _novaRouterDev = __webpack_require__(4);
 	
-	var _novaRouter2 = _interopRequireDefault(_novaRouter);
+	var _novaRouterDev2 = _interopRequireDefault(_novaRouterDev);
 	
 	__webpack_require__(6);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	window.router = new _novaRouter2.default();
+	window.router = new _novaRouterDev2.default();
 	window.fooView = document.createElement("nova-view");
 	fooView.content = 'foo';
 	
 	window.barView = document.createElement("nova-view");
 	barView.content = "bar";
+	// barView.set("content","bar")
 	
 	window.bazView = document.createElement("nova-view");
 	bazView.content = "baz";
@@ -126,7 +127,7 @@
 	    }
 	});
 	
-	router.beforeEach(function (transition) {
+	router.beforeEach(function () {
 	    // console.log(transition)
 	    // console.log("beforeEach",transition.from,transition.to)
 	    return true;
@@ -1067,7 +1068,7 @@
 	    } else if (true) {
 	      !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
-	      var globalAlias = '__10';
+	      var globalAlias = '__1';
 	      var namespace = globalAlias.split('.');
 	      var parent = root;
 	      for (var i = 0; i < namespace.length - 1; i++) {
@@ -1326,6 +1327,29 @@
 						}
 	
 						/**
+	      * set redirects
+	      * @param  {[type]} map [description]
+	      * @return {[type]}     [description]
+	      */
+	
+					}, {
+						key: 'redirect',
+						value: function redirect(map) {
+							for (var path in map) {
+								this._addRedirect(path, map[path]);
+							}
+							return this;
+						}
+					}, {
+						key: 'alias',
+						value: function alias(map) {
+							for (var path in map) {
+								this._addAlias(path, map[path]);
+							}
+							return this;
+						}
+	
+						/**
 	      * set global before hook
 	      * @param  {Function} fn [description]
 	      * @return {[type]}      [description]
@@ -1405,7 +1429,6 @@
 							if (!this.routerView) {
 								if (!routerView) {
 									throw new Error("Must start router with router view");
-									return;
 								}
 							}
 							if (typeof routerView === 'string') {
@@ -1508,6 +1531,77 @@
 						}
 	
 						/**
+	      * add redirect record
+	      * @param {[type]} path         [description]
+	      * @param {[type]} redirectPath [description]
+	      */
+	
+					}, {
+						key: '_addRedirect',
+						value: function _addRedirect(path, redirectPath) {
+							if (path === '*') {
+								this._notFoundRedirect = redirectPath;
+							} else {
+								this._addGuard(path, redirectPath, this.replace);
+							}
+						}
+	
+						/**
+	      * add alias record
+	      * @param {[type]} path      [description]
+	      * @param {[type]} aliasPath [description]
+	      */
+	
+					}, {
+						key: '_addAlias',
+						value: function _addAlias(path, aliasPath) {
+							this._addGuard(path, aliasPath, this._match);
+						}
+	
+						/**
+	      * add a guard to pass the path into the real path
+	      * @param {[type]} path       [description]
+	      * @param {[type]} mappedPath [description]
+	      * @param {[type]} handler    [description]
+	      */
+	
+					}, {
+						key: '_addGuard',
+						value: function _addGuard(path, mappedPath, _handler) {
+							var _this2 = this;
+	
+							this._guardRecognizer.add([{
+								path: path,
+								handler: function handler(match, query) {
+									var realPath = (0, _util.mapParams)(mappedPath, match.params, query);
+									_handler.call(_this2, realPath);
+								}
+							}]);
+						}
+	
+						/**
+	      * check if  the path match redirect records
+	      * @param  {[type]} path [description]
+	      * @return {[type]}      [description]
+	      */
+	
+					}, {
+						key: '_checkGuard',
+						value: function _checkGuard(path) {
+							var matched = this._guardRecognizer.recognize(path, true);
+							if (matched) {
+								matched[0].handler(matched[0], matched.queryParams);
+								return true;
+							} else if (this._notFoundRedirect) {
+								matched = this._recognizer.recognize(path);
+								if (!matched) {
+									this.replace(this._notFoundRedirect);
+									return true;
+								}
+							}
+						}
+	
+						/**
 	      * match the url path and move to the correct view
 	      * @param  {[type]} path   [description]
 	      * @param  {[type]} state  [description]
@@ -1518,9 +1612,13 @@
 					}, {
 						key: '_match',
 						value: function _match(path, state, anchor) {
-							var _this2 = this;
+							var _this3 = this;
 	
-							// 这里有一个检查路径的操作
+							// check if it redirect
+							if (this._checkGuard(path)) {
+								return;
+							}
+	
 							var currentRoute = this._currentRoute;
 							var currentTransition = this._currentTransition;
 	
@@ -1551,7 +1649,7 @@
 							var beforeHooks = this._beforeEachHooks;
 							var startTransition = function startTransition() {
 								transition.start(function () {
-									_this2._postTransition(transition, state, anchor);
+									_this3._postTransition(transition, state, anchor);
 								});
 							};
 							if (beforeHooks.length) {
@@ -1570,11 +1668,12 @@
 					}, {
 						key: '_onTransitionValidated',
 						value: function _onTransitionValidated(transition) {
+							var _this4 = this;
+	
 							this._currentRoute = transition.to;
 							// copy one in case of the user change our route
-							var route = Object.assign({}, this._currentRoute);
 							this._components.forEach(function (each) {
-								each.$route = route;
+								(0, _util.setNovaProperty)(each, "$route", _this4._currentRoute);
 							});
 						}
 	
@@ -1595,13 +1694,13 @@
 							var pos = state && state.pos;
 							if (pos && this._saveScrollPosition) {
 								setTimeout(function () {
-									window.scrollTo(pos.x, pos.y);
+									window && window.scrollTo(pos.x, pos.y);
 								}, 0);
 							} else if (anchor) {
 								setTimeout(function () {
 									var el = document.getElementById(anchor.slice(1));
 									if (el) {
-										window.scrollTo(window.scrollX, el.offsetTop);
+										window && window.scrollTo(window.scrollX, el.offsetTop);
 									}
 								}, 0);
 							}
@@ -1733,6 +1832,7 @@
 				Object.defineProperty(exports, "__esModule", {
 					value: true
 				});
+				exports.setNovaProperty = undefined;
 	
 				var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
 					return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
@@ -1746,6 +1846,7 @@
 				exports.warn = warn;
 				exports.mapParams = mapParams;
 				exports.inBrowser = inBrowser;
+				exports.initialCaps = initialCaps;
 	
 				var _routeRecognizer = __webpack_require__(3);
 	
@@ -1757,14 +1858,14 @@
 	
 				var genQuery = _routeRecognizer2.default.prototype.generateQueryString;
 				/**
-	    * Resolve a relative path.
-	    * 根据相对路径拼接出绝对路径
-	    *
-	    * @param {String} base
-	    * @param {String} relative
-	    * @param {Boolean} append ?是否要拼接
-	    * @return {String}
-	    */
+	   * Resolve a relative path.
+	   * 根据相对路径拼接出绝对路径
+	   *
+	   * @param {String} base
+	   * @param {String} relative
+	   * @param {Boolean} append ?是否要拼接
+	   * @return {String}
+	   */
 				function resolvePath(base, relative, append) {
 					var query = base.match(/(\?.*)$/);
 					if (query) {
@@ -1802,28 +1903,28 @@
 				}
 	
 				/**
-	    * 判断是否是promise
-	    * @param  {[type]}  p [description]
-	    * @return {Boolean}   [description]
-	    */
+	   * 判断是否是promise
+	   * @param  {[type]}  p [description]
+	   * @return {Boolean}   [description]
+	   */
 				function isPromise(p) {
 					return p && typeof p.then === 'function';
 				}
 	
 				/**
-	    * 判断是不是object
-	    * @param  {[type]}  val [description]
-	    * @return {Boolean}     [description]
-	    */
+	   * 判断是不是object
+	   * @param  {[type]}  val [description]
+	   * @return {Boolean}     [description]
+	   */
 				function isObject(val) {
 					return val != null && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && Array.isArray(val) === false;
 				};
 	
 				/**
-	    * 通用warn函数
-	    * @param  {[type]} msg [description]
-	    * @return {[type]}     [description]
-	    */
+	   * 通用warn函数
+	   * @param  {[type]} msg [description]
+	   * @return {[type]}     [description]
+	   */
 				function warn(msg) {
 					/* istanbul ignore next */
 					if (typeof console !== 'undefined') {
@@ -1832,13 +1933,13 @@
 				}
 	
 				/**
-	    * Map the dynamic segments in a path to params.
-	    * 将动态片段置换为相应数值
-	    *
-	    * @param {String} path
-	    * @param {Object} params
-	    * @param {Object} query
-	    */
+	   * Map the dynamic segments in a path to params.
+	   * 将动态片段置换为相应数值
+	   *
+	   * @param {String} path
+	   * @param {Object} params
+	   * @param {Object} query
+	   */
 	
 				function mapParams(path) {
 					var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -1861,6 +1962,26 @@
 				function inBrowser() {
 					var test = window || null;
 					return Object.prototype.toString.call(test) === "[object Window]";
+				}
+	
+				function setNovaProperty(component, key, _value) {
+					if (component.hasProperty(key)) {
+						component.set(key, _value);
+					} else {
+						component.addProperty(key, {
+							type: initialCaps(typeof _value === 'undefined' ? 'undefined' : _typeof(_value)),
+							value: function value() {
+								return _value;
+							}
+						});
+					}
+				}
+	
+				exports.setNovaProperty = setNovaProperty;
+				function initialCaps(str) {
+					return str.replace(/^\S/, function (s) {
+						return s.toUpperCase();
+					});
 				}
 	
 				/***/
@@ -2806,17 +2927,7 @@
 	
 						var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n    " };
 						NovaExports({
-							is: 'router-view',
-							props: {
-								content: {
-									type: String,
-									value: ''
-								}
-							},
-							createdHandler: function createdHandler() {},
-							attachedHandler: function attachedHandler() {},
-							detachedHandler: function detachedHandler() {},
-							attributeChangedHandler: function attributeChangedHandler(attrName, oldVal, newVal) {}
+							is: 'router-view'
 						});
 	
 						return _bundleExports;
@@ -3035,7 +3146,6 @@
 									Args = Args.concat([transition, function () {
 										step(index + 1);
 									}]).concat(fnArgs);
-									// console.log(fn,Args)
 									fn.apply(transition, Args);
 								}
 							}
@@ -3213,10 +3323,6 @@
 					return Object.prototype.toString.call(val) === '[object Object]';
 				}
 	
-				function toArray(val) {
-					return val ? Array.prototype.slice.call(val) : [];
-				}
-	
 				/***/
 			},
 			/* 11 */
@@ -3282,12 +3388,6 @@
 				function activate(parent, child, transition, cb) {
 					parent = parent || { handler: { component: transition.router.routerView } };
 					var component = child.handler.component;
-					// component.$route = {
-					//     path:transition.router._currentRoute.path,
-					//     params:transition.router._currentRoute.params,
-					//     query:transition.router._currentRoute.query,
-					// }
-					// console.log(component.$route)
 					if (!isChildNode(parent.handler.component, child.handler.component)) {
 						var fn = component.route && component.route.activate || function () {
 							return true;
@@ -3343,12 +3443,12 @@
 				}
 	
 				function data(component, transition) {
-					component.loadingRouteData = true;
+					(0, _util.setNovaProperty)(component, 'loadingRouteData', true);
 					var fn = component.route && component.route.data || function () {
 						return {};
 					};
 					transition.callHook(fn, component, function () {
-						component.loadingRouteData = false;
+						(0, _util.setNovaProperty)(component, 'loadingRouteData', false);
 					}, {
 						postActivate: true,
 						// 处理data语法糖
@@ -3359,10 +3459,10 @@
 									var val = data[key];
 									if ((0, _util.isPromise)(val)) {
 										promises.push(val.then(function (resolvedData) {
-											component[key] = resolvedData;
+											(0, _util.setNovaProperty)(component, key, resolvedData);
 										}));
 									} else {
-										component[key] = val;
+										(0, _util.setNovaProperty)(component, key, val);
 									}
 								});
 							}
@@ -3402,7 +3502,7 @@
 		);
 	});
 	;
-	//# sourceMappingURL=nova-router.js.map
+	//# sourceMappingURL=nova-router.dev.js.map
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
 
 /***/ },
@@ -3436,7 +3536,7 @@
 	        } else if (true) {
 	            !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	        } else {
-	            var globalAlias = '__12';
+	            var globalAlias = '__3';
 	            var namespace = globalAlias.split('.');
 	            var parent = root;
 	            for (var i = 0; i < namespace.length - 1; i++) {

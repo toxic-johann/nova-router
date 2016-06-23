@@ -11,41 +11,41 @@
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -55,59 +55,59 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
+	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
+	
 	var _hash = __webpack_require__(1);
-
+	
 	var _hash2 = _interopRequireDefault(_hash);
-
+	
 	var _abstract = __webpack_require__(6);
-
+	
 	var _abstract2 = _interopRequireDefault(_abstract);
-
+	
 	var _html = __webpack_require__(7);
-
+	
 	var _html2 = _interopRequireDefault(_html);
-
+	
 	__webpack_require__(8);
-
+	
 	var _routeRecognizer = __webpack_require__(3);
-
+	
 	var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
-
+	
 	var _route = __webpack_require__(9);
-
+	
 	var _route2 = _interopRequireDefault(_route);
-
+	
 	var _transition = __webpack_require__(10);
-
+	
 	var _transition2 = _interopRequireDefault(_transition);
-
+	
 	var _util = __webpack_require__(2);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	var historyBackends = {
 	    abstract: _abstract2.default,
 	    hash: _hash2.default,
 	    html5: _html2.default
 	};
-
+	
 	var Router = function () {
 	    function Router() {
 	        var _this = this;
-
+	
 	        var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
+	
 	        var _ref$hashbang = _ref.hashbang;
 	        var hashbang = _ref$hashbang === undefined ? true : _ref$hashbang;
 	        var _ref$abstract = _ref.abstract;
@@ -121,13 +121,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        suppressTransitionError = _ref$suppressTransiti === undefined ? false : _ref$suppressTransiti;
 	        var _ref$root = _ref.root;
 	        var root = _ref$root === undefined ? null : _ref$root;
-
+	
 	        _classCallCheck(this, Router);
-
+	
 	        // route recognizer
 	        this._recognizer = new _routeRecognizer2.default();
 	        this._guardRecognizer = new _routeRecognizer2.default();
-
+	
 	        // state
 	        this._started = false;
 	        this._startCb = null;
@@ -139,17 +139,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._beforeEachHooks = [];
 	        this._afterEachHooks = [];
 	        this._rendered = false;
-
+	
 	        // history mode
 	        this._root = root;
 	        this._hashbang = hashbang;
 	        this._abstract = abstract;
-
+	
 	        // check if HTML5 histroy is available
 	        var hasPushState = typeof window !== 'undefined' && window.history && window.history.pushState;
 	        this._history = history && hasPushState;
 	        this._historyFallBack = history && !hasPushState;
-
+	
 	        // create history object
 	        this.mode = !_util.inBrowser || this._abstract ? 'abstract' : this._history ? 'html5' : 'hash';
 	        var History = historyBackends[this.mode];
@@ -160,20 +160,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	                _this._match(path, state, anchor);
 	            }
 	        });
-
+	
 	        this._saveScrollPosition = saveScrollPosition;
 	        this._suppress = suppressTransitionError;
 	        this._components = [];
 	    }
-
+	
 	    // API ===================================================
 	    /**
 	     * register the map
 	     * @param  {[type]} map [description]
 	     * @return {[type]}     [description]
 	     */
-
-
+	
+	
 	    _createClass(Router, [{
 	        key: 'map',
 	        value: function map(_map) {
@@ -182,14 +182,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return this;
 	        }
-
+	
 	        /**
 	         * register each route
 	         * @param  {[type]} rootPath [description]
 	         * @param  {[type]} handler  [description]
 	         * @return {[type]}          [description]
 	         */
-
+	
 	    }, {
 	        key: 'on',
 	        value: function on(rootPath, handler) {
@@ -200,13 +200,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return this;
 	        }
-
+	
 	        /**
 	         * set redirects
 	         * @param  {[type]} map [description]
 	         * @return {[type]}     [description]
 	         */
-
+	
 	    }, {
 	        key: 'redirect',
 	        value: function redirect(map) {
@@ -223,39 +223,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return this;
 	        }
-
+	
 	        /**
 	         * set global before hook
 	         * @param  {Function} fn [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'beforeEach',
 	        value: function beforeEach(fn) {
 	            this._beforeEachHooks.push(fn);
 	            return this;
 	        }
-
+	
 	        /**
 	         * set global after hook
 	         * @param  {Function} fn [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'afterEach',
 	        value: function afterEach(fn) {
 	            this._afterEachHooks.push(fn);
 	            return this;
 	        }
-
+	
 	        /**
 	         * go to a new path
 	         * @param  {[type]} path [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'go',
 	        value: function go(path) {
@@ -270,13 +270,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.history.go(path, replace, append);
 	            }
 	        }
-
+	
 	        /**
 	         * replace current path
 	         * @param  {[type]} path [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'replace',
 	        value: function replace(path) {
@@ -286,14 +286,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            path.replace = true;
 	            this.go(path);
 	        }
-
+	
 	        /**
 	         * 启动路由
 	         * @param  {[type]}   router [description]
 	         * @param  {Function} cb     [description]
 	         * @return {[type]}          [description]
 	         */
-
+	
 	    }, {
 	        key: 'start',
 	        value: function start(routerView, cb) {
@@ -315,24 +315,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._startCb = cb;
 	            this.history.start();
 	        }
-
+	
 	        /**
 	         * Stop listening to route changes.
 	         */
-
+	
 	    }, {
 	        key: 'stop',
 	        value: function stop() {
 	            this.history.stop();
 	            this._started = false;
 	        }
-
+	
 	        /**
 	         * normalize named route object into string
 	         * @param  {[type]} path [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'stringifyPath',
 	        value: function stringifyPath(path) {
@@ -357,27 +357,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            return generatePath;
 	        }
-
+	
 	        // Internal methods ======================================
 	        /**
 	         * set the not found router handler
 	         * @param  {[type]} handler [description]
 	         * @return {[type]}         [description]
 	         */
-
+	
 	    }, {
 	        key: '_notFound',
 	        value: function _notFound(handler) {
 	            this._notFoundHandler = [{ handler: handler }];
 	        }
-
+	
 	        /**
 	         * add route and at the same time add the subroute
 	         * @param {[type]} path     [description]
 	         * @param {[type]} handler  [description]
 	         * @param {[type]} segments [description]
 	         */
-
+	
 	    }, {
 	        key: '_addRoute',
 	        value: function _addRoute(path, handler, segments) {
@@ -404,13 +404,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-
+	
 	        /**
 	         * add redirect record
 	         * @param {[type]} path         [description]
 	         * @param {[type]} redirectPath [description]
 	         */
-
+	
 	    }, {
 	        key: '_addRedirect',
 	        value: function _addRedirect(path, redirectPath) {
@@ -420,31 +420,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this._addGuard(path, redirectPath, this.replace);
 	            }
 	        }
-
+	
 	        /**
 	         * add alias record
 	         * @param {[type]} path      [description]
 	         * @param {[type]} aliasPath [description]
 	         */
-
+	
 	    }, {
 	        key: '_addAlias',
 	        value: function _addAlias(path, aliasPath) {
 	            this._addGuard(path, aliasPath, this._match);
 	        }
-
+	
 	        /**
 	         * add a guard to pass the path into the real path
 	         * @param {[type]} path       [description]
 	         * @param {[type]} mappedPath [description]
 	         * @param {[type]} handler    [description]
 	         */
-
+	
 	    }, {
 	        key: '_addGuard',
 	        value: function _addGuard(path, mappedPath, _handler) {
 	            var _this2 = this;
-
+	
 	            this._guardRecognizer.add([{
 	                path: path,
 	                handler: function handler(match, query) {
@@ -453,13 +453,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }]);
 	        }
-
+	
 	        /**
 	         * check if  the path match redirect records
 	         * @param  {[type]} path [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: '_checkGuard',
 	        value: function _checkGuard(path) {
@@ -475,7 +475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-
+	
 	        /**
 	         * match the url path and move to the correct view
 	         * @param  {[type]} path   [description]
@@ -483,20 +483,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {[type]} anchor [description]
 	         * @return {[type]}        [description]
 	         */
-
+	
 	    }, {
 	        key: '_match',
 	        value: function _match(path, state, anchor) {
 	            var _this3 = this;
-
+	
 	            // check if it redirect
 	            if (this._checkGuard(path)) {
 	                return;
 	            }
-
+	
 	            var currentRoute = this._currentRoute;
 	            var currentTransition = this._currentTransition;
-
+	
 	            if (currentTransition) {
 	                if (currentTransition.to.path === path) {
 	                    // we have an transition doing that thing so ignore the request
@@ -513,14 +513,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    currentTransition.aborted = true;
 	                }
 	            }
-
+	
 	            // construct an new route and the new transition
 	            var route = new _route2.default(path, this);
 	            var transition = new _transition2.default(this, route, currentRoute);
-
+	
 	            this._previousTransition = currentTransition;
 	            this._currentTransition = transition;
-
+	
 	            var beforeHooks = this._beforeEachHooks;
 	            var startTransition = function startTransition() {
 	                transition.start(function () {
@@ -533,30 +533,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	                startTransition();
 	            }
 	        }
-
+	
 	        /**
 	         * called when we validate the transition can run
 	         * @param  {[type]} transition [description]
 	         * @return {[type]}            [description]
 	         */
-
+	
 	    }, {
 	        key: '_onTransitionValidated',
 	        value: function _onTransitionValidated(transition) {
 	            var _this4 = this;
-
+	
 	            this._currentRoute = transition.to;
 	            // copy one in case of the user change our route
 	            this._components.forEach(function (each) {
 	                (0, _util.setNovaProperty)(each, "$route", _this4._currentRoute);
 	            });
 	        }
-
+	
 	        /**
 	         * called when we finished transition
 	         * @return {[type]} [description]
 	         */
-
+	
 	    }, {
 	        key: '_postTransition',
 	        value: function _postTransition(transition, state, anchor) {
@@ -589,10 +589,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }]);
-
+	
 	    return Router;
 	}();
-
+	
 	exports.default = Router;
 
 /***/ },
@@ -600,28 +600,28 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
+	
 	var _util = __webpack_require__(2);
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	var HashHistory = function () {
 	    function HashHistory(_ref) {
 	        var hashbang = _ref.hashbang;
 	        var onChange = _ref.onChange;
-
+	
 	        _classCallCheck(this, HashHistory);
-
+	
 	        this.hashbang = hashbang;
 	        this.onChange = onChange;
 	    }
-
+	
 	    _createClass(HashHistory, [{
 	        key: 'start',
 	        value: function start() {
@@ -664,12 +664,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                location.hash = path;
 	            }
 	        }
-
+	
 	        /**
 	         * format to absolute path
 	         * 格式化为绝对路径
 	         */
-
+	
 	    }, {
 	        key: 'formatPath',
 	        value: function formatPath(path, append) {
@@ -678,10 +678,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return isAbsolute ? prefix + path : prefix + (0, _util.resolvePath)(location.hash.replace(/^#!?/, ''), path, append);
 	        }
 	    }]);
-
+	
 	    return HashHistory;
 	}();
-
+	
 	exports.default = HashHistory;
 
 /***/ },
@@ -689,14 +689,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	exports.setNovaProperty = undefined;
-
+	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
+	
 	exports.resolvePath = resolvePath;
 	exports.isPromise = isPromise;
 	exports.isObject = isObject;
@@ -704,13 +704,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.mapParams = mapParams;
 	exports.inBrowser = inBrowser;
 	exports.initialCaps = initialCaps;
-
+	
 	var _routeRecognizer = __webpack_require__(3);
-
+	
 	var _routeRecognizer2 = _interopRequireDefault(_routeRecognizer);
-
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+	
 	var genQuery = _routeRecognizer2.default.prototype.generateQueryString;
 	/**
 	* Resolve a relative path.
@@ -756,7 +756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return stack.join('/');
 	}
-
+	
 	/**
 	* 判断是否是promise
 	* @param  {[type]}  p [description]
@@ -765,7 +765,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function isPromise(p) {
 	    return p && typeof p.then === 'function';
 	}
-
+	
 	/**
 	* 判断是不是object
 	* @param  {[type]}  val [description]
@@ -774,7 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function isObject(val) {
 	    return val != null && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && Array.isArray(val) === false;
 	};
-
+	
 	/**
 	* 通用warn函数
 	* @param  {[type]} msg [description]
@@ -786,7 +786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        console.error('[nova-router] ' + msg);
 	    }
 	}
-
+	
 	/**
 	* Map the dynamic segments in a path to params.
 	* 将动态片段置换为相应数值
@@ -795,11 +795,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	* @param {Object} params
 	* @param {Object} query
 	*/
-
+	
 	function mapParams(path) {
 	    var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	    var query = arguments[2];
-
+	
 	    path = path.replace(/:([^\/]+)/g, function (_, key) {
 	        var val = params[key];
 	        /* istanbul ignore if */
@@ -813,12 +813,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return path;
 	}
-
+	
 	function inBrowser() {
 	    var test = window || null;
 	    return Object.prototype.toString.call(test) === "[object Window]";
 	}
-
+	
 	function setNovaProperty(component, key, _value) {
 	    if (component.hasProperty(key)) {
 	        component.set(key, _value);
@@ -831,7 +831,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 	}
-
+	
 	exports.setNovaProperty = setNovaProperty;
 	function initialCaps(str) {
 	    return str.replace(/^\S/, function (s) {
@@ -850,17 +850,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.matcher = matcher;
 	      this.delegate = delegate;
 	    }
-
+	
 	    $$route$recognizer$dsl$$Target.prototype = {
 	      to: function(target, callback) {
 	        var delegate = this.delegate;
-
+	
 	        if (delegate && delegate.willAddRoute) {
 	          target = delegate.willAddRoute(this.matcher.target, target);
 	        }
-
+	
 	        this.matcher.add(this.path, target);
-
+	
 	        if (callback) {
 	          if (callback.length === 0) { throw new Error("You must have an argument in the function passed to `to`"); }
 	          this.matcher.addChild(this.path, target, callback, this.delegate);
@@ -868,36 +868,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	      }
 	    };
-
+	
 	    function $$route$recognizer$dsl$$Matcher(target) {
 	      this.routes = {};
 	      this.children = {};
 	      this.target = target;
 	    }
-
+	
 	    $$route$recognizer$dsl$$Matcher.prototype = {
 	      add: function(path, handler) {
 	        this.routes[path] = handler;
 	      },
-
+	
 	      addChild: function(path, target, callback, delegate) {
 	        var matcher = new $$route$recognizer$dsl$$Matcher(target);
 	        this.children[path] = matcher;
-
+	
 	        var match = $$route$recognizer$dsl$$generateMatch(path, matcher, delegate);
-
+	
 	        if (delegate && delegate.contextEntered) {
 	          delegate.contextEntered(target, match);
 	        }
-
+	
 	        callback(match);
 	      }
 	    };
-
+	
 	    function $$route$recognizer$dsl$$generateMatch(startingPath, matcher, delegate) {
 	      return function(path, nestedCallback) {
 	        var fullPath = startingPath + path;
-
+	
 	        if (nestedCallback) {
 	          nestedCallback($$route$recognizer$dsl$$generateMatch(fullPath, matcher, delegate));
 	        } else {
@@ -905,26 +905,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      };
 	    }
-
+	
 	    function $$route$recognizer$dsl$$addRoute(routeArray, path, handler) {
 	      var len = 0;
 	      for (var i=0; i<routeArray.length; i++) {
 	        len += routeArray[i].path.length;
 	      }
-
+	
 	      path = path.substr(len);
 	      var route = { path: path, handler: handler };
 	      routeArray.push(route);
 	    }
-
+	
 	    function $$route$recognizer$dsl$$eachRoute(baseRoute, matcher, callback, binding) {
 	      var routes = matcher.routes;
-
+	
 	      for (var path in routes) {
 	        if (routes.hasOwnProperty(path)) {
 	          var routeArray = baseRoute.slice();
 	          $$route$recognizer$dsl$$addRoute(routeArray, path, routes[path]);
-
+	
 	          if (matcher.children[path]) {
 	            $$route$recognizer$dsl$$eachRoute(routeArray, matcher.children[path], callback, binding);
 	          } else {
@@ -933,29 +933,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-
+	
 	    var $$route$recognizer$dsl$$default = function(callback, addRouteCallback) {
 	      var matcher = new $$route$recognizer$dsl$$Matcher();
-
+	
 	      callback($$route$recognizer$dsl$$generateMatch("", matcher, this.delegate));
-
+	
 	      $$route$recognizer$dsl$$eachRoute([], matcher, function(route) {
 	        if (addRouteCallback) { addRouteCallback(this, route); }
 	        else { this.add(route); }
 	      }, this);
 	    };
-
+	
 	    var $$route$recognizer$$specials = [
 	      '/', '.', '*', '+', '?', '|',
 	      '(', ')', '[', ']', '{', '}', '\\'
 	    ];
-
+	
 	    var $$route$recognizer$$escapeRegex = new RegExp('(\\' + $$route$recognizer$$specials.join('|\\') + ')', 'g');
-
+	
 	    function $$route$recognizer$$isArray(test) {
 	      return Object.prototype.toString.call(test) === "[object Array]";
 	    }
-
+	
 	    // A Segment represents a segment in the original route description.
 	    // Each Segment type provides an `eachChar` and `regex` method.
 	    //
@@ -972,59 +972,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // * `validChars`: a String with a list of all valid characters, or
 	    // * `invalidChars`: a String with a list of all invalid characters
 	    // * `repeat`: true if the character specification can repeat
-
+	
 	    function $$route$recognizer$$StaticSegment(string) { this.string = string; }
 	    $$route$recognizer$$StaticSegment.prototype = {
 	      eachChar: function(currentState) {
 	        var string = this.string, ch;
-
+	
 	        for (var i=0; i<string.length; i++) {
 	          ch = string.charAt(i);
 	          currentState = currentState.put({ invalidChars: undefined, repeat: false, validChars: ch });
 	        }
-
+	
 	        return currentState;
 	      },
-
+	
 	      regex: function() {
 	        return this.string.replace($$route$recognizer$$escapeRegex, '\\$1');
 	      },
-
+	
 	      generate: function() {
 	        return this.string;
 	      }
 	    };
-
+	
 	    function $$route$recognizer$$DynamicSegment(name) { this.name = name; }
 	    $$route$recognizer$$DynamicSegment.prototype = {
 	      eachChar: function(currentState) {
 	        return currentState.put({ invalidChars: "/", repeat: true, validChars: undefined });
 	      },
-
+	
 	      regex: function() {
 	        return "([^/]+)";
 	      },
-
+	
 	      generate: function(params) {
 	        return params[this.name];
 	      }
 	    };
-
+	
 	    function $$route$recognizer$$StarSegment(name) { this.name = name; }
 	    $$route$recognizer$$StarSegment.prototype = {
 	      eachChar: function(currentState) {
 	        return currentState.put({ invalidChars: "", repeat: true, validChars: undefined });
 	      },
-
+	
 	      regex: function() {
 	        return "(.+)";
 	      },
-
+	
 	      generate: function(params) {
 	        return params[this.name];
 	      }
 	    };
-
+	
 	    function $$route$recognizer$$EpsilonSegment() {}
 	    $$route$recognizer$$EpsilonSegment.prototype = {
 	      eachChar: function(currentState) {
@@ -1033,15 +1033,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      regex: function() { return ""; },
 	      generate: function() { return ""; }
 	    };
-
+	
 	    function $$route$recognizer$$parse(route, names, specificity) {
 	      // normalize route as not starting with a "/". Recognition will
 	      // also normalize.
 	      if (route.charAt(0) === "/") { route = route.substr(1); }
-
+	
 	      var segments = route.split("/");
 	      var results = new Array(segments.length);
-
+	
 	      // A routes has specificity determined by the order that its different segments
 	      // appear in. This system mirrors how the magnitude of numbers written as strings
 	      // works.
@@ -1062,10 +1062,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // together, from left to right. After we have looped through all of the segments,
 	      // we convert the string to a number.
 	      specificity.val = '';
-
+	
 	      for (var i=0; i<segments.length; i++) {
 	        var segment = segments[i], match;
-
+	
 	        if (match = segment.match(/^:([^\/]+)$/)) {
 	          results[i] = new $$route$recognizer$$DynamicSegment(match[1]);
 	          names.push(match[1]);
@@ -1082,12 +1082,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          specificity.val += '4';
 	        }
 	      }
-
+	
 	      specificity.val = +specificity.val;
-
+	
 	      return results;
 	    }
-
+	
 	    // A State has a character specification and (`charSpec`) and a list of possible
 	    // subsequent states (`nextStates`).
 	    //
@@ -1104,7 +1104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Currently, State is implemented naively by looping over `nextStates` and
 	    // comparing a character specification against a character. A more efficient
 	    // implementation would use a hash of keys pointing at one or more next states.
-
+	
 	    function $$route$recognizer$$State(charSpec) {
 	      this.charSpec = charSpec;
 	      this.nextStates = [];
@@ -1113,100 +1113,100 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.handlers = undefined;
 	      this.specificity = undefined;
 	    }
-
+	
 	    $$route$recognizer$$State.prototype = {
 	      get: function(charSpec) {
 	        if (this.charSpecs[charSpec.validChars]) {
 	          return this.charSpecs[charSpec.validChars];
 	        }
-
+	
 	        var nextStates = this.nextStates;
-
+	
 	        for (var i=0; i<nextStates.length; i++) {
 	          var child = nextStates[i];
-
+	
 	          var isEqual = child.charSpec.validChars === charSpec.validChars;
 	          isEqual = isEqual && child.charSpec.invalidChars === charSpec.invalidChars;
-
+	
 	          if (isEqual) {
 	            this.charSpecs[charSpec.validChars] = child;
 	            return child;
 	          }
 	        }
 	      },
-
+	
 	      put: function(charSpec) {
 	        var state;
-
+	
 	        // If the character specification already exists in a child of the current
 	        // state, just return that state.
 	        if (state = this.get(charSpec)) { return state; }
-
+	
 	        // Make a new state for the character spec
 	        state = new $$route$recognizer$$State(charSpec);
-
+	
 	        // Insert the new state as a child of the current state
 	        this.nextStates.push(state);
-
+	
 	        // If this character specification repeats, insert the new state as a child
 	        // of itself. Note that this will not trigger an infinite loop because each
 	        // transition during recognition consumes a character.
 	        if (charSpec.repeat) {
 	          state.nextStates.push(state);
 	        }
-
+	
 	        // Return the new state
 	        return state;
 	      },
-
+	
 	      // Find a list of child states matching the next character
 	      match: function(ch) {
 	        var nextStates = this.nextStates,
 	            child, charSpec, chars;
-
+	
 	        var returned = [];
-
+	
 	        for (var i=0; i<nextStates.length; i++) {
 	          child = nextStates[i];
-
+	
 	          charSpec = child.charSpec;
-
+	
 	          if (typeof (chars = charSpec.validChars) !== 'undefined') {
 	            if (chars.indexOf(ch) !== -1) { returned.push(child); }
 	          } else if (typeof (chars = charSpec.invalidChars) !== 'undefined') {
 	            if (chars.indexOf(ch) === -1) { returned.push(child); }
 	          }
 	        }
-
+	
 	        return returned;
 	      }
 	    };
-
+	
 	    // Sort the routes by specificity
 	    function $$route$recognizer$$sortSolutions(states) {
 	      return states.sort(function(a, b) {
 	        return b.specificity.val - a.specificity.val;
 	      });
 	    }
-
+	
 	    function $$route$recognizer$$recognizeChar(states, ch) {
 	      var nextStates = [];
-
+	
 	      for (var i=0, l=states.length; i<l; i++) {
 	        var state = states[i];
-
+	
 	        nextStates = nextStates.concat(state.match(ch));
 	      }
-
+	
 	      return nextStates;
 	    }
-
+	
 	    var $$route$recognizer$$oCreate = Object.create || function(proto) {
 	      function F() {}
 	      F.prototype = proto;
 	      return new F();
 	    };
-
+	
 	    function $$route$recognizer$$RecognizeResults(queryParams) {
 	      this.queryParams = queryParams || {};
 	    }
@@ -1217,27 +1217,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	      length: 0,
 	      queryParams: null
 	    });
-
+	
 	    function $$route$recognizer$$findHandler(state, path, queryParams) {
 	      var handlers = state.handlers, regex = state.regex;
 	      var captures = path.match(regex), currentCapture = 1;
 	      var result = new $$route$recognizer$$RecognizeResults(queryParams);
-
+	
 	      result.length = handlers.length;
-
+	
 	      for (var i=0; i<handlers.length; i++) {
 	        var handler = handlers[i], names = handler.names, params = {};
-
+	
 	        for (var j=0; j<names.length; j++) {
 	          params[names[j]] = captures[currentCapture++];
 	        }
-
+	
 	        result[i] = { handler: handler.handler, params: params, isDynamic: !!names.length };
 	      }
-
+	
 	      return result;
 	    }
-
+	
 	    function $$route$recognizer$$decodeQueryParamPart(part) {
 	      // http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.1
 	      part = part.replace(/\+/gm, '%20');
@@ -1247,41 +1247,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } catch(error) {result = '';}
 	      return result;
 	    }
-
+	
 	    // The main interface
-
+	
 	    var $$route$recognizer$$RouteRecognizer = function() {
 	      this.rootState = new $$route$recognizer$$State();
 	      this.names = {};
 	    };
-
-
+	
+	
 	    $$route$recognizer$$RouteRecognizer.prototype = {
 	      add: function(routes, options) {
 	        var currentState = this.rootState, regex = "^",
 	            specificity = {},
 	            handlers = new Array(routes.length), allSegments = [], name;
-
+	
 	        var isEmpty = true;
-
+	
 	        for (var i=0; i<routes.length; i++) {
 	          var route = routes[i], names = [];
-
+	
 	          var segments = $$route$recognizer$$parse(route.path, names, specificity);
-
+	
 	          allSegments = allSegments.concat(segments);
-
+	
 	          for (var j=0; j<segments.length; j++) {
 	            var segment = segments[j];
-
+	
 	            if (segment instanceof $$route$recognizer$$EpsilonSegment) { continue; }
-
+	
 	            isEmpty = false;
-
+	
 	            // Add a "/" for the new segment
 	            currentState = currentState.put({ invalidChars: undefined, repeat: false, validChars: "/" });
 	            regex += "/";
-
+	
 	            // Add a representation of the segment to the NFA and regex
 	            currentState = segment.eachChar(currentState);
 	            regex += segment.regex();
@@ -1289,16 +1289,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var handler = { handler: route.handler, names: names };
 	          handlers[i] = handler;
 	        }
-
+	
 	        if (isEmpty) {
 	          currentState = currentState.put({ invalidChars: undefined, repeat: false, validChars: "/" });
 	          regex += "/";
 	        }
-
+	
 	        currentState.handlers = handlers;
 	        currentState.regex = new RegExp(regex + "$");
 	        currentState.specificity = specificity;
-
+	
 	        if (name = options && options.as) {
 	          this.names[name] = {
 	            segments: allSegments,
@@ -1306,49 +1306,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	          };
 	        }
 	      },
-
+	
 	      handlersFor: function(name) {
 	        var route = this.names[name];
-
+	
 	        if (!route) { throw new Error("There is no route named " + name); }
-
+	
 	        var result = new Array(route.handlers.length);
-
+	
 	        for (var i=0; i<route.handlers.length; i++) {
 	          result[i] = route.handlers[i];
 	        }
-
+	
 	        return result;
 	      },
-
+	
 	      hasRoute: function(name) {
 	        return !!this.names[name];
 	      },
-
+	
 	      generate: function(name, params) {
 	        var route = this.names[name], output = "";
 	        if (!route) { throw new Error("There is no route named " + name); }
-
+	
 	        var segments = route.segments;
-
+	
 	        for (var i=0; i<segments.length; i++) {
 	          var segment = segments[i];
-
+	
 	          if (segment instanceof $$route$recognizer$$EpsilonSegment) { continue; }
-
+	
 	          output += "/";
 	          output += segment.generate(params);
 	        }
-
+	
 	        if (output.charAt(0) !== '/') { output = '/' + output; }
-
+	
 	        if (params && params.queryParams) {
 	          output += this.generateQueryString(params.queryParams, route.handlers);
 	        }
-
+	
 	        return output;
 	      },
-
+	
 	      generateQueryString: function(params, handlers) {
 	        var pairs = [];
 	        var keys = [];
@@ -1375,12 +1375,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            pairs.push(pair);
 	          }
 	        }
-
+	
 	        if (pairs.length === 0) { return ''; }
-
+	
 	        return "?" + pairs.join("&");
 	      },
-
+	
 	      parseQueryString: function(queryString) {
 	        var pairs = queryString.split("&"), queryParams = {};
 	        for(var i=0; i < pairs.length; i++) {
@@ -1410,43 +1410,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return queryParams;
 	      },
-
+	
 	      recognize: function(path) {
 	        var states = [ this.rootState ],
 	            pathLen, i, l, queryStart, queryParams = {},
 	            isSlashDropped = false;
-
+	
 	        queryStart = path.indexOf('?');
 	        if (queryStart !== -1) {
 	          var queryString = path.substr(queryStart + 1, path.length);
 	          path = path.substr(0, queryStart);
 	          queryParams = this.parseQueryString(queryString);
 	        }
-
+	
 	        path = decodeURI(path);
-
+	
 	        if (path.charAt(0) !== "/") { path = "/" + path; }
-
+	
 	        pathLen = path.length;
 	        if (pathLen > 1 && path.charAt(pathLen - 1) === "/") {
 	          path = path.substr(0, pathLen - 1);
 	          isSlashDropped = true;
 	        }
-
+	
 	        for (i=0; i<path.length; i++) {
 	          states = $$route$recognizer$$recognizeChar(states, path.charAt(i));
 	          if (!states.length) { break; }
 	        }
-
+	
 	        var solutions = [];
 	        for (i=0; i<states.length; i++) {
 	          if (states[i].handlers) { solutions.push(states[i]); }
 	        }
-
+	
 	        states = $$route$recognizer$$sortSolutions(solutions);
-
+	
 	        var state = solutions[0];
-
+	
 	        if (state && state.handlers) {
 	          // if a trailing slash was dropped and a star segment is the last segment
 	          // specified, put the trailing slash back
@@ -1457,13 +1457,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    };
-
+	
 	    $$route$recognizer$$RouteRecognizer.prototype.map = $$route$recognizer$dsl$$default;
-
+	
 	    $$route$recognizer$$RouteRecognizer.VERSION = '0.1.11';
-
+	
 	    var $$route$recognizer$$default = $$route$recognizer$$RouteRecognizer;
-
+	
 	    /* global define:true module:true window: true */
 	    if ("function" === 'function' && __webpack_require__(5)['amd']) {
 	      !(__WEBPACK_AMD_DEFINE_RESULT__ = function() { return $$route$recognizer$$default; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -1473,7 +1473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this['RouteRecognizer'] = $$route$recognizer$$default;
 	    }
 	}).call(this);
-
+	
 	//# sourceMappingURL=route-recognizer.js.map
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
@@ -1505,27 +1505,27 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
+	
 	var _util = __webpack_require__(2);
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	var AbstractHistory = function () {
 	    function AbstractHistory(_ref) {
 	        var onChange = _ref.onChange;
-
+	
 	        _classCallCheck(this, AbstractHistory);
-
+	
 	        this.onChange = onChange;
 	        this.currentPath = '/';
 	    }
-
+	
 	    _createClass(AbstractHistory, [{
 	        key: 'start',
 	        value: function start() {
@@ -1548,10 +1548,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return path.charAt(0) === '/' ? path : (0, _util.resolvePath)(this.currentPath, path, append);
 	        }
 	    }]);
-
+	
 	    return AbstractHistory;
 	}();
-
+	
 	exports.default = AbstractHistory;
 
 /***/ },
@@ -1559,26 +1559,26 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
+	
 	var _util = __webpack_require__(2);
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	var hashRegExp = /#.*$/;
-
+	
 	var HTML5History = function () {
 	    function HTML5History(_ref) {
 	        var root = _ref.root;
 	        var onChange = _ref.onChange;
-
+	
 	        _classCallCheck(this, HTML5History);
-
+	
 	        if (root && root !== '/') {
 	            // make sure the startting
 	            if (root.charAt(0) !== '/') {
@@ -1595,12 +1595,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var baseEl = document.querySelector('base');
 	        this.base = baseEl && baseEl.getAttribute('href');
 	    }
-
+	
 	    _createClass(HTML5History, [{
 	        key: 'start',
 	        value: function start() {
 	            var _this = this;
-
+	
 	            this.listener = function (e) {
 	                var url = location.pathname + location.search;
 	                if (_this.root) {
@@ -1633,7 +1633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // then push new state
 	                history.pushState({}, '', url);
 	            }
-
+	
 	            var hashMatch = path.match(hashRegExp);
 	            var hash = hashMatch && hashMatch[0];
 	            path = url
@@ -1649,10 +1649,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return path.charAt(0) === '/' ? this.root ? this.root + '/' + path.replace(/^\//, '') : path : (0, _util.resolvePath)(this.base || location.pathname, path, append);
 	        }
 	    }]);
-
+	
 	    return HTML5History;
 	}();
-
+	
 	exports.default = HTML5History;
 
 /***/ },
@@ -1660,9 +1660,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
-
+	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
+	
 	(function () {
 	  (function (root, factory) {
 	    if (( false ? 'undefined' : _typeof(exports)) === 'object') {
@@ -1683,12 +1683,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function _requireDep(name) {
 	      return {}[name];
 	    }
-
+	
 	    var _bundleExports = undefined;NovaExports.__fixedUglify = "script>";NovaExports.exports = { "template": "\n    " };
 	    NovaExports({
 	      is: 'router-view'
 	    });
-
+	
 	    return _bundleExports;
 	  });
 	}).call(window);
@@ -1698,20 +1698,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	var internalKeysRegExp = /^(component|subRoutes|fullPath)$/;
-
+	
 	var Route = function Route(path, router) {
 	    var _this = this;
-
+	
 	    _classCallCheck(this, Route);
-
+	
 	    var matched = router._recognizer.recognize(path);
 	    if (matched) {
 	        [].forEach.call(matched, function (match) {
@@ -1732,7 +1732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return prev;
 	        }, {});
 	    }
-
+	
 	    this.path = path;
 	    // set some property for internal use
 	    this.matched = matched || router._notFoundHandler;
@@ -1742,7 +1742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    Object.freeze(this);
 	};
-
+	
 	exports.default = Route;
 
 /***/ },
@@ -1750,23 +1750,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
+	
 	var _util = __webpack_require__(2);
-
+	
 	var _pipeline = __webpack_require__(11);
-
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+	
 	var Transition = function () {
 	    function Transition(router, to, from) {
 	        _classCallCheck(this, Transition);
-
+	
 	        this.router = router;
 	        this.to = to;
 	        this.from = from;
@@ -1774,13 +1774,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.aborted = false;
 	        this.done = false;
 	    }
-
+	
 	    /**
 	     * abort current transition and return to previous location
 	     * @return {[type]} [description]
 	     */
-
-
+	
+	
 	    _createClass(Transition, [{
 	        key: 'abort',
 	        value: function abort() {
@@ -1793,14 +1793,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-
+	
 	        /**
 	         * abort current transition and go to the new path
 	         * path can be string or object
 	         * @param  {[type]} path [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'redirect',
 	        value: function redirect(path) {
@@ -1815,20 +1815,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this.router.replace(path);
 	            }
 	        }
-
+	
 	        /**
 	         * 开始一次转换
 	         * @param  {Function} cb [description]
 	         * @return {[type]}      [description]
 	         */
-
+	
 	    }, {
 	        key: 'start',
 	        value: function start() {
 	            var cb = arguments.length <= 0 || arguments[0] === undefined ? function () {} : arguments[0];
-
+	
 	            var transition = this;
-
+	
 	            var deactivateQueue = this.from.matched ? [].map.call(this.from.matched, function (each) {
 	                return each;
 	            }) : [];
@@ -1836,10 +1836,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return each;
 	            }) : [];
 	            var reverseDeactivateQueue = deactivateQueue.slice().reverse();
-
+	
 	            // 获取重用队列
 	            transition.reuseQueue = (0, _pipeline.getReuseQueue)(deactivateQueue, activateQueue, this);
-
+	
 	            // 此处有一个检测是否可以重用的部分
 	            transition.runQueue(reverseDeactivateQueue, _pipeline.canDeactivate, { factor: 1 }, function () {
 	                transition.runQueue(activateQueue, _pipeline.canActivate, { factor: -1 }, function () {
@@ -1859,7 +1859,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {Function} cb    [description]
 	         * @return {[type]}         [description]
 	         */
-
+	
 	    }, {
 	        key: 'runQueue',
 	        value: function runQueue(queue, fn, _ref) {
@@ -1872,7 +1872,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var _ref$fnArgs = _ref.fnArgs;
 	            var fnArgs = _ref$fnArgs === undefined ? [] : _ref$fnArgs;
 	            var cb = arguments.length <= 3 || arguments[3] === undefined ? function () {} : arguments[3];
-
+	
 	            var transition = this;
 	            step(start);
 	            function step(index) {
@@ -1892,7 +1892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	        }
-
+	
 	        /**
 	         * 调用钩子函数专用
 	         * @param  {[type]}   hook                  [description]
@@ -1904,12 +1904,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {Object}   options.cleanup                       } [description]
 	         * @return {[type]}                         [description]
 	         */
-
+	
 	    }, {
 	        key: 'callHook',
 	        value: function callHook(hook, context, cb) {
 	            var _ref2 = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
-
+	
 	            var _ref2$expectBoolean = _ref2.expectBoolean;
 	            var expectBoolean = _ref2$expectBoolean === undefined ? false : _ref2$expectBoolean;
 	            var _ref2$postActivate = _ref2.postActivate;
@@ -1917,18 +1917,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var // 必定触发激活
 	            processData = _ref2.processData;
 	            var cleanup = _ref2.cleanup;
-
+	
 	            var transition = this;
 	            var nextCalled = false;
 	            var aborted = false;
-
+	
 	            // abort the transition
 	            var abort = function abort() {
 	                aborted = true;
 	                cleanup && cleanup();
 	                transition.abort();
 	            };
-
+	
 	            // handle errors
 	            var onError = function onError(err) {
 	                postActivate ? next() : abort();
@@ -1937,7 +1937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    throw err instanceof Error ? err : new Error(err);
 	                }
 	            };
-
+	
 	            // promise will swallows errors?
 	            // it seems i use resolve can sovle this problem
 	            // but resolve means wrap a new promise=--=
@@ -1964,7 +1964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                cb && cb();
 	            };
-
+	
 	            // 需要处理正确错误的下一步
 	            var nextWithBoolean = function nextWithBoolean(res) {
 	                if (typeof res === 'boolean') {
@@ -1978,7 +1978,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    onError("must return Boolean or Promise in " + hook);
 	                }
 	            };
-
+	
 	            // 需要处理数据的下一步
 	            var nextWithData = function nextWithData(data) {
 	                var res = void 0;
@@ -1993,7 +1993,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    next();
 	                }
 	            };
-
+	
 	            // expose a clone of transition so that would not mix up
 	            var exposed = {
 	                to: transition.to,
@@ -2006,7 +2006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    transition.redirect.apply(transition, arguments);
 	                }
 	            };
-
+	
 	            // actually call the hook
 	            var res = void 0;
 	            try {
@@ -2029,7 +2029,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                next();
 	            }
 	        }
-
+	
 	        /**
 	         * call single hook or array of hooks
 	         * @param  {[type]}   hooks   [description]
@@ -2038,12 +2038,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param  {[type]}   options [description]
 	         * @return {[type]}           [description]
 	         */
-
+	
 	    }, {
 	        key: 'callHooks',
 	        value: function callHooks(hooks, context, cb, options) {
 	            var _this = this;
-
+	
 	            if (Array.isArray(hooks)) {
 	                this.runQueue(hooks, function (hook, transition, next) {
 	                    if (!_this.aborted) {
@@ -2055,13 +2055,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	    }]);
-
+	
 	    return Transition;
 	}();
-
+	
 	exports.default = Transition;
-
-
+	
+	
 	function isPlainOjbect(val) {
 	    return Object.prototype.toString.call(val) === '[object Object]';
 	}
@@ -2071,7 +2071,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
+	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
@@ -2083,9 +2083,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.canReuse = canReuse;
 	exports.data = data;
 	exports.isChildNode = isChildNode;
-
+	
 	var _util = __webpack_require__(2);
-
+	
 	function getReuseQueue(deactivateQueue, activateQueue, transition) {
 	    var depth = Math.min(deactivateQueue.length, activateQueue.length);
 	    var reuseQueue = [];
@@ -2106,7 +2106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return reuseQueue;
 	}
-
+	
 	function deactivate(parent, child, transition, cb) {
 	    parent = parent || { handler: { component: transition.router.routerView } };
 	    if (isChildNode(parent.handler.component, child.handler.component)) {
@@ -2126,7 +2126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        cb && cb && cb();
 	    }
 	}
-
+	
 	function activate(parent, child, transition, cb) {
 	    parent = parent || { handler: { component: transition.router.routerView } };
 	    var component = child.handler.component;
@@ -2144,7 +2144,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        cb && cb();
 	    }
 	}
-
+	
 	function canActivate(parent, child, transition, cb) {
 	    parent = parent || { handler: { component: transition.router.routerView } };
 	    if (!isChildNode(parent.handler.component, child.handler.component)) {
@@ -2157,7 +2157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        cb && cb();
 	    }
 	}
-
+	
 	function canDeactivate(parent, child, transition, cb) {
 	    parent = parent || { handler: { component: transition.router.routerView } };
 	    if (parent.handler.component.contains(child.handler.component)) {
@@ -2174,7 +2174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        cb && cb();
 	    }
 	}
-
+	
 	function canReuse(child, transition) {
 	    for (var i = transition.reuseQueue.length - 1; i > -1; i--) {
 	        if (Object.is(child.handler.component, transition.reuseQueue[i].handler.component)) {
@@ -2183,7 +2183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return false;
 	}
-
+	
 	function data(component, transition) {
 	    (0, _util.setNovaProperty)(component, 'loadingRouteData', true);
 	    var fn = component.route && component.route.data || function () {
@@ -2214,7 +2214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    });
 	}
-
+	
 	function isChildNode(parent, child) {
 	    if (!parent || !child || !parent.hasChildNodes()) {
 	        return false;
@@ -2227,13 +2227,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return false;
 	}
-
+	
 	/**
 	 * Check plain object.
 	 *
 	 * @param {*} val
 	 */
-
+	
 	function isPlainObject(val) {
 	    return Object.prototype.toString.call(val) === '[object Object]';
 	}
@@ -2242,3 +2242,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
+//# sourceMappingURL=nova-router.dev.js.map

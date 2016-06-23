@@ -315,6 +315,179 @@ describe('Core',function () {
         router.start(el)
     })
 
+    it('alias',function(done){
+        router = new Router({abstract:true})
+        let aView =  createNovaView({content:'a'})
+        let bView =  createNovaView({content:'b'})
+        router.map({
+            '/a':{
+                component:aView
+            },
+            '/b':{
+                component:bView
+            }
+        })
+        router.alias({
+            '/c/a':'/a',
+            '/c/b':'/b'
+        })
+        let guide = assertRoutes([
+            ['/a', 'a'],
+            ['/b', 'b'],
+            ['/c/a', 'a'],
+            ['/c/b', 'b']
+        ],done,matches=>{
+            let content = router.routerView.children[0]?router.routerView.children[0].content:''
+            expect(content).toBe(matches[0][1])
+        })
+        router.afterEach(function(){
+            guide.check()
+            guide.next()
+        })
+        router.start(el)
+    })
+
+    it('multi-variable alias', function(done) {
+        router = new Router({abstract:true})
+        let aView =  createNovaView({content:'a'})
+        let bView =  createNovaView({content:'b'})
+        router.map({
+            '/a/:foo':{
+                component:aView,
+                subRoutes:{
+                    '/b/:bar':{
+                        component:bView
+                    }
+                }
+            }
+        })
+        router.alias({'/c/a/:foo/b/:bar': '/a/:foo/b/:bar'})
+        let guide = assertRoutes([
+            ['/c/a/123/b/456', '123456'],
+            ['/c/a/234/b/567', '234567']
+        ],done,matches=>{
+            let content = router.routerView.children[0]
+                ?router.routerView.children[0].$route.params.foo + router.routerView.children[0].$route.params.bar
+                :''
+            expect(content).toBe(matches[0][1])
+        })
+        router.afterEach(function(){
+            guide.check()
+            guide.next()
+        })
+        router.start(el)
+    })
+
+    it('redirect', function(done) {
+        router = new Router({abstract:true})
+        let aView =  createNovaView({content:'a'})
+        let bView =  createNovaView({content:'b'})
+        let cView =  createNovaView({content:'c'})
+        router.map({
+            '/a':{
+                component:aView,
+                subRoutes:{
+                    '/b':{
+                        component:bView
+                    },
+                    '/c':{
+                        component:cView,
+                    }
+                }
+            },
+        })
+        router.redirect({
+            '/whatever':'/a/b',
+            '/ok':'/a/c',
+            '*':'/a/b'
+        })
+        let guide = assertRoutes([
+            ['/whatever', 'a'],
+            ['/ok?msg=world', 'world'],
+            ['/fesfsefsef', 'a']
+        ],done,matches=>{
+            let content = router.routerView.children[0]
+                ? (router.routerView.children[0].$route.query && router.routerView.children[0].$route.query.msg) || router.routerView.children[0].content
+                :''
+            expect(content).toBe(matches[0][1])
+        },{defaultMatch:false})
+        router.afterEach(function(){
+            guide.check()
+            guide.next()
+        })
+        router.start(el)
+    })
+
+    it('redirect without notfound', function(done) {
+        router = new Router({abstract:true})
+        let aView =  createNovaView({content:'a'})
+        let bView =  createNovaView({content:'b'})
+        let cView =  createNovaView({content:'c'})
+        router.map({
+            '/a':{
+                component:aView,
+                subRoutes:{
+                    '/b':{
+                        component:bView
+                    },
+                    '/c':{
+                        component:cView,
+                    }
+                }
+            },
+        })
+        router.redirect({
+            '/whatever':'/a/b',
+            '/ok':'/a/c',
+        })
+        let guide = assertRoutes([
+            ['/whatever', 'a'],
+            ['/ok?msg=world', 'world'],
+            ['/fesfsefsef', '']
+        ],done,matches=>{
+            let content = router.routerView.children[0]
+                ?router.routerView.children[0].$route.query.msg || router.routerView.children[0].content
+                :''
+            expect(content).toBe(matches[0][1])
+        })
+        router.afterEach(function(){
+            guide.check()
+            guide.next()
+        })
+        router.start(el)
+    })
+
+    it('multi-variable redirect',function (done) {
+        router = new Router({abstract:true})
+        let aView =  createNovaView({content:'a'})
+        let bView =  createNovaView({content:'b'})
+        router.map({
+            '/a/:foo':{
+                component:aView,
+                subRoutes:{
+                    '/b/:bar':{
+                        component:bView
+                    }
+                }
+            }
+        })
+        router.redirect({'/c/a/:foo/b/:bar': '/a/:foo/b/:bar'})
+        let guide = assertRoutes([
+            ['/c/a/123/b/456', '123456'],
+            ['/c/a/234/b/567', '234567']
+        ],done,matches=>{
+            let content = router.routerView.children[0]
+                ?router.routerView.children[0].$route.params.foo + router.routerView.children[0].$route.params.bar
+                :''
+            expect(content).toBe(matches[0][1])
+        })
+        router.afterEach(function(){
+            guide.check()
+            guide.next()
+        })
+        router.start(el)
+    })
+
     it('notfound',function(done) {
         router = new Router({abstract:true})
         let aView = createNovaView({content:"a"})
@@ -484,7 +657,9 @@ describe('Core',function () {
     function assertRoutes (routes=[],done=(()=>true),check = (()=>true),{defaultMatch = ''}={}){
         let matches = routes
         // default start from none
-        matches.unshift(['/',defaultMatch])
+        if(defaultMatch !== false) {
+            matches.unshift(['/',defaultMatch])
+        }
         return {
             next:function(){
                 if(matches.length){

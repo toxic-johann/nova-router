@@ -23,20 +23,6 @@
   var _bundleExports = undefined;NovaExports.__fixedUglify="script>";NovaExports.exports={"template":"\n    "};
         NovaExports({
             is: 'router-view',
-            props: {
-                content: {
-                    type: String,
-                    value: ''
-                },
-            },
-            createdHandler: function() {
-            },
-            attachedHandler: function() {
-            },
-            detachedHandler: function() { 
-            },
-            attributeChangedHandler: function(attrName, oldVal, newVal) { 
-            },
         });
     
 

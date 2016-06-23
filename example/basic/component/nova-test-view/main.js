@@ -6,7 +6,7 @@
     define([], factory);
   }
   else {
-    var globalAlias = '__11';
+    var globalAlias = '__2';
     var namespace = globalAlias.split('.');
     var parent = root;
     for ( var i = 0; i < namespace.length-1; i++ ) {
@@ -32,16 +32,6 @@
                     type:Boolean,
                     value:false
                 },
-                $route:{
-                    type:Object,
-                    value:function(){
-                        return {
-                            params:"",
-                            path:"",
-                            query:"",
-                        }
-                    }
-                }
             },
             createdHandler: function() {
                 console.log("nova-test-view "+ this.content + " created");

@@ -1,5 +1,6 @@
 import {
   isPromise,
+  setNovaProperty,
 } from './util'
 
 export function getReuseQueue (deactivateQueue,activateQueue,transition) {
@@ -48,12 +49,6 @@ export function deactivate (parent, child, transition, cb){
 export function activate (parent, child, transition, cb){
     parent = parent || {handler:{component:transition.router.routerView}}
     let component = child.handler.component
-    // component.$route = {
-    //     path:transition.router._currentRoute.path,
-    //     params:transition.router._currentRoute.params,
-    //     query:transition.router._currentRoute.query,
-    // }
-    // console.log(component.$route)
     if(!isChildNode(parent.handler.component,child.handler.component)){
         let fn = (component.route && component.route.activate) || (()=>true)
         transition.callHook(fn,component,()=>{
@@ -104,10 +99,10 @@ export function canReuse(child,transition){
 }
 
 export function data(component,transition){
-    component.loadingRouteData = true;
+    setNovaProperty(component,'loadingRouteData',true)
     let fn = (component.route && component.route.data) || (()=>{return {}})
     transition.callHook(fn,component,()=>{
-        component.loadingRouteData = false;
+        setNovaProperty(component,'loadingRouteData',false)
     },{
         postActivate:true,
         // 处理data语法糖
@@ -118,10 +113,10 @@ export function data(component,transition){
                     const val = data[key]
                     if(isPromise(val)) {
                         promises.push(val.then(resolvedData=>{
-                            component[key] = resolvedData
+                            setNovaProperty(component,key,resolvedData)
                         }))
                     } else {
-                        component[key] = val
+                        setNovaProperty(component,key,val)
                     }
                 })
             }
