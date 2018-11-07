@@ -1,4 +1,4 @@
-# nova-router  [![npm package](https://img.shields.io/npm/v/nova-router.svg)](https://www.npmjs.com/package/nova-router) 
+# nova-router  [![npm package](https://img.shields.io/npm/v/nova-router.svg)](https://www.npmjs.com/package/nova-router) [![Greenkeeper badge](https://badges.greenkeeper.io/toxic-johann/nova-router.svg)](https://greenkeeper.io/) 
 
 **Compatibility Note:** `nova-router` requires Nova.js 1.0.1+
 
